@@ -96,17 +96,18 @@
 
 
 
-  <meta name="description" content="This my personal website">
-<meta name="keywords" content="Blog">
-<meta property="og:type" content="website">
-<meta property="og:title" content="かがやの部屋">
-<meta property="og:url" content="https://kagaya85.github.io/archives/index.html">
+  <meta name="description" content="Mysql和MariaDB中的Rank排序的坑题目中需要对一个成绩表按考试科目以及学生做排名 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表 想法是  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的： /* 临时rank function 要求原表按id score_mark降">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql和MariaDB中的Rank排序的坑">
+<meta property="og:url" content="https://kagaya85.github.io/2019/04/01/mysql-e5-92-8cmariadb-e4-b8-ad-e7-9a-84rank-e6-8e-92-e5-ba-8f-e7-9a-84-e5-9d-91/index.html">
 <meta property="og:site_name" content="かがやの部屋">
-<meta property="og:description" content="This my personal website">
+<meta property="og:description" content="Mysql和MariaDB中的Rank排序的坑题目中需要对一个成绩表按考试科目以及学生做排名 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表 想法是  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的： /* 临时rank function 要求原表按id score_mark降">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-07T06:20:35.197Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="かがやの部屋">
-<meta name="twitter:description" content="This my personal website">
+<meta name="twitter:title" content="Mysql和MariaDB中的Rank排序的坑">
+<meta name="twitter:description" content="Mysql和MariaDB中的Rank排序的坑题目中需要对一个成绩表按考试科目以及学生做排名 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表 想法是  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的： /* 临时rank function 要求原表按id score_mark降">
 
 
 
@@ -114,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://kagaya85.github.io/archives/">
+  <link rel="canonical" href="https://kagaya85.github.io/2019/04/01/mysql-e5-92-8cmariadb-e4-b8-ad-e7-9a-84rank-e6-8e-92-e5-ba-8f-e7-9a-84-e5-9d-91/">
 
 
 
@@ -124,7 +125,7 @@
   };
 </script>
 
-  <title>Archiv | かがやの部屋</title>
+  <title>Mysql和MariaDB中的Rank排序的坑 | かがやの部屋</title>
   
 
 
@@ -172,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -282,7 +283,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -321,31 +322,6 @@
   
     
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
   
 
   
@@ -370,397 +346,253 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kagaya85.github.io/2019/04/01/mysql-e5-92-8cmariadb-e4-b8-ad-e7-9a-84rank-e6-8e-92-e5-ba-8f-e7-9a-84-e5-9d-91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kagaya">
+      <meta itemprop="description" content="This my personal website">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="かがやの部屋">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">Mysql和MariaDB中的Rank排序的坑
+
+              
+            
+          </h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-04-01 02:40:07" itemprop="dateCreated datePublished" datetime="2019-04-01T02:40:07+08:00">2019-04-01</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="Geändert am: 2019-05-07 14:20:35" itemprop="dateModified" datetime="2019-05-07T14:20:35+08:00">2019-05-07</time>
+              
+            
+          </span>
+
           
-        
-        Öhm..! Insgesamt 11 Artikel. Bleib dran.
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Code/" itemprop="url" rel="index"><span itemprop="name">Code</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/01/mysql-e5-92-8cmariadb-e4-b8-ad-e7-9a-84rank-e6-8e-92-e5-ba-8f-e7-9a-84-e5-9d-91/" itemprop="url">
+          
             
-              <span itemprop="name">Mysql和MariaDB中的Rank排序的坑</span>
             
-          </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-01T02:40:07+08:00" content="2019-04-01">
-          04-01
-        </time>
-      </div>
+          
+          
 
-    </header>
-  </article>
+          
 
+          
 
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/03/08/e9-9a-be-e5-be-97-e7-9c-8b-e6-ac-a1-e7-94-b5-e5-bd-b1-ef-bc-8c-e9-9a-8f-e4-be-bf-e5-86-99-e5-86-99/" itemprop="url">
-            
-              <span itemprop="name">难得看次电影，随便写写</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-03-08T23:46:31+08:00" content="2019-03-08">
-          03-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <h1 id="Mysql和MariaDB中的Rank排序的坑"><a href="#Mysql和MariaDB中的Rank排序的坑" class="headerlink" title="Mysql和MariaDB中的Rank排序的坑"></a>Mysql和MariaDB中的Rank排序的坑</h1><p>题目中需要对一个成绩表按考试科目以及学生做排名 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表 想法是</p>
+<ul>
+<li>先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询</li>
+<li>在新表中调用自定义的rank函数添加排名</li>
+</ul>
+<p>rank函数是这样写的：</p>
+<pre><code>/* 临时rank function 要求原表按id score_mark降序 排列好 */
+delimiter //
+drop function if exists myrank;
+create function myrank(score_id int, score_mark float)
+returns int
+READS SQL DATA
+begin
+if(@pre_score_id is null or @pre_score_id != score_id) then
+set @pre_score_id := score_id;
+set @pre_score_mark := score_mark;
+set @row := 1;
+set @rank := 1;
+else
+set @row := @row + 1;
+if(@pre_score_mark != score_mark or score_mark is null) then
+set @rank := @row;
+set @pre_score_mark = score_mark;
+end if;
+end if;
+return @rank;
+end //
+delimiter ;
+</code></pre><p>完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：</p>
+<pre><code>drop table if exists tmp_table_rank;
+create table tmp_table_rank as
+select score_id, score_stuno, Score_mark, myrank(score_id, Score_mark) as rank
+from (
+select *
+from score
+order by score_id asc, Score_mark desc, right(score_stuno, 2) asc
+);
+</code></pre><p>写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却<strong>不一样</strong>！！！ ？？？ 首先怀疑的是<code>mysql</code>版本的问题 服务器上使用的<code>mysql</code>版本为<code>mysql Ver 14.14 Distrib 5.6.37, for linux-glibc2.12 (x86_64) using EditLine wrapper</code> 虚拟机上则是<code>mysql Ver 15.1 5.5.56-mariaDB</code> 按理说<code>mariaDB</code>本质上还是<code>mysql</code>，结果却不一样。。。 在询问同学和老师后怀疑是两者在<strong>排序</strong>和<strong>调用函数</strong>的处理上有不同，理论上期望<code>mysql</code>先做完子查询的排序后，对排好序的表计算rank，<code>mysql</code>确实是这么做的，但是<code>mariaDB</code>似乎还没做完子查询的排序就开始调用函数计算rank，导致每个人的成绩和排名对应不上，出现错误 针对这个怀疑，做出了如下修改： 先将子查询放入一个临时表中，再调用该临时表</p>
+<pre><code>/* 临时table, 按科目添加排名 */
+drop table if exists tmp_table_asc;
+create table tmp_table_asc as
+select *
+from score
+order by score_id asc, Score_mark desc, right(score_stuno, 2) asc;
 
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/29/e3-80-8a-e5-9d-82-e4-b8-8a-e4-b9-8b-e4-ba-91-e3-80-8b-e4-b8-80-e9-83-a8-e6-97-a5-e6-9c-ac-e7-9a-84-e5-a5-8b-e6-96-97-e5-8f-b2/" itemprop="url">
-            
-              <span itemprop="name">《坂上之云》——一部日本的奋斗史</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-29T23:38:11+08:00" content="2019-01-29">
-          01-29
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+drop table if exists tmp_table_rank;
+create table tmp_table_rank as
+select score_id, score_stuno, Score_mark, myrank(score_id, Score_mark) as rank
+from tmp_table_asc;
+</code></pre><p>结果正确了，果然你俩还不是一个东西啊（苦笑</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/27/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-3/" itemprop="url">
-            
-              <span itemprop="name">Vue.js学习笔记 part 3</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-27T22:43:56+08:00" content="2019-01-27">
-          01-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/27/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-2/" itemprop="url">
-            
-              <span itemprop="name">Vue.js学习笔记 part 2</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-27T00:17:34+08:00" content="2019-01-27">
-          01-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/24/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-1/" itemprop="url">
-            
-              <span itemprop="name">Vue.js学习笔记 part 1</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-24T23:02:00+08:00" content="2019-01-24">
-          01-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/23/e8-bf-9b-e7-a8-8b-e9-97-b4-e9-80-9a-e4-bf-a1/" itemprop="url">
-            
-              <span itemprop="name">进程间通信</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-23T18:26:01+08:00" content="2019-01-23">
-          01-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/21/ditf-e7-ac-ac-e5-8d-81-e4-b8-89-e9-9b-86ed-e7-bb-98-e6-9c-ac-e3-80-8a-e9-ad-94-e7-89-a9-e4-b8-8e-e7-8e-8b-e5-ad-90-e3-80-8b-e7-bf-bb-e8-af-91/" itemprop="url">
-            
-              <span itemprop="name">DitF第十三集ed绘本《魔物与王子》翻译</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-21T17:43:39+08:00" content="2019-01-21">
-          01-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/21/e6-88-91-e4-bb-ac-e9-83-bd-e5-9c-a8-e5-90-91-e5-89-8d-e8-b5-b0-ef-bc-8c-e5-8f-aa-e6-9c-89-e5-9b-9e-e5-bf-86-e9-a9-bb-e7-95-99-e5-9c-a8-e5-8e-9f-e5-9c-b0/" itemprop="url">
-            
-              <span itemprop="name">我们都在向前走，只有回忆驻留在原地</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-21T17:38:34+08:00" content="2019-01-21">
-          01-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/01/21/e6-89-93-e7-ae-97-e9-87-8d-e5-90-afkgyzone/" itemprop="url">
-            
-              <span itemprop="name">打算重启kgyzone</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-21T17:31:05+08:00" content="2019-01-21">
-          01-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SQL/" rel="tag"># SQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/08/e9-9a-be-e5-be-97-e7-9c-8b-e6-ac-a1-e7-94-b5-e5-bd-b1-ef-bc-8c-e9-9a-8f-e4-be-bf-e5-86-99-e5-86-99/" rel="next" title="难得看次电影，随便写写">
+                <i class="fa fa-chevron-left"></i> 难得看次电影，随便写写
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="Nächste Seite"></i></a>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -780,8 +612,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -943,6 +784,23 @@
       </div>
 
       
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Mysql和MariaDB中的Rank排序的坑"><span class="nav-number">1.</span> <span class="nav-text">Mysql和MariaDB中的Rank排序的坑</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
 
       
 
@@ -1070,6 +928,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
 
   
 
@@ -1085,6 +947,8 @@
 
   
 
+
+  
 
 
   

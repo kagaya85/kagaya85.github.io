@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Vue.js学习笔记 part 1在学校期间重新认识了JavaScript这门动态语言的强大功能，尤其是在当今H5越来越主流的趋势下JavaScript也在大放异彩，于是寒假开始打算捡起好久没用的JavaScript，一面重新回顾一下基础语法，另一面打算接触一款前端框架，利用这个假期的时间好好研究一下。 了解了下目前前端最热门的框架比如Facebook的React以及Vue.js，在询问了朋友的意">
+<meta name="keywords" content="学习笔记,JavaScript,Vue.js,前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue.js学习笔记 part 1">
+<meta property="og:url" content="https://kagaya85.github.io/2019/01/24/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-1/index.html">
+<meta property="og:site_name" content="かがやの部屋">
+<meta property="og:description" content="Vue.js学习笔记 part 1在学校期间重新认识了JavaScript这门动态语言的强大功能，尤其是在当今H5越来越主流的趋势下JavaScript也在大放异彩，于是寒假开始打算捡起好久没用的JavaScript，一面重新回顾一下基础语法，另一面打算接触一款前端框架，利用这个假期的时间好好研究一下。 了解了下目前前端最热门的框架比如Facebook的React以及Vue.js，在询问了朋友的意">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cn.vuejs.org/images/components.png">
+<meta property="og:updated_time" content="2019-05-07T05:38:59.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue.js学习笔记 part 1">
+<meta name="twitter:description" content="Vue.js学习笔记 part 1在学校期间重新认识了JavaScript这门动态语言的强大功能，尤其是在当今H5越来越主流的趋势下JavaScript也在大放异彩，于是寒假开始打算捡起好久没用的JavaScript，一面重新回顾一下基础语法，另一面打算接触一款前端框架，利用这个假期的时间好好研究一下。 了解了下目前前端最热门的框架比如Facebook的React以及Vue.js，在询问了朋友的意">
+<meta name="twitter:image" content="https://cn.vuejs.org/images/components.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://kagaya85.github.io/2019/01/24/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Vue.js学习笔记 part 1 | かがやの部屋</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">かがやの部屋</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">明日晴れるかな～</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Navigationsleiste an/ausschalten">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>Über</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>Schlagwörter</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>Kategorien</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-schedule">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/schedule/" rel="section"><i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>Zeitplan</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kagaya85.github.io/2019/01/24/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kagaya">
+      <meta itemprop="description" content="This my personal website">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="かがやの部屋">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue.js学习笔记 part 1
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+
+              
+                
+              
+
+              <time title="Erstellt: 2019-01-24 23:02:00" itemprop="dateCreated datePublished" datetime="2019-01-24T23:02:00+08:00">2019-01-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Bearbeitet am</span>
+                
+                <time title="Geändert am: 2019-05-07 13:38:59" itemprop="dateModified" datetime="2019-05-07T13:38:59+08:00">2019-05-07</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Code/" itemprop="url" rel="index"><span itemprop="name">Code</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Vue-js学习笔记-part-1"><a href="#Vue-js学习笔记-part-1" class="headerlink" title="Vue.js学习笔记 part 1"></a>Vue.js学习笔记 part 1</h1><p>在学校期间重新认识了JavaScript这门动态语言的强大功能，尤其是在当今H5越来越主流的趋势下JavaScript也在大放异彩，于是寒假开始打算捡起好久没用的JavaScript，一面重新回顾一下基础语法，另一面打算接触一款前端框架，利用这个假期的时间好好研究一下。 了解了下目前前端最热门的框架比如Facebook的React以及Vue.js，在询问了朋友的意见之后最终还是决定从Vue入手。接下来便决定一边研读Vue的官方文档，一边用学习笔记的方式记录学习过程，并尽量用简单的语言表达出来，方便之后查看。（不得不说无论是Vue还是React，之所以受到广大开发者的欢迎除了其易用性外，详尽的多语言官方文档也是必不可少的） <strong>准备</strong></p>
+<ul>
+<li>如何使用Vue.js</li>
+<li><p>可以直接在html页面中引入用于开发环境的Vue库文件，包含有详尽的命令行警告等调试信息</p>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+</li>
+</ul>
+<ul>
+<li><p>或使用用于生产环境，优化了库的大小和加载速度的Vue库</p>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+
+</li>
+</ul>
+<ul>
+<li><p>如果有安装Node.js可以在开发目录下使用本地安装Vue库，之后会将Vue相关文件安装到运行目录下的node_modules目录下，使用时可通过require引入</p>
+<p>npm install vue</p>
+</li>
+</ul>
+<ul>
+<li>当然还有使用Vue官方的开发环境配置工具<code>vue-cli</code>，如果不熟悉使用Node.js的构建工具的话暂时还是不建议使用</li>
+</ul>
+<p><strong>认识Vue.js</strong></p>
+<ul>
+<li>Vue的核心——声明式渲染</li>
+</ul>
+<p>Vue可以利用简洁的模板语法来声明式地将数据在渲染地时候加入到DOM系统中，这点似乎有点类似XAML里绑定数据更新源地操作，但对于脚本语言来说似乎更加方便直接，很好的将UI代码和逻辑代码实现了分离。 举一个官方的例子 HTML：</p>
+<pre><code>&lt;div id=&quot;app&quot;&gt;
+    { { message }}&lt;/div&gt;
+</code></pre><p>JavaScript：</p>
+<pre><code>var app = new Vue({
+el: &apos;#app&apos;,
+data: {
+message: &apos;Hello Vue!&apos;
+}
+})
+</code></pre><p><code>el</code>表示element，看来这个选择器是可以利用 css选择器的语法的，<code>data</code>大概是为了绑定相关的数据，这里将<code>message</code>的值渲染为<code>&#39;Hello Vue!&#39;</code></p>
+<ul>
+<li>除了<strong>文本插值</strong>又或者可以使用Vue的特性——<strong>指令</strong></li>
+</ul>
+<p>HTML:</p>
+<pre><code>&lt;div id=&quot;app-2&quot;&gt;
+    &lt;span v-bind:title=&quot;message&quot;&gt;
+鼠标悬停几秒钟查看此处动态绑定的提示信息！
+&lt;/span&gt;&lt;/div&gt;
+</code></pre><p>JavaScript:</p>
+<pre><code>var app2 = new Vue({
+el: &apos;#app-2&apos;,
+data: {
+message: &apos;页面加载于 &apos; + new Date().toLocaleString()
+}
+})
+</code></pre><p>这里的<code>v-</code>前缀表示将<code>span</code>的<code>title</code>属性与代码实例中的<code>message</code>保持一致 以上的值也可以直接通过浏览器中的JavaScript控制台来使用命令直接操作，如：</p>
+<pre><code>app.message = &apos;新消息&apos;
+</code></pre><p>同时便可以直接的在浏览器中看到属性值的变化，可见Vue在后台将数据和DOM已经做了直接的关联，可以轻松实现<strong>响应式</strong>的网页 <strong>Vue指令</strong> ​ 除了上文提到的<code>v-bind</code>下面会补充几个常用的Vue指令</p>
+<ul>
+<li>条件显示：<code>v-if</code></li>
+</ul>
+<p>HTML：</p>
+<pre><code>&lt;div id=&quot;app-3&quot;&gt;
+&lt;p v-if=&quot;seen&quot;&gt;现在你看到我了&lt;/p&gt;
+
+
+&lt;/div&gt;
+</code></pre><p>JavaScript：</p>
+<pre><code>var app3 = new Vue({
+el: &apos;#app-3&apos;,
+data: {
+seen: true
+}
+})
+</code></pre><p>在控制台输入<code>app3.seen = false</code>，对应的<code>p</code>标签就变得不可见了 Vue有强大的过渡效果系统，可以在插入/更新/删除元素时自动应用<strong>过渡效果</strong></p>
+<ul>
+<li>for循环：<code>v-for</code></li>
+</ul>
+<p>HTML：</p>
+<pre><code>&lt;div id=&quot;app-4&quot;&gt;
+&lt;ol&gt;
+    &lt;li v-for=&quot;todo in todos&quot;&gt;
+        { { todo.text }}&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</code></pre><p>JavaScript：</p>
+<pre><code>var app4 = new Vue({
+el: &apos;#app-4&apos;,
+data: {
+todos: [
+{ text: &apos;学习 JavaScript&apos; },
+{ text: &apos;学习 Vue&apos; },
+{ text: &apos;整个项目&apos; }
+]
+}
+})
+</code></pre><p>将数组元素中的每一项循环生成了对应的<code>li</code>标签，NB！ 甚至可以再在控制台中使用<code>app4.todos.push({ text: &#39;新项目&#39; })</code>来添加新的项目，或使用<code>pop</code>方法来删去项目</p>
+<ul>
+<li>事件监听：<code>v-on</code></li>
+</ul>
+<p>HTML：</p>
+<pre><code>&lt;div id=&quot;app-5&quot;&gt;
+
+{ { message }}
+
+&lt;button v-on:click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;
+
+&lt;/div&gt;
+</code></pre><p>JavaScript：</p>
+<pre><code>var app5 = new Vue({
+el: &apos;#app-5&apos;,
+data: {
+message: &apos;Hello Vue.js!&apos;
+},
+methods: {
+reverseMessage: function () {
+this.message = this.message.split(&apos;&apos;).reverse().join(&apos;&apos;)
+}
+}
+})
+</code></pre><p>这里出现了新的<code>methods</code>关键字，将所有绑定的函数放在这里，例子中将<code>button</code>标签的click事件绑定到了<code>reverseMessage</code>而这个属性是一个匿名函数，用于将该对象中的<code>message</code>字符串做反转，有点好奇这里的<code>split()</code>函数按空格划分后在调用<code>recerse()</code>难道不是只将数组元素调换位置，得到<code>Vue.js! Hello</code>嘛，而是对每一项字符串也做了reverse操作，先记一下。</p>
+<ul>
+<li>状态-输入双向绑定：<code>v-model</code></li>
+</ul>
+<p>HTML：</p>
+<pre><code>&lt;div id=&quot;app-6&quot;&gt;
+
+{ { message }}
+
+&lt;input v-model=&quot;message&quot;&gt;
+
+&lt;/div&gt;
+</code></pre><p>JavaScript：</p>
+<pre><code>var app6 = new Vue({
+el: &apos;#app-6&apos;,
+data: {
+message: &apos;Hello Vue!&apos;
+}
+})
+</code></pre><p>上面示例可以直接将<code>input</code>输入的值通过<code>message</code>及时反馈到<code>p</code>标签的内容上，轻松实现双向的数据绑定，舒服 <strong>Vue组件</strong> ​ <img src="https://cn.vuejs.org/images/components.png" alt="Component Tree"></p>
+<ul>
+<li>注册组件</li>
+</ul>
+<p>组件是可复用的 Vue 实例，且带有一个名字，这里为todo-item</p>
+<pre><code>// 定义名为 todo-item 的新组件
+Vue.component(&apos;todo-item&apos;, {
+// todo-item 组件现在接受一个
+// &quot;prop&quot;，类似于一个自定义特性。
+// 这个 prop 名为 todo。
+props: [&apos;todo&apos;],
+template: &apos;
+    &lt;li&gt;{ { todo.text }}&lt;/li&gt;
+&apos;
+})
+</code></pre><p>这里的<code>props: [&#39;todo&#39;]</code>不是很理解为什么这样写，为什么不是类似<code>data：</code>的形式，目测<code>component</code>作为<code>Vue</code>的一个子对象，需要通过这中方式传值，先记一下，不过明白这里需要接受todo的传值运用于模板中</p>
+<ul>
+<li><p>构建组件模板</p>
+<div id="app-7"><br><ol><br>      <!--
+        现在我们为每个 todo-item 提供 todo 对象
+        todo 对象是变量，即其内容可以是动态的。
+        我们也需要为每个组件提供一个“key”，稍后再
+        作详细解释。
+      --><br><todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id"><br></todo-item></ol><br></div>
+
+
+</li>
+</ul>
+<p>将有序列表中的<code>li</code>替换为一个自定义标签<code>todo-item</code>，对应前面定义的组件，这里绑定<code>todo</code>到对应List中的每一个<code>item</code>，传递给模板后按模板显示出<code>todo.text</code> 剩余JavaScript代码：</p>
+<pre><code>var app7 = new Vue({
+el: &apos;#app-7&apos;,
+data: {
+groceryList: [
+{ id: 0, text: &apos;蔬菜&apos; },
+{ id: 1, text: &apos;奶酪&apos; },
+{ id: 2, text: &apos;随便其它什么人吃的东西&apos; }
+]
+}
+})
+</code></pre><p>这样可以为模板增加更加复杂的逻辑而不会影响到其父单元的调用，实现了很好的界面与逻辑代码的分离</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/学习笔记/" rel="tag"># 学习笔记</a>
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/Vue-js/" rel="tag"># Vue.js</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/23/e8-bf-9b-e7-a8-8b-e9-97-b4-e9-80-9a-e4-bf-a1/" rel="next" title="进程间通信">
+                <i class="fa fa-chevron-left"></i> 进程间通信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/27/vue-js-e5-ad-a6-e4-b9-a0-e7-ac-94-e8-ae-b0-part-2/" rel="prev" title="Vue.js学习笔记 part 2">
+                Vue.js学习笔记 part 2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Kagaya</p>
+              <div class="site-description motion-element" itemprop="description">This my personal website</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-name">Artikel</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">Kategorien</span>
+                  
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">schlagwörter</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/kagaya85" title="GitHub &rarr; https://github.com/kagaya85" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:kagaya85@outlook.com" title="E-Mail &rarr; mailto:kagaya85@outlook.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/kagaya_85" title="Twitter &rarr; https://twitter.com/kagaya_85" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Vue-js学习笔记-part-1"><span class="nav-number">1.</span> <span class="nav-text">Vue.js学习笔记 part 1</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kagaya</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Design – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/schemes/muse.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
