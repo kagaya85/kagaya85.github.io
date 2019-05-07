@@ -551,6 +551,13 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -895,6 +902,45 @@
   
 
   
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://kagaya85.github.io/2019/01/29/e3-80-8a-e5-9d-82-e4-b8-8a-e4-b9-8b-e4-ba-91-e3-80-8b-e4-b8-80-e9-83-a8-e6-97-a5-e6-9c-ac-e7-9a-84-e5-a5-8b-e6-96-97-e5-8f-b2/";
+    this.page.identifier = "2019/01/29/e3-80-8a-e5-9d-82-e4-b8-8a-e4-b9-8b-e4-ba-91-e3-80-8b-e4-b8-80-e9-83-a8-e6-97-a5-e6-9c-ac-e7-9a-84-e5-a5-8b-e6-96-97-e5-8f-b2/";
+    this.page.title = '《坂上之云》——一部日本的奋斗史';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Kagaya.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
 
 
   

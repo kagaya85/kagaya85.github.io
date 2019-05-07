@@ -562,6 +562,13 @@
           
 
   
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
 
 
 
@@ -906,6 +913,45 @@
   
 
   
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://kagaya85.github.io/2019/01/21/ditf-e7-ac-ac-e5-8d-81-e4-b8-89-e9-9b-86ed-e7-bb-98-e6-9c-ac-e3-80-8a-e9-ad-94-e7-89-a9-e4-b8-8e-e7-8e-8b-e5-ad-90-e3-80-8b-e7-bf-bb-e8-af-91/";
+    this.page.identifier = "2019/01/21/ditf-e7-ac-ac-e5-8d-81-e4-b8-89-e9-9b-86ed-e7-bb-98-e6-9c-ac-e3-80-8a-e9-ad-94-e7-89-a9-e4-b8-8e-e7-8e-8b-e5-ad-90-e3-80-8b-e7-bf-bb-e8-af-91/";
+    this.page.title = 'DitF第十三集ed绘本《魔物与王子》翻译';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Kagaya.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
 
 
   

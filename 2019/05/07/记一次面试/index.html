@@ -100,7 +100,7 @@
 <meta name="keywords" content="碎碎念">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Microsoft">
-<meta property="og:url" content="https://kagaya85.github.io/2019/05/07/Microsoft/index.html">
+<meta property="og:url" content="https://kagaya85.github.io/2019/05/07/记一次面试/index.html">
 <meta property="og:site_name" content="かがやの部屋">
 <meta property="og:description" content="记一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。    微软分网测和面试两个部分，投简历后不久就先收到了网测通知的邮件，也就是某天下午7点到9点要在电脑前完成一个测试。邮件里附了一个考试连接和一个体验连接，后者可以让你提前熟悉一下操作环境，测试一下你的电脑环境（摄像头）。对了，">
 <meta property="og:locale" content="zh-CN">
@@ -117,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://kagaya85.github.io/2019/05/07/Microsoft/">
+  <link rel="canonical" href="https://kagaya85.github.io/2019/05/07/记一次面试/">
 
 
 
@@ -364,7 +364,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://kagaya85.github.io/2019/05/07/Microsoft/">
+    <link itemprop="mainEntityOfPage" href="https://kagaya85.github.io/2019/05/07/记一次面试/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kagaya">
@@ -540,6 +540,13 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
 
   
 
@@ -912,6 +919,45 @@
   
 
   
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://kagaya85.github.io/2019/05/07/记一次面试/";
+    this.page.identifier = "2019/05/07/记一次面试/";
+    this.page.title = 'Microsoft';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Kagaya.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
 
 
   

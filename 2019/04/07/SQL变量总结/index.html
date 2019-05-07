@@ -638,7 +638,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/07/Microsoft/" rel="prev" title="Microsoft">
+              <a href="/2019/05/07/记一次面试/" rel="prev" title="Microsoft">
                 Microsoft <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -661,6 +661,13 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
 
   
 
@@ -1033,6 +1040,45 @@
   
 
   
+  
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://kagaya85.github.io/2019/04/07/SQL变量总结/";
+    this.page.identifier = "2019/04/07/SQL变量总结/";
+    this.page.title = 'SQL变量总结';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://Kagaya.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    $(function() {
+      var offsetTop = $('#comments').offset().top - $(window).height();
+      if (offsetTop <= 0) {
+        // load directly when there's no a scrollbar
+        loadComments();
+      } else {
+        $(window).on('scroll.disqus_scroll', function() {
+          // offsetTop may changes because of manually resizing browser window or lazy loading images.
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          var scrollTop = $(window).scrollTop();
+
+          // pre-load comments a bit? (margin or anything else)
+          if (offsetTop - scrollTop < 60) {
+            $(window).off('.disqus_scroll');
+            loadComments();
+          }
+        });
+      }
+    });
+  
+</script>
+
+
+
 
 
   
