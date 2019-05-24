@@ -1,0 +1,26 @@
+/* 自定义样式 */
+.el-textarea .el-textarea__inner{
+  resize: none;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 600px;
+  height: 70vh;
+}
+
+.login-form {
+  padding: 50px;
+  min-width: 280px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.wide-btn {
+  width: 100%;
+}
