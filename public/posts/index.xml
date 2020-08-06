@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on LeaveIt</title>
+    <link>http://example.org/posts/</link>
+    <description>Recent content in Posts on LeaveIt</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 04 Aug 2020 17:31:20 +0800</lastBuildDate>
+    
+	<atom:link href="http://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Test</title>
+      <link>http://example.org/2020/test/</link>
+      <pubDate>Tue, 04 Aug 2020 17:31:20 +0800</pubDate>
+      
+      <guid>http://example.org/2020/test/</guid>
+      <description>LeetCode(Test) 最长回文子串 O(n)
+class Solution: def longestPalindrome(self, s: str) -&amp;gt; str: ss = &amp;#39;#&amp;#39; + &amp;#39;#&amp;#39;.join(s) + &amp;#39;#&amp;#39; LR = [0 for i in range(len(ss))] maxR = 0; center = 0; maxlen = 0; maxi = 0; for i in range(len(ss)): if i &amp;lt; maxR: LR[i] = min(maxR - i + 1, LR[2 * center - i]) else: LR[i] = 1; while i - LR[i] &amp;gt;= 0 and i + LR[i] &amp;lt; len(ss) and ss[i-LR[i]] == ss[i+LR[i]]: LR[i] += 1 if i + LR[i] - 1 &amp;gt; maxR: maxR = i + LR[i] - 1 center = i if maxlen &amp;lt; LR[i] - 1: maxlen = LR[i] - 1 maxi = i return ss[maxi - LR[maxi] + 1 : maxi + LR[maxi]].</description>
+    </item>
+    
+  </channel>
+</rss>
