@@ -1,6 +1,6 @@
 ---
 title: "SQL变量总结"
-date: 2019-04-7T21:30:20+08:00
+date: 2019-04-07T21:30:20+08:00
 tags: ["SQL", "Database"]
 categories: ["Code"]
 featured_image:

@@ -1,6 +1,6 @@
 ---
 title: "pthread多线程编程初探"
-date: 2019-06-1T21:30:20+08:00
+date: 2019-06-01T21:30:20+08:00
 tags: ["C++", "Pthread", "并行计算"]
 categories: ["Code"]
 featured_image:

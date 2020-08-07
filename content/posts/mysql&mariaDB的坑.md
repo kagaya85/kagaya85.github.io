@@ -1,6 +1,6 @@
 ---
 title: "Mysql和MariaDB中的Rank排序的坑"
-date: 2019-04-1T21:30:20+08:00
+date: 2019-04-01T21:30:20+08:00
 tags: ["SQL", "Database"]
 categories: ["Code"]
 featured_image:

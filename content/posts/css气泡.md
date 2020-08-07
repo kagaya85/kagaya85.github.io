@@ -11,7 +11,7 @@ draft: false
 
 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
 
-![bili](images/bili.jpg)
+![bili](/images/bili.jpg)
 
 
 主要原理是利用css伪类的`:before`和`:after`在圆角`div`前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
@@ -44,7 +44,7 @@ draft: false
 }
 ```
 
-![inline](images/inlineblock.jpg)
+![inline](/images/inlineblock.jpg)
 
 之后插入先后插入一个`:before`和`:after`块，位置定义为absolute（注意`.bubble`需定义为relative才能做到相对`.bubble`块偏移）
 
@@ -63,7 +63,7 @@ draft: false
 }
 ```
 
-![before](images/before.jpg)
+![before](/images/before.jpg)
 
 :after
 
@@ -82,7 +82,7 @@ draft: false
 
 这里的`background-color`和背景色设置为相同
 
-![before](images/after.jpg)
+![before](/images/after.jpg)
 
 `border-bottom-left-radius`熟悉后的两个值分别表示椭圆的半长轴和半短轴，用来调整角的弯曲度
 
@@ -92,6 +92,6 @@ draft: false
 
 但是b站对于图片气泡直接使用了canvas实现，画一个气泡然后用图片填充
 
-![canvas](images/canvas.jpg)
+![canvas](/images/canvas.jpg)
 
 (⊙﹏⊙)学到了

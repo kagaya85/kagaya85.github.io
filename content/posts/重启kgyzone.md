@@ -1,6 +1,6 @@
 ---
 title: "打算重启kgyzone"
-date: 2019-01-21T21:30:20+08:00
+date: 2019-01-01T21:30:20+08:00
 tags: ["碎碎念"]
 categories: ["Others"]
 featured_image:
