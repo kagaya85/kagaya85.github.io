@@ -1,6 +1,6 @@
 baseURL = "http://example.org/"
 languageCode = "zh-cn"
-title = "LeaveIt"
+title = "Kagaya's house"
 theme = "LeaveIt"
 
 paginate = 12
@@ -42,15 +42,15 @@ preserveTaxonomyNames = true
 [params]
     since = 1997
     author = "Kagaya"                           # Author's name
-    avatar = "/images/me/avatar.jpeg"           # Author's avatar
-    subtitle = "我会更好，因为我没有停止"         # Subtitle
+    avatar = "/images/me/avatar.jpg"           # Author's avatar
+    subtitle = "Let's code the world"         # Subtitle
     cdn_url = ""           # Base CDN URL
     home_mode = "" # post or other
 
     google_verification = ""
    
-    description = "test des" # site description
-    keywords = "test keywords" # site keywords
+    description = "Kagaya's personal blog" # site description
+    keywords = "computer science technology blog" # site keywords
 
     beian = ""
     baiduAnalytics = ""
@@ -58,12 +58,12 @@ preserveTaxonomyNames = true
     license= '本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可'
 
 [params.social]
-    GitHub = "xxoo"
-    Twitter = "xxoo"
-    Email   = "xxoo"
-    Instagram = "xxoo"
+    GitHub = "kagaya85"
+    Twitter = "kagaya_85"
+    Email   = "kagaya85@outlook.com"
+    # Instagram = "xxoo"
     Wechat = "/images/me/wechat.png"  # Wechat QRcode image
-    Facebook = "xxoo"
-    Telegram = "xxoo"
-    Dribbble = "xxoo"
-    Medium = "xxoo"
+    # Facebook = "xxoo"
+    # Telegram = "xxoo"
+    # Dribbble = "xxoo"
+    # Medium = "xxoo"
