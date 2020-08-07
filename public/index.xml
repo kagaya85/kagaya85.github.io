@@ -1,20 +1,51 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>LeaveIt on LeaveIt</title>
+    <title>Kagaya&#39;s house on Kagaya&#39;s house</title>
     <link>http://example.org/</link>
-    <description>Recent content in LeaveIt on LeaveIt</description>
+    <description>Recent content in Kagaya&#39;s house on Kagaya&#39;s house</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 04 Aug 2020 17:31:20 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Posts</title>
       <link>http://example.org/posts/</link>
-      <pubDate>Tue, 04 Aug 2020 17:31:20 +0800</pubDate>
+      <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
       <guid>http://example.org/posts/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>http://example.org/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/about/</guid>
+      <description>&lt;h1 id=&#34;about-me&#34;&gt;About me&lt;/h1&gt;
+&lt;h2 id=&#34;简单介绍一下自己&#34;&gt;🙌🏼简单介绍一下自己&lt;/h2&gt;
+&lt;p&gt;本科就读于同济大学计算机科学专业，现在复旦大学研究生在读，主攻方向微服务故障定位与链路追踪。&lt;/p&gt;
+&lt;p&gt;技术宅/工业党&lt;/p&gt;
+&lt;h2 id=&#34;我在用的装备&#34;&gt;👨🏻‍💻我在用的装备&lt;/h2&gt;
+&lt;h3 id=&#34;大件&#34;&gt;大件&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Macbook pro 13&lt;/li&gt;
+&lt;li&gt;Nintendo Switch&lt;/li&gt;
+&lt;li&gt;Huawei P30&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;耳机&#34;&gt;耳机&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Sony WH-1000 XM3&lt;/li&gt;
+&lt;li&gt;Huawei Freebuds 3&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;其他&#34;&gt;其他&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Huawei Watch GT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;未来的规划&#34;&gt;✈️未来的规划&lt;/h2&gt;
+&lt;p&gt;待定。。。&lt;/p&gt;
+</description>
     </item>
     
   </channel>

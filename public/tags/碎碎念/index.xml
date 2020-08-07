@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>碎碎念 on Kagaya&#39;s house</title>
+    <link>http://example.org/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
+    <description>Recent content in 碎碎念 on Kagaya&#39;s house</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 01 Jan 2019 21:30:20 +0800</lastBuildDate>
+    
+	<atom:link href="http://example.org/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>打算重启kgyzone</title>
+      <link>http://example.org/2019/%E9%87%8D%E5%90%AFkgyzone/</link>
+      <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
+      
+      <guid>http://example.org/2019/%E9%87%8D%E5%90%AFkgyzone/</guid>
+      <description>打算重启kgyzone 离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。
+之后可以慢慢在这里发一下心得体会。或许可以直接将markdown格式的文件直接发上来，那样的话会方便很多。
+markdown真好用啊</description>
+    </item>
+    
+  </channel>
+</rss>

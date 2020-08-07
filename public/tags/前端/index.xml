@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>前端 on Kagaya&#39;s house</title>
+    <link>http://example.org/tags/%E5%89%8D%E7%AB%AF/</link>
+    <description>Recent content in 前端 on Kagaya&#39;s house</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate>
+    
+	<atom:link href="http://example.org/tags/%E5%89%8D%E7%AB%AF/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DeepClone深克隆</title>
+      <link>http://example.org/2019/deepclone/</link>
+      <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
+      
+      <guid>http://example.org/2019/deepclone/</guid>
+      <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
+于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
+为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
+说到类型机制，JavaScript作为一门弱类型的语言，在变量类型上帮助程序员做了太多的工作，由于我之前是以写C/C++为主，在刚接触JavaScript、Python和PHP的时候，惊奇于竟然有语言不需要再申明变量的时候使用类型定义符，感叹于总算不需要为某种变量不知该定义哪种类型头疼了。
+于此同时，对于Python，PHP这种新变量直接赋值便可以使用的来说，我更喜欢JS的原因是有用于变量声明的var，const，let，因为这更贴近我所熟悉的C++语法，而PHP使用变量都需要打一个$符号也让我十分不习惯
+当然有利就有弊，弱类型语言带来的最大的问题就是变量类型的不明确以及对于编辑器无法做出类型推导等。弱类型语言使得编译器（或解释器）不太去关注变量的类型，同时也会帮程序员做一些看不见的类型转换，虽然一定程度上让人可以更加专注于程序逻辑上，但往往会埋下一些潜在的问题
+用一个最简单的例子
+//javascript var a = 1 a = &amp;#34;123&amp;#34; var b = a + 1	// &amp;#39;1231&amp;#39; # python a = 1 a = &amp;#39;123&amp;#39; b = a + 1 # type error JavaScript是直接可以字符串+int值的，然而python中会报错，但是两者对于一个int型的变量赋值一个字符串都是合法的。这在c++里是不可想象的。
+这就导致了在函数传参的时候又可能传进去参数的类型并不是所期待的类型，而这种错往往很难发现。
+好在对于JavaScript，微软发明了一种TypeScript的语言作为JavaScript的超集，很好的解决了JavaScript最大的痛点，类型问题，而且在编辑器里有着很好的类型推导，这简直让人更加喜爱这门语言
+话说回到深克隆问题
+用过C++的人都知道，C++最大的一个优势之一就是凭借着指针类型变量可以方便的直接对内存进行操作。而对于JavaScript其实也是有指针变量，虽然并没有单独划分出一个类型而且功能没C++那么强大，但都是表示指向了内存的一块区域。
+当时在学习C++类的拷贝构造函数时，老师就特意提醒对于类中的指针变量不可直接赋值，需要申请新的内存空间然后使用memcpy等函数进行内存复制。这是因为直接进行指针的赋值会导致多个指针指向同一块内存，引起访问冲突。而这，正是导致JavaScript中出现浅拷贝深拷贝问题的根源。
+var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
+如果要实现一个浅克隆可以这样做
+var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.</description>
+    </item>
+    
+    <item>
+      <title>CSS伪类的应用——实现聊天气泡效果</title>
+      <link>http://example.org/2019/css%E6%B0%94%E6%B3%A1/</link>
+      <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
+      
+      <guid>http://example.org/2019/css%E6%B0%94%E6%B3%A1/</guid>
+      <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
+消息气泡的模板定义如下
+&amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
+首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+:before
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同</description>
+    </item>
+    
+  </channel>
+</rss>
