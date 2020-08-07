@@ -2,165 +2,165 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Kagaya&#39;s house</title>
-    <link>http://example.org/tags/</link>
+    <link>https://kagaya85.github.io/tags/</link>
     <description>Recent content in Tags on Kagaya&#39;s house</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate>
     
-	<atom:link href="http://example.org/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://kagaya85.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>JavaScript</title>
-      <link>http://example.org/tags/javascript/</link>
+      <link>https://kagaya85.github.io/tags/javascript/</link>
       <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/javascript/</guid>
+      <guid>https://kagaya85.github.io/tags/javascript/</guid>
       <description></description>
     </item>
     
     <item>
       <title>前端</title>
-      <link>http://example.org/tags/%E5%89%8D%E7%AB%AF/</link>
+      <link>https://kagaya85.github.io/tags/%E5%89%8D%E7%AB%AF/</link>
       <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E5%89%8D%E7%AB%AF/</guid>
+      <guid>https://kagaya85.github.io/tags/%E5%89%8D%E7%AB%AF/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Linux</title>
-      <link>http://example.org/tags/linux/</link>
+      <link>https://kagaya85.github.io/tags/linux/</link>
       <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/linux/</guid>
+      <guid>https://kagaya85.github.io/tags/linux/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Unix</title>
-      <link>http://example.org/tags/unix/</link>
+      <link>https://kagaya85.github.io/tags/unix/</link>
       <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/unix/</guid>
+      <guid>https://kagaya85.github.io/tags/unix/</guid>
       <description></description>
     </item>
     
     <item>
       <title>C&#43;&#43;</title>
-      <link>http://example.org/tags/c&#43;&#43;/</link>
+      <link>https://kagaya85.github.io/tags/c&#43;&#43;/</link>
       <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/c&#43;&#43;/</guid>
+      <guid>https://kagaya85.github.io/tags/c&#43;&#43;/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Pthread</title>
-      <link>http://example.org/tags/pthread/</link>
+      <link>https://kagaya85.github.io/tags/pthread/</link>
       <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/pthread/</guid>
+      <guid>https://kagaya85.github.io/tags/pthread/</guid>
       <description></description>
     </item>
     
     <item>
       <title>并行计算</title>
-      <link>http://example.org/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</link>
+      <link>https://kagaya85.github.io/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</link>
       <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</guid>
+      <guid>https://kagaya85.github.io/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/</guid>
       <description></description>
     </item>
     
     <item>
       <title>CSS</title>
-      <link>http://example.org/tags/css/</link>
+      <link>https://kagaya85.github.io/tags/css/</link>
       <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/css/</guid>
+      <guid>https://kagaya85.github.io/tags/css/</guid>
       <description></description>
     </item>
     
     <item>
       <title>面试</title>
-      <link>http://example.org/tags/%E9%9D%A2%E8%AF%95/</link>
+      <link>https://kagaya85.github.io/tags/%E9%9D%A2%E8%AF%95/</link>
       <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E9%9D%A2%E8%AF%95/</guid>
+      <guid>https://kagaya85.github.io/tags/%E9%9D%A2%E8%AF%95/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Database</title>
-      <link>http://example.org/tags/database/</link>
+      <link>https://kagaya85.github.io/tags/database/</link>
       <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/database/</guid>
+      <guid>https://kagaya85.github.io/tags/database/</guid>
       <description></description>
     </item>
     
     <item>
       <title>SQL</title>
-      <link>http://example.org/tags/sql/</link>
+      <link>https://kagaya85.github.io/tags/sql/</link>
       <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/sql/</guid>
+      <guid>https://kagaya85.github.io/tags/sql/</guid>
       <description></description>
     </item>
     
     <item>
       <title>电影</title>
-      <link>http://example.org/tags/%E7%94%B5%E5%BD%B1/</link>
+      <link>https://kagaya85.github.io/tags/%E7%94%B5%E5%BD%B1/</link>
       <pubDate>Fri, 08 Mar 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E7%94%B5%E5%BD%B1/</guid>
+      <guid>https://kagaya85.github.io/tags/%E7%94%B5%E5%BD%B1/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Daring in the Franxx</title>
-      <link>http://example.org/tags/daring-in-the-franxx/</link>
+      <link>https://kagaya85.github.io/tags/daring-in-the-franxx/</link>
       <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/daring-in-the-franxx/</guid>
+      <guid>https://kagaya85.github.io/tags/daring-in-the-franxx/</guid>
       <description></description>
     </item>
     
     <item>
       <title>翻译</title>
-      <link>http://example.org/tags/%E7%BF%BB%E8%AF%91/</link>
+      <link>https://kagaya85.github.io/tags/%E7%BF%BB%E8%AF%91/</link>
       <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E7%BF%BB%E8%AF%91/</guid>
+      <guid>https://kagaya85.github.io/tags/%E7%BF%BB%E8%AF%91/</guid>
       <description></description>
     </item>
     
     <item>
       <title>短评</title>
-      <link>http://example.org/tags/%E7%9F%AD%E8%AF%84/</link>
+      <link>https://kagaya85.github.io/tags/%E7%9F%AD%E8%AF%84/</link>
       <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E7%9F%AD%E8%AF%84/</guid>
+      <guid>https://kagaya85.github.io/tags/%E7%9F%AD%E8%AF%84/</guid>
       <description></description>
     </item>
     
     <item>
       <title>肆式青春</title>
-      <link>http://example.org/tags/%E8%82%86%E5%BC%8F%E9%9D%92%E6%98%A5/</link>
+      <link>https://kagaya85.github.io/tags/%E8%82%86%E5%BC%8F%E9%9D%92%E6%98%A5/</link>
       <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E8%82%86%E5%BC%8F%E9%9D%92%E6%98%A5/</guid>
+      <guid>https://kagaya85.github.io/tags/%E8%82%86%E5%BC%8F%E9%9D%92%E6%98%A5/</guid>
       <description></description>
     </item>
     
     <item>
       <title>碎碎念</title>
-      <link>http://example.org/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
+      <link>https://kagaya85.github.io/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
       <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</guid>
+      <guid>https://kagaya85.github.io/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</guid>
       <description></description>
     </item>
     

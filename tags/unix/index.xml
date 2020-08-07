@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Unix on Kagaya&#39;s house</title>
-    <link>http://example.org/tags/unix/</link>
+    <link>https://kagaya85.github.io/tags/unix/</link>
     <description>Recent content in Unix on Kagaya&#39;s house</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Tue, 25 Jun 2019 21:30:20 +0800</lastBuildDate>
     
-	<atom:link href="http://example.org/tags/unix/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://kagaya85.github.io/tags/unix/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Unix系统分析——锁</title>
-      <link>http://example.org/2019/lock/</link>
+      <link>https://kagaya85.github.io/2019/lock/</link>
       <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>http://example.org/2019/lock/</guid>
+      <guid>https://kagaya85.github.io/2019/lock/</guid>
       <description>Unix系统分析——锁 总结Unix系统中锁的相关知识
 Linux各种锁的实现 原子操作 原子操作是最小的执行单位，保证在执行完毕前不会被其他任何事物或事件打断，也就是说不能有比它更小的执行单位，命名也借用了物理学中物质稳定存在的最小单位——原子。
 原子操作于硬件架构相关，由汇编语言实现，一般用于实现计数等操作

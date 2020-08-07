@@ -63,4 +63,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: http://example.org/sitemap.xml
+Sitemap: https://kagaya85.github.io/sitemap.xml
