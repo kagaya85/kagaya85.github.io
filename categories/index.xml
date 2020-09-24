@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on Kagaya&#39;s house</title>
+    <title>Categories on かがやの部屋</title>
     <link>https://kagaya85.github.io/categories/</link>
-    <description>Recent content in Categories on Kagaya&#39;s house</description>
+    <description>Recent content in Categories on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 17 Aug 2020 22:42:52 +0800</lastBuildDate>
-    
-	<atom:link href="https://kagaya85.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tech</title>
+      <link>https://kagaya85.github.io/categories/tech/</link>
+      <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
+      
+      <guid>https://kagaya85.github.io/categories/tech/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Blog</title>

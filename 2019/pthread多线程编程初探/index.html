@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cn"><head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
+实验要求 使用pthread实现图像卷积的并行计算
+由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
+基本概念 进程与线程 进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。
+随着人们对于并行计算的需求越来越多，而每次都开多个进程虽然可以实现并行计算，但带来的新的问题——进程间通信。这就需要涉及操作系统提供的进程通信方法（无名管道、有名管道、信号、消息队列、共享内存、Socket、共享文件），无论哪种方式，对于程序原来说需要单独编写通信相关代码还是过于麻烦。因此，懒惰的程序员们便提出了线程的概念。
+线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。
+当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习
+ 在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程
+ Liunx的pthread 头文件
+#include &amp;lt;pthread.h&amp;gt;创建线程
+int pthread_create( pthread_t *restrict_tidp, const pthread_attr_t *restrict_attr, void *(*start_rtn)(void), void *restrict_arg ); 需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败
+看一段代码
+// pthread create if(pthread_create(&amp;amp;thread_id, NULL, thread_task, &amp;amp;paras[i]) &amp;lt; 0) { cerr &amp;lt;&amp;lt; &amp;#34;pthread_create error&amp;#34; &amp;lt;&amp;lt; endl; exit(-1); } thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便
+回收线程
+int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL
+编译
+由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
+g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid'><title>pthread多线程编程初探</title>
+    
+    <link rel='canonical' href='https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='pthread多线程编程初探'>
+<meta property='og:description' content='pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
+实验要求 使用pthread实现图像卷积的并行计算
+由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
+基本概念 进程与线程 进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。
+随着人们对于并行计算的需求越来越多，而每次都开多个进程虽然可以实现并行计算，但带来的新的问题——进程间通信。这就需要涉及操作系统提供的进程通信方法（无名管道、有名管道、信号、消息队列、共享内存、Socket、共享文件），无论哪种方式，对于程序原来说需要单独编写通信相关代码还是过于麻烦。因此，懒惰的程序员们便提出了线程的概念。
+线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。
+当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习
+ 在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程
+ Liunx的pthread 头文件
+#include &amp;lt;pthread.h&amp;gt;创建线程
+int pthread_create( pthread_t *restrict_tidp, const pthread_attr_t *restrict_attr, void *(*start_rtn)(void), void *restrict_arg ); 需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败
+看一段代码
+// pthread create if(pthread_create(&amp;amp;thread_id, NULL, thread_task, &amp;amp;paras[i]) &amp;lt; 0) { cerr &amp;lt;&amp;lt; &amp;#34;pthread_create error&amp;#34; &amp;lt;&amp;lt; endl; exit(-1); } thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便
+回收线程
+int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL
+编译
+由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
+g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid'>
+<meta property='og:url' content='https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
+<meta property='og:site_name' content='かがやの部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='Pthread' /><meta property='article:tag' content='并行计算' /><meta property='article:published_time' content='2019-06-01T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-06-01T21:30:20&#43;08:00'/>
+<meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="pthread多线程编程初探">
+<meta name="twitter:description" content="pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
+实验要求 使用pthread实现图像卷积的并行计算
+由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
+基本概念 进程与线程 进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。
+随着人们对于并行计算的需求越来越多，而每次都开多个进程虽然可以实现并行计算，但带来的新的问题——进程间通信。这就需要涉及操作系统提供的进程通信方法（无名管道、有名管道、信号、消息队列、共享内存、Socket、共享文件），无论哪种方式，对于程序原来说需要单独编写通信相关代码还是过于麻烦。因此，懒惰的程序员们便提出了线程的概念。
+线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。
+当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习
+ 在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程
+ Liunx的pthread 头文件
+#include &amp;lt;pthread.h&amp;gt;创建线程
+int pthread_create( pthread_t *restrict_tidp, const pthread_attr_t *restrict_attr, void *(*start_rtn)(void), void *restrict_arg ); 需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败
+看一段代码
+// pthread create if(pthread_create(&amp;amp;thread_id, NULL, thread_task, &amp;amp;paras[i]) &amp;lt; 0) { cerr &amp;lt;&amp;lt; &amp;#34;pthread_create error&amp;#34; &amp;lt;&amp;lt; endl; exit(-1); } thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便
+回收线程
+int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL
+编译
+由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
+g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid"></head><body class="">
+        <div class="container flex on-phone--column align-items--flex-start extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+
+                
+                    
+                    <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x300_resize_box_2.png" width="300"
+                        height="300" class="site-logo" loading="lazy" alt="Avatar">
+                
+
+                <span class="emoji">🍥</span>
+            </figure>
+        
+        <h1 class="site-name"><a href="https://kagaya85.github.io/">かがやの部屋</a></h1>
+        <h2 class="site-description">明日は晴れるかな〜</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='https://kagaya85.github.io/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://kagaya85.github.io/about'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://kagaya85.github.io/archives'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+    </ol>
+</aside>
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://kagaya85.github.io/" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+                <a href="https://kagaya85.github.io/categories/code/">Code</a>
+            
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/">pthread多线程编程初探</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Jun 01, 2019</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="pthread多线程编程初探">pthread多线程编程初探</h1>
+<p><strong>POSIX线程</strong>（POSIX threads），简称Pthreads，是线程的<strong>POSIX标准</strong>。该标准定义了创建和操纵线程的一整套API。</p>
+<h2 id="实验要求">实验要求</h2>
+<p><strong>使用pthread实现图像卷积的并行计算</strong></p>
+<p>由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。</p>
+<h2 id="基本概念">基本概念</h2>
+<h3 id="进程与线程">进程与线程</h3>
+<p>进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。</p>
+<p>随着人们对于并行计算的需求越来越多，而每次都开多个进程虽然可以实现并行计算，但带来的新的问题——进程间通信。这就需要涉及操作系统提供的进程通信方法（无名管道、有名管道、信号、消息队列、共享内存、Socket、共享文件），无论哪种方式，对于程序原来说需要单独编写通信相关代码还是过于麻烦。因此，懒惰的程序员们便提出了线程的概念。</p>
+<p>线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。</p>
+<p>当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习</p>
+<blockquote>
+<p>在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程</p>
+</blockquote>
+<h3 id="liunx的pthread">Liunx的pthread</h3>
+<p><strong>头文件</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span></code></pre></div><p><strong>创建线程</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">pthread_create</span><span class="p">(</span>
+    <span class="n">pthread_t</span> <span class="o">*</span><span class="n">restrict_tidp</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">pthread_attr_t</span> <span class="o">*</span><span class="n">restrict_attr</span><span class="p">,</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">start_rtn</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">restrict_arg</span>
+    <span class="p">);</span>
+</code></pre></div><p>需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败</p>
+<p>看一段代码</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// pthread create
+</span><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便</p>
+<p><strong>回收线程</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
+</code></pre></div><p>第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL</p>
+<p><strong>编译</strong></p>
+<p>由于<code>pthread.h</code>不是标准库函数，之前需要指定<code>-lpthread</code>，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定<code>-pthread</code>参数即可编译成功</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">g++ pthread.cpp -o pthread -pthread
+</code></pre></div><h2 id="遇到的问题及解决方法">遇到的问题及解决方法</h2>
+<h3 id="id">Id</h3>
+<p>有三个东西，pid，thread_id，tid</p>
+<p>对于一个进程来说：</p>
+<ul>
+<li>pid就是进程id，和thread_id相等</li>
+</ul>
+<p>对于一个进程的许多线程来说：</p>
+<ul>
+<li>thread_id与pid不同，而且不是一个从0开始的数</li>
+<li>thread_id在该进程内不相同，可能与其他进程的线程thread_id相同</li>
+<li>由于之前提到的，linux对于线程的管理也是按进程的方式，所以线程也有一个pid，称为tid，可以使用系统调用获取。</li>
+<li>若需要项其他进程的线程发送信息，就需要使用tid来标识对应线程，而不是pid或者thread_id</li>
+</ul>
+<h3 id="传递参数时地址共享问题">传递参数时地址共享问题</h3>
+<p>由于需要传递多个参数，采用结构体<code>task_para</code>传值</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">task_para</span> <span class="n">paras</span><span class="p">;</span>
+<span class="c1">// pthread create
+</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">paras</span><span class="p">.</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">.</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">.</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>传递参数时传递不同地址的结构体</p>
+<div class="highlight"><pre class="chroma"><code class="language-c++" data-lang="c++"><span class="n">task_para</span><span class="o">*</span> <span class="n">paras</span> <span class="o">=</span> <span class="k">new</span> <span class="n">task_para</span><span class="p">[</span><span class="n">thread_num</span><span class="p">];</span>    
+<span class="c1">// pthread create
+</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
+    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>以上就是这次实验中总结的一些知识点，当然thread还有许多用法没有去实践，之后用OpenMP来实现卷积时再打算总结一下各自优劣吧。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            
+                <a href="https://kagaya85.github.io/tags/c&#43;&#43;/">C&#43;&#43;</a>
+            
+        
+            
+                <a href="https://kagaya85.github.io/tags/pthread/">Pthread</a>
+            
+        
+            
+                <a href="https://kagaya85.github.io/tags/%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/">并行计算</a>
+            
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>本文采用[知识共享署名-非商业性使用 4.0 国际许可协议]进行许可</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="widget related-contents--wrapper">
+    
+    
+        <h1 class="widget-title"></h1>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="">
+    <a href="https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepClone深克隆</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Unix系统分析——锁</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CSS伪类的应用——实现聊天气泡效果</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL变量总结</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Mysql和MariaDB中的Rank排序的坑</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "kagayablog.disqus.com/admin/" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">&copy; 2020 かがやの部屋</section>
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener">Stack</a></b> designed by
+        <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" style="display:none">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+            </main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"
+    integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g=" crossorigin="anonymous"></script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+<link rel="stylesheet" href="/css/highlight/light.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="/css/highlight/dark.min.css" media="(prefers-color-scheme: dark)">
+
+    </body>
+</html>
