@@ -8,11 +8,11 @@
     <language>zh-cn</language>
     <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Tech</title>
-      <link>https://kagaya85.github.io/categories/tech/</link>
+      <title>Code</title>
+      <link>https://kagaya85.github.io/categories/code/</link>
       <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/categories/tech/</guid>
+      <guid>https://kagaya85.github.io/categories/code/</guid>
       <description></description>
     </item>
     
@@ -22,15 +22,6 @@
       <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
       
       <guid>https://kagaya85.github.io/categories/blog/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Code</title>
-      <link>https://kagaya85.github.io/categories/code/</link>
-      <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/categories/code/</guid>
       <description></description>
     </item>
     
