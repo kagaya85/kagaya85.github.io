@@ -257,7 +257,7 @@ server {
 </span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
 </span><span class="w">        </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
 </span></code></pre></div><p>在www目录下放一个index.php文件输出phpinfo用于测试，最后在浏览器里访问localhost</p>
-<p>![php](<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot">https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot</a> 2020-09-24 at <a href="mailto:15.01.24@2x.png">15.01.24@2x.png</a>)</p>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.01.24@2x.png" alt="php"  /></p>
 <h2 id="在docker内连接mysql">在Docker内连接Mysql</h2>
 <p>对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现</p>
 <p>同时，我们还可以将mysql的3306端口映射到主机，方便我们用数据库管理软件进行操作</p>
@@ -321,7 +321,7 @@ RUN docker-php-ext-install mysqli
 </code></pre></div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
 <p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg" alt="docker-compose"  /></p>
 <p>这样，我们就可以直接在本地调试wordpress中的php代码了，并且在vscode中也可以获得代码提示</p>
-<p>![wordpress](<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot">https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot</a> 2020-09-24 at <a href="mailto:15.00.35@2x.png">15.00.35@2x.png</a>)</p>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png" alt="CleanShot2020-09-24at15.00.35@2x"  /></p>
 
 </section>
 
