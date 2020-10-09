@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>かがやの部屋</title>
-    <link>https://kagaya85.github.io/</link>
-    <description>Recent content on かがやの部屋</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>使用Docker部署本地Wordpress开发环境</title>
-      <link>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
-      <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
-      <description>使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。
+    <channel>
+        <title>かがやの部屋</title>
+        <link>https://kagaya85.github.io/</link>
+        <description>Recent content on かがやの部屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>使用Docker部署本地Wordpress开发环境</title>
+        <link>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+        <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+        <description>使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。
 背景 由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。
 本机环境 MacOS 10.15.6（理论上适用于所有支持Docker的环境）
 Docker Desktop 19.03.12
@@ -24,15 +23,14 @@ Docker Desktop 19.03.12
  修改nginx的配置，指定php处理方式 通过设置使nginx能够访问到php容器 启动nginx与php的容器  首先，为了持久化配置，我在/Users/kagaya/Docker/nginx/conf.d/下新建了default.conf配置文件，挂载到目标文件/etc/nginx/conf.d:ro并指定只读属性
 最后对nginx的配置文件做对应修改即可：
 # default.conf server { listen 80; server_name localhost; location / { root /usr/share/nginx/html; index index.</description>
-    </item>
-    
-    <item>
-      <title>八佰看完了，谈一点肤浅的想法</title>
-      <link>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E8%B0%88%E4%B8%80%E7%82%B9%E8%82%A4%E6%B5%85%E7%9A%84%E6%83%B3%E6%B3%95/</link>
-      <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E8%B0%88%E4%B8%80%E7%82%B9%E8%82%A4%E6%B5%85%E7%9A%84%E6%83%B3%E6%B3%95/</guid>
-      <description>八佰看完了，谈一点肤浅的想法 我先给《八佰》一个好评（主观上） 《八佰》看完了，还专门去看了IMAX版。尽管这部电影从宣发到撤档再到重新定档上映，之间备受争议。但我还说要说，仅从抗战电影本身来说，这是部好电影，甚至超出了我之前看过的所有抗战片，我要给它很高的评价。《八佰》的出现对于中国抗战片来说有一定的特殊意义，类似《流浪地球》对于中国科幻片。这不仅因为它是一部少有的大陆拍摄的国军战役，而且制作团队对于电影的取材，伴奏配乐，画面分镜以及叙事节奏的掌握都十分出色。最后所表达的主题也很明确：**尽管这是一场必然失败的“表演”战役，但是“八佰壮士”用自己的行动向江对岸的人展示了中国军人真正的气魄，以此来唤醒更多中国人参与抗战。**这点我深表赞同。
+        </item>
+        <item>
+        <title>八佰看完了，谈一点肤浅的想法</title>
+        <link>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E8%B0%88%E4%B8%80%E7%82%B9%E8%82%A4%E6%B5%85%E7%9A%84%E6%83%B3%E6%B3%95/</link>
+        <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E8%B0%88%E4%B8%80%E7%82%B9%E8%82%A4%E6%B5%85%E7%9A%84%E6%83%B3%E6%B3%95/</guid>
+        <description>八佰看完了，谈一点肤浅的想法 我先给《八佰》一个好评（主观上） 《八佰》看完了，还专门去看了IMAX版。尽管这部电影从宣发到撤档再到重新定档上映，之间备受争议。但我还说要说，仅从抗战电影本身来说，这是部好电影，甚至超出了我之前看过的所有抗战片，我要给它很高的评价。《八佰》的出现对于中国抗战片来说有一定的特殊意义，类似《流浪地球》对于中国科幻片。这不仅因为它是一部少有的大陆拍摄的国军战役，而且制作团队对于电影的取材，伴奏配乐，画面分镜以及叙事节奏的掌握都十分出色。最后所表达的主题也很明确：**尽管这是一场必然失败的“表演”战役，但是“八佰壮士”用自己的行动向江对岸的人展示了中国军人真正的气魄，以此来唤醒更多中国人参与抗战。**这点我深表赞同。
 个人认为的争议 说说争议点，对我来说让我非常不满的是导演管虎本人，《八佰》是部好电影，但是宣发的时候特意要去找八十八师师长“飞将军”孙元良的后人，孙的行为在抗战期间颇有争议，尽管是孙元良当时亲自给谢晋元下令死守四行仓库，但是因为本人的污点，不应该成为宣发时的素材。
 历史虚无主义 历史虚无主义——指不加具体分析而盲目否定人类社会的历史发展过程
 有人批评电影有历史虚无主义的嫌疑，认为一方面历史中日军并没有猛攻四行仓库，且电影中刻意夸大了国军的表现，认为事实中的国军并不是为了保卫上海而在电影中被“美化”，女学生送国旗也是从桥上光明正大地走过去而不是冒着子弹渡河。确实，电影确实在这方面有所夸张，但是电影之所以是电影而不是纪录片，为了表现主题而做适当的夸张处理，以此使感情的表达更加强烈，我觉得是可以接受的，在这一点上《八佰》确实也做到了。关于“美化”的问题，我觉得电影中处理的也比较恰当，如果我们交换时空设想一下，当时河对岸租界里的普通民众看来，对岸的中国军人在对抗日寇就是在保护自己（尽管他们也知道日军不会打到租界来），从谢晋元以及仓库里的士兵这些以执行军令为天职的军人看来，上级下达死守仓库的命令就是为了保卫上海最后一块领地而他们或许真的不知道这背后的真实目的是什么，电影中也表现了谢晋元团长的军人风度和民族气概以及士兵们视仓库为自己最后的坟墓，绝不后撤保卫上海的决心。在电影的最后，特使和谢团长的对峙中，戳破了这场战斗只是“表演”，只是为了在国际上获得同情，也是基本尊重史实的。所以我认为《八佰》出色地完成了它的任务，可以说它有虚构的成分，但最后宣扬的主题是没有问题的。既没有否定国军正面战场的妥协失利利用“表演”来博得国际社会同情的行为，也没有否定国军中也有像谢晋元及其部下英勇抗战的中国军人。
@@ -40,15 +38,14 @@ Docker Desktop 19.03.12
 结局最后在“八百壮士”从桥面冲向租界撤退戛然而止，并在片尾拍摄了如今上海四行仓库的遗址，串起了历史与当今，这种对比让人更加感同身受。这是很标准的结尾，不出彩，但值得好评。
 总结 总而言之，制作团队的努力不可否认，淞沪会战“八百壮士”的英雄事迹不该遗忘，有机会一定也去四行仓库遗址看看。最后，我希望这部电影能够走出中国，毕竟长期以来，欧洲战场太平洋战场的好片子太多了，作为东方主战场的中国，需要更多类似《八佰》这样的电影，在尊重历史的基础上，向世界展示中国在世界反法西斯战争中的决心和努力，无论是共军还是国军。
 再给管大导演一个机会，期待他后面抗美援朝的片子。。。</description>
-    </item>
-    
-    <item>
-      <title>DeepClone深克隆</title>
-      <link>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
-      <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
-      <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
+        </item>
+        <item>
+        <title>DeepClone深克隆</title>
+        <link>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+        <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+        <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
 于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
 为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
 说到类型机制，JavaScript作为一门弱类型的语言，在变量类型上帮助程序员做了太多的工作，由于我之前是以写C/C++为主，在刚接触JavaScript、Python和PHP的时候，惊奇于竟然有语言不需要再申明变量的时候使用类型定义符，感叹于总算不需要为某种变量不知该定义哪种类型头疼了。
@@ -64,15 +61,14 @@ Docker Desktop 19.03.12
 var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
 如果要实现一个浅克隆可以这样做
 var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.</description>
-    </item>
-    
-    <item>
-      <title>Unix系统分析——锁</title>
-      <link>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
-      <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
-      <description>Unix系统分析——锁 总结Unix系统中锁的相关知识
+        </item>
+        <item>
+        <title>Unix系统分析——锁</title>
+        <link>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
+        <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
+        <description>Unix系统分析——锁 总结Unix系统中锁的相关知识
 Linux各种锁的实现 原子操作 原子操作是最小的执行单位，保证在执行完毕前不会被其他任何事物或事件打断，也就是说不能有比它更小的执行单位，命名也借用了物理学中物质稳定存在的最小单位——原子。
 原子操作于硬件架构相关，由汇编语言实现，一般用于实现计数等操作
 信号量 信号量，Semaphore，Linux内核信号量以一个初始值创建，用来表示同时可以有几个任务可以访问由信号量保护的共享资源。初始值为1的信号量就是互斥锁，即在同一时间只能有一个任务可以访问信号量保护的共享资源
@@ -100,15 +96,14 @@ void downgrade_write(struct rw_semaphore *sem); 函数用于把写者降级为�
 顺序锁 对读写锁的优化，读者不会被写者阻塞，意味着写者在进行写操作时读者仍然可以读取，读写是可以同时发生的，但写者之间依然互斥。
 既然读写可以并行，为了保证数据的正确性依然有许多限制：
  被保护的资源不能有指针，否则当写者修改指针后，读者读取时可能失效 若读者读取时发生了写操作，读者需要重新读取数据  舒徐所适用于读写同时进行的概率较小的场景，允许读写同时进行，性能和并发度都有提高</description>
-    </item>
-    
-    <item>
-      <title>pthread多线程编程初探</title>
-      <link>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
-      <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
-      <description>pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
+        </item>
+        <item>
+        <title>pthread多线程编程初探</title>
+        <link>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
+        <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
+        <description>pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
 实验要求 使用pthread实现图像卷积的并行计算
 由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
 基本概念 进程与线程 进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。
@@ -126,15 +121,14 @@ int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的�
 编译
 由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
 g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid</description>
-    </item>
-    
-    <item>
-      <title>CSS伪类的应用——实现聊天气泡效果</title>
-      <link>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
-      <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
-      <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+        </item>
+        <item>
+        <title>CSS伪类的应用——实现聊天气泡效果</title>
+        <link>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
+        <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
+        <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
@@ -143,15 +137,14 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
 :before
 .bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同</description>
-    </item>
-    
-    <item>
-      <title>记人生中第一次面试</title>
-      <link>https://kagaya85.github.io/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
-      <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
-      <description>记人生中第一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。
+        </item>
+        <item>
+        <title>记人生中第一次面试</title>
+        <link>https://kagaya85.github.io/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
+        <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
+        <description>记人生中第一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。
 微软分网测和面试两个部分，投简历后不久就先收到了网测通知的邮件，也就是某天下午7点到9点要在电脑前完成一个测试。邮件里附了一个考试连接和一个体验连接，后者可以让你提前熟悉一下操作环境，测试一下你的电脑环境（摄像头）。对了，网测通知的全程要开摄像头，也就是说会有监考，内容是两小时做四道题。但是我测的时候全程摄像头的指示灯都没有亮，甚至倒计时的计时器都是6小时？？？
 考试界面和leetcode很像，题目都是英文的，前两道题比较简单，后两道难度一下就提高了。除非打过acm的选手或特别练过的，我觉得就算有思路也很难下手。当然我也只是完成了前两道，到了两小时就交卷了。
 没想到过了几天竟然受到了微软的面试通知，这确实让我蛮惊喜意外的，但更多的还是不安。因为对于面试经验几乎为0的我来说，第一次就是面微软确实是一个巨大的挑战。准备时间大概只有两周，于是翻开了各大论坛的面经指南寻找准备方法。一直在忙于做各种课设的我也没怎么刷leetcode，甚至面试前在车上还在看全排列的题（我甚至没想到看的这道题三小时后就考了！！！🙄🙃👻）
@@ -160,39 +153,36 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
 问题是机票按照先后顺序（出发地，目的地）排序的问题。我一开始先说了个谁都能想到的On2的方法，当然我肯定不会只到这。接着分析了下优化主要可以从查找效率入手，先是提了下二分搜索，最后还是落脚在了哈希表上。这样搜索基本可以达到常数效率。后来面试官和我一边讨论一些特殊情况，一边改进程序，感觉就像是老师学生在讨论题目，越说越有信心。感觉最后面试官也很满意，在带我回休息室的时候还问我要不要喝杯咖啡。
 第二个面试官就感觉不是很顺利了，叫我的时候问我有没有简历（我：？？？），理论上每个面试官应该收到的都是电子版的简历，有些比较负责的可能会先去看你的简历，熟悉了以后在针对性的面试，所以他这么一问我只能说没有。于是他只能拿出手机看电子版简历，不过明显是第一次看，第一个就问我研究方向是什么？（我：？？？），我说明了下我是本科生后他好像有点失望，便将提问方向转向了有没有写代码的机会。我只能说代码肯定每天都在写，只是没有接触大项目的机会。于是同样问了几个之前的项目就开始做题，题目正是我两小时前还在看的全排列。我还有点惊喜，因为思路立马就有了，于是直接开始写。没用多久就完成了，是一个很简单的递归程序，我用最保险的方法写了。写完后便开始挑毛病，我发现我漏了一句pop，不过其他基本没什么逻辑上的错误。最后他觉得我写的复杂了，自己说了个插入的方法，确实这个方法我也看到过，但是不是很熟就没写。简单提了下他自己的思路后就结束了，二面大概只面了半小时，而且我觉得沟通不是很舒服，我感觉多半是凉了。于是两轮后就没有三轮了。
 不过今天一天确实收获不少，很荣幸能微软一日游，也为今后如何准备面试提供了不少经验，感觉还是赚到了，给自己加油！</description>
-    </item>
-    
-    <item>
-      <title>SQL变量总结</title>
-      <link>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
-      <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
-      <description>SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
+        </item>
+        <item>
+        <title>SQL变量总结</title>
+        <link>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+        <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+        <description>SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
 请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
    id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出</description>
-    </item>
-    
-    <item>
-      <title>Mysql和MariaDB中的Rank排序的坑</title>
-      <link>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
-      <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
-      <description>Mysql和MariaDB中的Rank排序的坑 题目中需要对一个成绩表按考试科目以及学生做排名
+        </item>
+        <item>
+        <title>Mysql和MariaDB中的Rank排序的坑</title>
+        <link>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+        <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+        <description>Mysql和MariaDB中的Rank排序的坑 题目中需要对一个成绩表按考试科目以及学生做排名
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的：
 /* 临时rank function 要求原表按id score_mark降序 排列好 */ delimiter // drop function if exists myrank; create function myrank(score_id int, score_mark float) returns int READS SQL DATA begin if(@pre_score_id is null or @pre_score_id != score_id) then set @pre_score_id := score_id; set @pre_score_mark := score_mark; set @row := 1; set @rank := 1; else set @row := @row + 1; if(@pre_score_mark != score_mark or score_mark is null) then set @rank := @row; set @pre_score_mark = score_mark; end if; end if; return @rank; end // delimiter ; 完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：</description>
-    </item>
-    
-    <item>
-      <title>难得看次电影，随便写写</title>
-      <link>https://kagaya85.github.io/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
-      <pubDate>Fri, 08 Mar 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
-      <description>难得看次电影，随便写写 ​	趁着周五+惊奇队长第一天上映，拉着基友去学校边上的电影院一睹为快，顺便看了广受好评的奥斯卡最佳影片——Green Book 绿皮书
+        </item>
+        <item>
+        <title>难得看次电影，随便写写</title>
+        <link>https://kagaya85.github.io/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
+        <pubDate>Fri, 08 Mar 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
+        <description>难得看次电影，随便写写 ​	趁着周五+惊奇队长第一天上映，拉着基友去学校边上的电影院一睹为快，顺便看了广受好评的奥斯卡最佳影片——Green Book 绿皮书
 ​	不得不说我真是很庆幸自己先看了惊奇队长，再看了绿皮书，然后心满意足地回到寝室。先说说惊奇队长，作为复仇者联盟的最强战力，上映的这部《惊奇队长》基本上是为了一个月后的《复联4》做铺垫的。一方面为了新加入的成员交代好故事背景，另一方面补充一些主线上的剧情。总得来说没有什么惊喜的地方，哦，对我来说最惊喜的地方是能再次在荧幕上看到富瑞和科尔森，两位在神盾局中举足轻重的人物。说真的，富瑞那时候还没有戴他那个标志性的眼罩，而且显得非常年轻，体态虽然宽大但丝毫不显臃肿，甚至当时作为三级特工的富瑞已经显得十分老练。刚出场的时候我一时还没认出来，直到科尔森喊出富瑞的名字，我惊喜的差点叫出来。富瑞的形象一直是那样稳重，看到他总会给人一种莫名的安全感，仿佛一切都在他的掌握之中。惊喜之余，也顺便给神盾局上柱香。另外，关于剧情主要还是意料之中地交代了惊奇队长身世以及能力的来源，虽然可能没有人看这篇blog，但我还是没有剧透的习惯，就不细说了，个人觉得就算没有看《惊奇队长》对于接下来的复联也不会有什么影响，比较关键的内容就是宇宙魔方是怎么到富瑞手里的以及富瑞在《复联3》里联系惊奇队长的那个寻呼机的来历，不过全身发出耀眼光芒的女侠还是蛮帅的，就凭一个人就能单挑一支舰队的能力（特效）来看，还是非常适合边吃爆米花边看的。
 ​	看完《惊奇队长》紧接着就去看了一直被各种吹爆的《绿皮书》，没错，我也要吹爆“小绿本”了。之前看到海报上一个人开着一辆绿色的车，我大致就可以猜到这可能是一部公路电影，但不清楚具体的内容，如果没有获得这么高的舆论评价我可能也不会在影院下架前赶着去看了最后一场。对这类题材其实并不是很感冒，而且看过的公路片印象深的也并不多（如果阿甘也算的话），看完以后确实感叹，小绿本是真的物有所值，它值得那个小金人。
 ​	《绿皮书》的核心内容其实还是黑人与种族歧视问题，对于这种在美国算作政治正确题材的电影，就像国内抗日爱国题材的电影，总能成为稳定的创作素材，的确能让我获得如此舒服的观后体验着实出乎我的意料。尤其是整部电影从头到尾基本都保持在一个轻松愉快的气氛中，甚至在刚开始我误以为它是一部喜剧片。影片一开始展示的“本片改编自真实故事”确实就已经吸引了我的注意力，这种真人真事的电影确实更能说服观众。大致的内容就是一名退役的白人士兵，托尼，为了生计给一位黑人钢琴家，雪利，做司机，一路上陪伴他在美国的南部进行了两个月的巡演的故事。时间背景大致是在上个世纪，种族歧视在美国南部盛行的年代。这样题材的电影也很容易就落入俗套，比如很可能就是黑人兄弟们是怎样活在白人歧视和压迫下一步一步克服艰难获得成功的故事。当然，这样也可以是一部好电影，比如《42号传奇》，我还蛮喜欢这部的，推荐。
@@ -200,15 +190,14 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
 ​	好的电影可能没必要通过悲伤的情景把你感动到流泪，或通过激烈的场面和配乐让你热血沸腾。也许可以是这样一部轻松愉快，让观影者不时发出欢笑声的电影，也能引发人们对问题矛盾的无限深思。
  2019年3月8日23点13分
  </description>
-    </item>
-    
-    <item>
-      <title>DitF第十三集ed绘本《魔物与王子》翻译</title>
-      <link>https://kagaya85.github.io/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
-      <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
-      <description>DitF第十三集ed绘本《魔物与王子》翻译 一个挺悲伤的故事（有翻译错误还请指教）
+        </item>
+        <item>
+        <title>DitF第十三集ed绘本《魔物与王子》翻译</title>
+        <link>https://kagaya85.github.io/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
+        <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
+        <description>DitF第十三集ed绘本《魔物与王子》翻译 一个挺悲伤的故事（有翻译错误还请指教）
 在某个国家漆黑的森林深处，有一个不为人知的种族生活在那里。背上长着巨大的他们十分的美丽，但是确实被成为“魔物”般的存在。那里生活着的“魔物”的公主。她的背上也有着巨大的灰色翅膀，当她成长到十六岁的时候，就被允许用翅膀飞到森林的外面。
 然后，当过完十六岁生日的时候，公主第一次飞出森林，穿越过了险峻的山峰，飞过了河流。好不容易到达了一个住着不同种族的地方——人类的国家。空中的月光照映着她的脸庞。
 她降落在了大城市中的庭院里，看到了一个独自仰望着月亮的青年的身影。公主躲在树林中注视着青年的身影。那是第一次萌生了恋爱的感觉。但是，他明显和自己是不同的种族。从来没有魔物和人类结成伴侣的事情发生。
@@ -219,56 +208,28 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
 但是，公主的幸福并没有持续很久，在身体如同灼烧一般的疼痛中醒来，自己的身体也渐渐变成一个丑陋的怪物，尖锐的利爪迅速的生长。“为什么？我应该已经拜托了她让我成为了人类啊”，然后，她的背后丑陋漆黑的翅膀突破皮肉展开来。“既然使用了魔法也是有代价的。你已经作为完美的人类获得了幸福了吧，之后你自己只是会丧失自己，变成丑陋得怪物而已罢了。” 森之魔女的声音一句句传到她的耳边。“但是，只要你亲手杀掉你最亲爱的人，你就会解除诅咒，变回你最初始的样子”
 公主看着自己心爱的王子，将自己长长的爪子伸向了王子的脖子。明明是比谁都要喜爱的人啊，如今却涌来了想要切断他的喉咙杀死他的感觉。公主拼命的控制自己，自己的手也渐渐渗出了血。“只要杀掉王子，诅咒就会解除……” 公主流着泪，轻轻的亲了下王子的脸颊。
 王子醒来后发现公主并不在身边，而是在床上发现了许多漆黑的羽毛。王子十分悲伤，即使在全城中寻找，却再也没有人见过公主。</description>
-    </item>
-    
-    <item>
-      <title>我们都在向前走，只有回忆驻留在原地</title>
-      <link>https://kagaya85.github.io/2019/%E6%88%91%E4%BB%AC%E9%83%BD%E5%9C%A8%E5%90%91%E5%89%8D%E8%B5%B0%E5%8F%AA%E6%9C%89%E5%9B%9E%E5%BF%86%E9%A9%BB%E7%95%99%E5%9C%A8%E5%8E%9F%E5%9C%B0/</link>
-      <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/%E6%88%91%E4%BB%AC%E9%83%BD%E5%9C%A8%E5%90%91%E5%89%8D%E8%B5%B0%E5%8F%AA%E6%9C%89%E5%9B%9E%E5%BF%86%E9%A9%BB%E7%95%99%E5%9C%A8%E5%8E%9F%E5%9C%B0/</guid>
-      <description>我们都在向前走，只有回忆驻留在原地 电影《肆式青春》短评
+        </item>
+        <item>
+        <title>我们都在向前走，只有回忆驻留在原地</title>
+        <link>https://kagaya85.github.io/2019/%E6%88%91%E4%BB%AC%E9%83%BD%E5%9C%A8%E5%90%91%E5%89%8D%E8%B5%B0%E5%8F%AA%E6%9C%89%E5%9B%9E%E5%BF%86%E9%A9%BB%E7%95%99%E5%9C%A8%E5%8E%9F%E5%9C%B0/</link>
+        <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/%E6%88%91%E4%BB%AC%E9%83%BD%E5%9C%A8%E5%90%91%E5%89%8D%E8%B5%B0%E5%8F%AA%E6%9C%89%E5%9B%9E%E5%BF%86%E9%A9%BB%E7%95%99%E5%9C%A8%E5%8E%9F%E5%9C%B0/</guid>
+        <description>我们都在向前走，只有回忆驻留在原地 电影《肆式青春》短评
 观看建议：这部电影是三位导演通过中国这个舞台来描绘他们眼中青春的故事，三个篇章之间关系不大，但各自讲述一段完整的故事，虽然篇幅较短，但请用心体会，如果能在将自己的经历带入其中一段故事中的话能获得最好的观看体验。
 首先很遗憾，限于排片过少没能够第一时间去影院支持一下。其实很早就开始关注这部电影了，随着中国资本进入动画市场，也一直期待着有能有一部讲述中国自己故事的动画，不得不说，绘梦这次做的不错。整体看完以后觉得基本上没让我失望，个人看来第一篇与第三篇是比较出彩的，可以看到叫兽和李导真的是十分想把属于那个时代的回忆和情感通过动画的形式传达出来，各个细节十分到位，电影中的各种中国式场景想必各位也看得十分有亲切感。也许限于篇幅原因，有许多内容没能够呈现出来，但也确实足够表现出两位在中国这片土地上长大的年轻人对于那个一段美好时光的不舍之情，叙事节奏的把握我觉得真的是十分不错了。但我觉得缺点也是有的，题材的限制使得只有相似经历的人更容易在这个电影里获得共鸣，另外篇幅限制使得许多地方存在铺垫不足的问题。但个人认为这些不至于影响到整个电影所表达的东西，所以我还是会推荐更多人来看的。 正如《一碗乡愁》的导演叫兽所说的一样，他的目的是要引起一部分人的共鸣，如果你在看这部电影的时候，电影中的一个事物，一个情节，或者一个人物，能让你不由自主地将自己代入到电影之中，那可以说这部电影是成功的。无论是自己的那位和蔼的长辈，还是小时候最喜欢的一道美食，抑或是那个曾经羞涩的自己所暗恋的ta。尽管每个人的青春时光都不尽相同，但大家都经历过那个年代，总能找到一些只属于那个年代的印记，电影讲述的不只是导演们自己的故事，也是在讲述我们每一个80后，90后甚至00后的青春。
 我们都在向前走，只有回忆驻留在原地。如今，我也只能借助这样一部电影，才能够回忆起曾经那个傻傻的自己了。</description>
-    </item>
-    
-    <item>
-      <title>打算重启kgyzone</title>
-      <link>https://kagaya85.github.io/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
-      <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
-      <description>打算重启kgyzone 离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。
+        </item>
+        <item>
+        <title>打算重启kgyzone</title>
+        <link>https://kagaya85.github.io/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
+        <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
+        
+        <guid>https://kagaya85.github.io/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
+        <description>打算重启kgyzone 离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。
 之后可以慢慢在这里发一下心得体会。或许可以直接将markdown格式的文件直接发上来，那样的话会方便很多。
 markdown真好用啊</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://kagaya85.github.io/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://kagaya85.github.io/about/</guid>
-      <description>About me 你好，欢迎来到我的Page，很高兴能在这里遇见你
-🙌🏼简单介绍一下自己 本科就读于同济大学，现在复旦大学硕士研究生在读
-技术宅/动漫宅/工业党
-👨🏻‍💻我在用的装备 大件  Macbook Pro 13 Nintendo Switch Huawei P30 Monitor：AOC U28P2U + Dostyle DM240  耳机  Sony WH-1000 XM3 Huawei Freebuds 3  其他  Huawei Watch GT 2  ✈️SNS 👏好耶，是新朋友🍻
-Twitter
-Bangumi
-Bilibili
-Github
-Let‘s Code The Fantastic World!</description>
-    </item>
-    
-    <item>
-      <title>Archives</title>
-      <link>https://kagaya85.github.io/archives/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://kagaya85.github.io/archives/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+        </item>
+        
+    </channel>
 </rss>
