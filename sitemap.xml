@@ -4,12 +4,42 @@
   
   <url>
     <loc>https://kagaya85.github.io/categories/</loc>
-    <lastmod>2020-09-23T16:47:28+08:00</lastmod>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
   </url>
   
   <url>
-    <loc>https://kagaya85.github.io/categories/code/</loc>
-    <lastmod>2020-09-23T16:47:28+08:00</lastmod>
+    <loc>https://kagaya85.github.io/tags/containerd/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/tags/kubernetes/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/post/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/tags/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/categories/technology/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2020-12-17T23:31:25+08:00</lastmod>
   </url>
   
   <url>
@@ -18,22 +48,7 @@
   </url>
   
   <url>
-    <loc>https://kagaya85.github.io/post/</loc>
-    <lastmod>2020-09-23T16:47:28+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://kagaya85.github.io/tags/</loc>
-    <lastmod>2020-09-23T16:47:28+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://kagaya85.github.io/tags/wordpress/</loc>
-    <lastmod>2020-09-23T16:47:28+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://kagaya85.github.io/</loc>
     <lastmod>2020-09-23T16:47:28+08:00</lastmod>
   </url>
   
@@ -48,7 +63,7 @@
   </url>
   
   <url>
-    <loc>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E8%B0%88%E4%B8%80%E7%82%B9%E8%82%A4%E6%B5%85%E7%9A%84%E6%83%B3%E6%B3%95/</loc>
+    <loc>https://kagaya85.github.io/2020/%E5%85%AB%E4%BD%B0%E5%A5%BD%E7%AE%A1%E8%99%8E%E5%BE%85%E5%AE%9A/</loc>
     <lastmod>2020-08-17T22:42:52+08:00</lastmod>
   </url>
   
