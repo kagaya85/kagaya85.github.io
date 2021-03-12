@@ -2,16 +2,43 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pages on かがやの部屋</title>
-    <link>https://kagaya85.github.io/page/</link>
+    <link>https://example.com/page/</link>
     <description>Recent content in Pages on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language><atom:link href="https://kagaya85.github.io/page/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 05 Aug 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/page/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>About</title>
+      <link>https://example.com/about/</link>
+      <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/about/</guid>
+      <description>你好，欢迎来到我的Page，很高兴能在这里遇见你
+🙌🏼简单介绍一下自己 本科就读于同济大学，现在复旦大学硕士研究生在读
+技术宅/动漫宅/工业党
+👨🏻‍💻我在用的装备 大件  Macbook Pro 13 Nintendo Switch Huawei P30 Monitor：AOC U28P2U + Dostyle DM240  耳机  Sony WH-1000 XM3 Huawei Freebuds 3  其他  Huawei Watch GT 2  ✈️SNS 👏好耶，是新朋友🍻
+Twitter
+Bangumi
+Bilibili
+Github
+Let‘s Code The Fantastic World!</description>
+    </item>
+    
     <item>
       <title>Archives</title>
-      <link>https://kagaya85.github.io/archives/</link>
+      <link>https://example.com/archives/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://kagaya85.github.io/archives/</guid>
+      <guid>https://example.com/archives/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Search</title>
+      <link>https://example.com/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/search/</guid>
       <description></description>
     </item>
     

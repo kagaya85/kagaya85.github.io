@@ -2,44 +2,44 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on かがやの部屋</title>
-    <link>https://kagaya85.github.io/categories/</link>
+    <link>https://example.com/categories/</link>
     <description>Recent content in Categories on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://example.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Technology</title>
-      <link>https://kagaya85.github.io/categories/technology/</link>
+      <link>https://example.com/categories/technology/</link>
       <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/categories/technology/</guid>
+      <guid>https://example.com/categories/technology/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Blog</title>
-      <link>https://kagaya85.github.io/categories/blog/</link>
+      <title>Essay</title>
+      <link>https://example.com/categories/essay/</link>
       <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/categories/blog/</guid>
+      <guid>https://example.com/categories/essay/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Anime</title>
-      <link>https://kagaya85.github.io/categories/anime/</link>
+      <link>https://example.com/categories/anime/</link>
       <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/categories/anime/</guid>
+      <guid>https://example.com/categories/anime/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Others</title>
-      <link>https://kagaya85.github.io/categories/others/</link>
+      <link>https://example.com/categories/others/</link>
       <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/categories/others/</guid>
+      <guid>https://example.com/categories/others/</guid>
       <description></description>
     </item>
     

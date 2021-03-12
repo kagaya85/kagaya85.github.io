@@ -2,20 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Technology on かがやの部屋</title>
-    <link>https://kagaya85.github.io/categories/technology/</link>
+    <link>https://example.com/categories/technology/</link>
     <description>Recent content in Technology on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/technology/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://example.com/categories/technology/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
-      <link>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
+      <link>https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
       <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
+      <guid>https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
       <description>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）
+本文所需shell脚本都在这个repo，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。
 配置基本环境 这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：
-  CleanShot_2020-12-18_at_21.54.34@2x 
+ CleanShot_2020-12-18_at_21.54.34@2x 
 当然这是我部署好后的截图，主机的名称也改为了ip+nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了04_pull_master_images.sh与04_pull_worker_images.sh，可以自动实现将主机名替换为ip+nodeType，当然，这都是后话了。
 本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）
 对于每一台机器，只需要一次执行00～02对应脚本
@@ -33,10 +34,10 @@ CONTAINERD_VERSION=1.4.3 wget https://github.com/containerd/containerd/releases/
     
     <item>
       <title>使用Docker部署本地Wordpress开发环境</title>
-      <link>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。
 背景 由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。
 本机环境 MacOS 10.15.6（理论上适用于所有支持Docker的环境）
@@ -52,10 +53,10 @@ Docker Desktop 19.03.12
     
     <item>
       <title>DeepClone深克隆</title>
-      <link>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+      <link>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
       <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+      <guid>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
       <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
 于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
 为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
@@ -76,10 +77,10 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.</description>
     
     <item>
       <title>Unix系统分析——锁</title>
-      <link>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
+      <link>https://example.com/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
       <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
+      <guid>https://example.com/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
       <description>Unix系统分析——锁 总结Unix系统中锁的相关知识
 Linux各种锁的实现 原子操作 原子操作是最小的执行单位，保证在执行完毕前不会被其他任何事物或事件打断，也就是说不能有比它更小的执行单位，命名也借用了物理学中物质稳定存在的最小单位——原子。
 原子操作于硬件架构相关，由汇编语言实现，一般用于实现计数等操作
@@ -112,10 +113,10 @@ void downgrade_write(struct rw_semaphore *sem); 函数用于把写者降级为�
     
     <item>
       <title>pthread多线程编程初探</title>
-      <link>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
+      <link>https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
       <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
+      <guid>https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
       <description>pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
 实验要求 使用pthread实现图像卷积的并行计算
 由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
@@ -138,10 +139,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>CSS伪类的应用——实现聊天气泡效果</title>
-      <link>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
+      <link>https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
       <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
+      <guid>https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
       <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
@@ -155,10 +156,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>SQL变量总结</title>
-      <link>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+      <link>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
       <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
       <description>SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
 请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
    id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出</description>
@@ -166,10 +167,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>Mysql和MariaDB中的Rank排序的坑</title>
-      <link>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+      <link>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
       <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+      <guid>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
       <description>Mysql和MariaDB中的Rank排序的坑 题目中需要对一个成绩表按考试科目以及学生做排名
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是

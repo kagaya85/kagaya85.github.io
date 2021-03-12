@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>JavaScript on かがやの部屋</title>
-    <link>https://kagaya85.github.io/tags/javascript/</link>
+    <link>https://example.com/tags/javascript/</link>
     <description>Recent content in JavaScript on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://example.com/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>DeepClone深克隆</title>
-      <link>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+      <link>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
       <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://kagaya85.github.io/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+      <guid>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
       <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
 于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
 为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制

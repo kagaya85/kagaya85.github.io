@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）
+本文所需shell脚本都在这个repo，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。
+配置基本环境 这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：
+ CleanShot_2020-12-18_at_21.54.34@2x 
+当然这是我部署好后的截图，主机的名称也改为了ip&#43;nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了04_pull_master_images.sh与04_pull_worker_images.sh，可以自动实现将主机名替换为ip&#43;nodeType，当然，这都是后话了。
+本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）
+对于每一台机器，只需要一次执行00～02对应脚本
+# cd进入脚本对应目录 bash 00_install_tools.sh bash 01_config_env.sh bash 02_install_kube.sh   00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改~/.zshrc文件，如果不使用zsh，请对应修改为~/.bashrc或~./bash_profile），这里可以根据自己的需要做修改。
+  01设置了一些基本环境配置，关闭firewalld和swap，设置了iptable转发等，特别是对时间进行同步，并修改为CST时区，保证各个主机上时间的一致性对集群的配置也至关重要。
+  02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套
+  安装Containerd 接下来，我们为每一台主机安装Containerd替换之前的Docker。
+一键安装：
+bash 03_install_containerd.sh Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。
+我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和libseccomp 、libseccomp-devel两个链接库，可以参考这里。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到$PATH对应的目录中即可。
+# install runc git clone https://github.com/opencontainers/runc cd runc &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install 这样就安装好了runc工具
+安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本
+CONTAINERD_VERSION=1.4.3 wget https://github.com/containerd/containerd/releases/download/v&amp;#34;$CONTAINERD_VERSION&amp;#34;/containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz tar -xvf containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz -C /usr/local/ 接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置'><title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
+
+<link rel='canonical' href='https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
+
+<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群'>
+<meta property='og:description' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）
+本文所需shell脚本都在这个repo，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。
+配置基本环境 这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：
+ CleanShot_2020-12-18_at_21.54.34@2x 
+当然这是我部署好后的截图，主机的名称也改为了ip&#43;nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了04_pull_master_images.sh与04_pull_worker_images.sh，可以自动实现将主机名替换为ip&#43;nodeType，当然，这都是后话了。
+本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）
+对于每一台机器，只需要一次执行00～02对应脚本
+# cd进入脚本对应目录 bash 00_install_tools.sh bash 01_config_env.sh bash 02_install_kube.sh   00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改~/.zshrc文件，如果不使用zsh，请对应修改为~/.bashrc或~./bash_profile），这里可以根据自己的需要做修改。
+  01设置了一些基本环境配置，关闭firewalld和swap，设置了iptable转发等，特别是对时间进行同步，并修改为CST时区，保证各个主机上时间的一致性对集群的配置也至关重要。
+  02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套
+  安装Containerd 接下来，我们为每一台主机安装Containerd替换之前的Docker。
+一键安装：
+bash 03_install_containerd.sh Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。
+我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和libseccomp 、libseccomp-devel两个链接库，可以参考这里。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到$PATH对应的目录中即可。
+# install runc git clone https://github.com/opencontainers/runc cd runc &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install 这样就安装好了runc工具
+安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本
+CONTAINERD_VERSION=1.4.3 wget https://github.com/containerd/containerd/releases/download/v&amp;#34;$CONTAINERD_VERSION&amp;#34;/containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz tar -xvf containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz -C /usr/local/ 接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置'>
+<meta property='og:url' content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
+<meta property='og:site_name' content='かがやの部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Kubernetes' /><meta property='article:tag' content='Containerd' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='article:modified_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='og:image' content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th.jpg' />
+<meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群">
+<meta name="twitter:description" content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）
+本文所需shell脚本都在这个repo，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。
+配置基本环境 这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：
+ CleanShot_2020-12-18_at_21.54.34@2x 
+当然这是我部署好后的截图，主机的名称也改为了ip&#43;nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了04_pull_master_images.sh与04_pull_worker_images.sh，可以自动实现将主机名替换为ip&#43;nodeType，当然，这都是后话了。
+本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）
+对于每一台机器，只需要一次执行00～02对应脚本
+# cd进入脚本对应目录 bash 00_install_tools.sh bash 01_config_env.sh bash 02_install_kube.sh   00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改~/.zshrc文件，如果不使用zsh，请对应修改为~/.bashrc或~./bash_profile），这里可以根据自己的需要做修改。
+  01设置了一些基本环境配置，关闭firewalld和swap，设置了iptable转发等，特别是对时间进行同步，并修改为CST时区，保证各个主机上时间的一致性对集群的配置也至关重要。
+  02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套
+  安装Containerd 接下来，我们为每一台主机安装Containerd替换之前的Docker。
+一键安装：
+bash 03_install_containerd.sh Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。
+我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和libseccomp 、libseccomp-devel两个链接库，可以参考这里。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到$PATH对应的目录中即可。
+# install runc git clone https://github.com/opencontainers/runc cd runc &amp;amp;&amp;amp; make &amp;amp;&amp;amp; make install 这样就安装好了runc工具
+安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本
+CONTAINERD_VERSION=1.4.3 wget https://github.com/containerd/containerd/releases/download/v&amp;#34;$CONTAINERD_VERSION&amp;#34;/containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz tar -xvf containerd-&amp;#34;$CONTAINERD_VERSION&amp;#34;-linux-amd64.tar.gz -C /usr/local/ 接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th.jpg' />
+    </head>
+    <body class="">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            localStorage.setItem(colorSchemeKey, "auto");
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.body.dataset.scheme = 'dark';
+        } else {
+            document.body.dataset.scheme = 'light';
+        }
+    })();
+</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
+            <aside class="sidebar left-sidebar sticky">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header class="site-info">
+        
+            <figure class="site-avatar">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_2.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+
+                
+                    <span class="emoji">🚀</span>
+                
+            </figure>
+        
+        <h1 class="site-name"><a href="https://example.com">かがやの部屋</a></h1>
+        <h2 class="site-description">明日は晴れるかな〜</h2>
+    </header>
+
+    <ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
+  viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="12" cy="7" r="4" />
+    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="10" cy="10" r="7" />
+    <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        
+    </ol>
+</aside>
+
+            <main class="main full-width">
+    <div id="article-toolbar">
+        <a href="https://example.com" class="back-home">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="15 6 9 12 15 18" />
+</svg>
+
+
+
+            <span>Back</span>
+        </a>
+    </div>
+
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th_hu8efc120597fca981842d25077e5509bd_12413_800x0_resize_q75_box.jpg"
+                        srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th_hu8efc120597fca981842d25077e5509bd_12413_800x0_resize_q75_box.jpg 800w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th_hu8efc120597fca981842d25077e5509bd_12413_1600x0_resize_q75_box.jpg 1600w"
+                        width="800" 
+                        height="600" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/technology/" style="background-color: #66ccff; color: #fff;">
+                Technology
+            </a>
+        
+    </header>
+    
+
+    <h2 class="article-title">
+        <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</a>
+    </h2>
+
+    <footer class="article-time">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+        <time class="article-time--published">Dec 17, 2020</time>
+    </footer></div>
+</header>
+
+    <section class="article-content">
+    <h1 id="使用kubernetes-v1200-与-containerd-配置k8s集群">使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</h1>
+<h2 id="写在前面">写在前面</h2>
+<p>Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）</p>
+<p>本文所需shell脚本都在这个<a class="link" href="https://github.com/kagaya85/K8sTakeOff"  target="_blank" rel="noopener"
+    >repo</a>，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。</p>
+<h2 id="配置基本环境">配置基本环境</h2>
+<p>这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：</p>
+<p><figure style="flex-grow: 210; flex-basis: 504px">
+		<a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png" data-size="1658x788"><img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png"
+				srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_480x0_resize_box_2.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_1024x0_resize_box_2.png 1024w"
+				width="1658"
+				height="788"
+				loading="lazy"
+				alt="CleanShot_2020-12-18_at_21.54.34@2x">
+		</a>
+		
+		<figcaption>CleanShot_2020-12-18_at_21.54.34@2x</figcaption>
+		
+	</figure></p>
+<p>当然这是我部署好后的截图，主机的名称也改为了ip+nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了<code>04_pull_master_images.sh</code>与<code>04_pull_worker_images.sh</code>，可以自动实现将主机名替换为ip+nodeType，当然，这都是后话了。</p>
+<p>本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）</p>
+<p>对于每一台机器，只需要一次执行00～02对应脚本</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># cd进入脚本对应目录</span>
+bash 00_install_tools.sh
+bash 01_config_env.sh
+bash 02_install_kube.sh
+</code></pre></div><ul>
+<li>
+<p>00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改<code>~/.zshrc</code>文件，如果不使用zsh，请对应修改为<code>~/.bashrc</code>或<code>~./bash_profile</code>），这里可以根据自己的需要做修改。</p>
+</li>
+<li>
+<p>01设置了一些基本环境配置，关闭firewalld和swap，设置了iptable转发等，特别是对时间进行同步，并修改为CST时区，保证各个主机上时间的一致性对集群的配置也至关重要。</p>
+</li>
+<li>
+<p>02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套</p>
+</li>
+</ul>
+<h2 id="安装containerd">安装Containerd</h2>
+<p>接下来，我们为每一台主机安装Containerd替换之前的Docker。</p>
+<p>一键安装：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 03_install_containerd.sh
+</code></pre></div><p>Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。</p>
+<p>我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和<code>libseccomp</code> 、<code>libseccomp-devel</code>两个链接库，可以参考<a class="link" href="https://github.com/containerd/containerd/blob/master/BUILDING.md#build-runc"  target="_blank" rel="noopener"
+    >这里</a>。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到<code>$PATH</code>对应的目录中即可。</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># install runc</span>
+git clone https://github.com/opencontainers/runc
+<span class="nb">cd</span> runc <span class="o">&amp;&amp;</span>
+  make <span class="o">&amp;&amp;</span>
+  make install
+</code></pre></div><p>这样就安装好了runc工具</p>
+<p>安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CONTAINERD_VERSION</span><span class="o">=</span>1.4.3
+wget https://github.com/containerd/containerd/releases/download/v<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>/containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz
+tar -xvf containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz -C /usr/local/
+</code></pre></div><p>接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置</p>
+<p>一般来说，containerd提供了生成默认配置的方法</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 需提前创建对应目录 </span>
+<span class="c1"># sudo mkdir -p /etc/containerd/</span>
+containerd config default &gt;/etc/containerd/config.toml
+</code></pre></div><p>但是这样会有<strong>一些问题</strong>：</p>
+<ul>
+<li>
+<p>之后在使用crictl工具连接containerd工具时会报错：</p>
+<pre><code>unknown service runtime.v1alpha2.ImageService &amp;Unimplemented desc = unknown service api.v1.CRIPluginService
+</code></pre><p>可参考这个<a class="link" href="https://github.com/kubernetes-sigs/cri-tools/issues/436#issuecomment-464290289"  target="_blank" rel="noopener"
+    >issue</a>，对应的解决方法就是修改以下配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">.</span><span class="nx">containerd</span><span class="p">]</span>
+  <span class="nx">snapshotter</span> <span class="p">=</span> <span class="s2">&#34;overlayfs&#34;</span> <span class="err">--&gt;</span> <span class="s2">&#34;native&#34;</span>
+  <span class="nx">default_runtime_name</span> <span class="p">=</span> <span class="s2">&#34;runc&#34;</span>
+  <span class="nx">no_pivot</span> <span class="p">=</span> <span class="kc">false</span>
+</code></pre></div></li>
+<li>
+<p>后面在使用<code>kubeadm init</code>初始化集群时，在启动apiserver等pod时，会报错：</p>
+<pre><code>        Unfortunately, an error has occurred:
+                timed out waiting for the condition
+  
+        This error is likely caused by:
+                - The kubelet is not running
+                - The kubelet is unhealthy due to a misconfiguration of the node in some way (required cgroups disabled)
+  
+        If you are on a systemd-powered system, you can try to troubleshoot the error with the following commands:
+                - 'systemctl status kubelet'
+                - 'journalctl -xeu kubelet'
+  
+        Additionally, a control plane component may have crashed or exited when started by the container runtime.
+        To troubleshoot, list all containers using your preferred container runtimes CLI.
+  
+        Here is one example how you may list all Kubernetes containers running in cri-o/containerd using crictl:
+                - 'crictl --runtime-endpoint /run/containerd/containerd.sock ps -a | grep kube | grep -v pause'
+                Once you have found the failing container, you can inspect its logs with:
+                - 'crictl --runtime-endpoint /run/containerd/containerd.sock logs CONTAINERID'
+  
+couldn't initialize a Kubernetes cluster
+</code></pre><p>使用<code>systemctl status kubelet</code>查看kubelet情况，可以看到kubelet有在运行但是日志里一直打印<code>node &quot;localhost.localdomain&quot; not found</code></p>
+<pre><code>● kubelet.service - kubelet: The Kubernetes Node Agent
+   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+  Drop-In: /usr/lib/systemd/system/kubelet.service.d
+           └─10-kubeadm.conf
+   Active: active (running) since Thu 2020-12-17 20:48:18 CST; 6min ago
+     Docs: https://kubernetes.io/docs/
+ Main PID: 10688 (kubelet)
+    Tasks: 18
+   Memory: 37.6M
+   CGroup: /system.slice/kubelet.service
+           └─10688 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf ...
+  
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+</code></pre><p>这里的日志不够详细，于是我又使用<code>journalctl -xeu kubelet</code>查看更详细的日志，日志数量比较多，很容易漏掉关键的错误，比如说下面这条报错是我在重试了多次后才在日志中发现的：</p>
+<pre><code>CreatePodSandbox for pod &quot;kube-scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce25476016scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce254760161b1d3b)&quot; failed: rpc error: code = Unknown desc = failed to get sandboxb1d3b)&quot; failed: rpc error: code = Unknown desc = failed to get sandbox image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull and unpack image &quot;k8s.gcr.io/pause:3.1&quot;:
+</code></pre><p>可以看到中的关键信息<code>failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;</code>，也就是说kubelet创建pod时卡在了拉取pause镜像这一步，当时在初始化kubeadm之前，我已经在本地准备好了所有所需要的镜像，并且kubeadm通过指定镜像仓库的参数<code>--image-repository=${IMAGE_REPOSITORY}</code>已经将kubelet所要拉取镜像的目标仓库切换为阿里云的仓库，但这里还是去从一个不存在的谷歌容器仓库k8s.gcr.io拉取镜像，导致我在这里一度怀疑是kubelet的配置问题。</p>
+<p>直到我翻到了kubeadm的<a class="link" href="https://github.com/kubernetes/kubeadm/issues/2020"  target="_blank" rel="noopener"
+    >issue#2020</a>中提到了kubeadm并不会配置pause image的repository，以及在containerd的<a class="link" href="https://github.com/containerd/cri/issues/813"  target="_blank" rel="noopener"
+    >issue#813</a>，提到了<strong>pause镜像的仓库及版本是写在containerd的配置文件中</strong>，所以，只需要在<code>config.toml</code>中修改以下配置</p>
+<div class="highlight"><pre class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">]</span>
+  <span class="nx">disable_tcp_service</span> <span class="p">=</span> <span class="kc">true</span>
+  <span class="nx">stream_server_address</span> <span class="p">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
+  <span class="nx">stream_server_port</span> <span class="p">=</span> <span class="s2">&#34;0&#34;</span>
+  <span class="nx">stream_idle_timeout</span> <span class="p">=</span> <span class="s2">&#34;4h0m0s&#34;</span>
+  <span class="nx">enable_selinux</span> <span class="p">=</span> <span class="kc">false</span>
+  <span class="nx">sandbox_image</span> <span class="p">=</span> <span class="s2">&#34;k8s.gcr.io/pause:3.1&#34;</span> <span class="err">--&gt;</span> <span class="s2">&#34;registry.cn-hangzhou.aliyuncs.com/kagaya/pause:3.2&#34;</span>
+</code></pre></div><p>以上问题就解决了:-(</p>
+</li>
+</ul>
+<p>所以，配置脚本中直接生成了修改好的配置文件，使用脚本就不会遇到以上问题了</p>
+<h2 id="安装kubernetes并创建集群">安装Kubernetes并创建集群</h2>
+<p>以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。</p>
+<p>这里先使用上一步配置好的crictl工具拉取镜像为创建集群时节省时间</p>
+<ul>
+<li>
+<p>准备Master节点镜像</p>
+<p>执行以下脚本</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 04_pull_master_images.sh
+</code></pre></div></li>
+<li>
+<p>准备Worker节点镜像</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 04_pull_worker_images.sh
+</code></pre></div></li>
+<li>
+<p>以上两步会以ip+nodeType的格式同时修改Master和Worker节点的主机名，原因写在了文章开头</p>
+</li>
+<li>
+<p>初始化Master节点</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 05_init_master.sh
+</code></pre></div><p>这一步会在kubeadm中指定kubernetes的版本，CIDR范围，镜像仓库等，如果顺利的话，你可以看到最后打印的其他节点join集群的方法，类似这样：</p>
+<pre><code>kubeadm join 192.168.0.170:6443 --token r7w69v.3e1nweyk81h5zj6y \
+    --discovery-token-ca-cert-hash sha256:1234a2317d27f0a4c6bcf5f284416a2fb3e8f3bd61aa88bc279a4f6ef18e09a1 
+</code></pre><p>之后需要手动在<strong>各个Worker节点</strong>上执行一下这条命令加入Master所在集群，请务必确保各节点时间同步，因为token的合法性会用时间去验证。</p>
+</li>
+<li>
+<p>如果需要，你还可以使用<code>05_init_worker_kubectl.sh</code>来初始化Worker节点上的kubectl命令</p>
+</li>
+</ul>
+<p>如果以上步骤顺利的话，你现在可以在Master节点上使用<code>kubectl get nodes -o wide</code>看到各个节点的信息，当然Status为NotReady是因为我们还没有执行最后一步，安装calico网络</p>
+<p><figure style="flex-grow: 585; flex-basis: 1404px">
+		<a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png" data-size="2844x486"><img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png"
+				srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_480x0_resize_box_2.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_1024x0_resize_box_2.png 1024w"
+				width="2844"
+				height="486"
+				loading="lazy"
+				alt="CleanShot_2020-12-17_at_22.41.02@2x">
+		</a>
+		
+		<figcaption>CleanShot_2020-12-17_at_22.41.02@2x</figcaption>
+		
+	</figure></p>
+<h2 id="安装calico网络">安装Calico网络</h2>
+<p>这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从<strong>Master节点</strong>上用kubectl应用yaml文件。</p>
+<p>一键脚本：</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 06_install_calico.sh
+</code></pre></div><p>这里也选用了较新的Calico v3.17.1</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CALICO_VERSION</span><span class="o">=</span>v3.17.1
+
+crictl pull calico/cni:<span class="nv">$CALICO_VERSION</span>
+crictl pull calico/pod2daemon-flexvol:<span class="nv">$CALICO_VERSION</span>
+crictl pull calico/node:<span class="nv">$CALICO_VERSION</span>
+crictl pull calico/kube-controllers:<span class="nv">$CALICO_VERSION</span>
+</code></pre></div><p>默认的yaml文件来自官方的3.17版本，我也在manifests目录下准备了离线版本</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CALICO_YAML</span><span class="o">=</span><span class="s2">&#34;https://docs.projectcalico.org/v3.17/manifests/calico.yaml&#34;</span>
+<span class="c1"># CALICO_YAML=&#34;./manifests/calico.yaml&#34;</span>
+</code></pre></div><p>kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。</p>
+<h2 id="最后说几句">最后说几句</h2>
+<p>以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">bash 07_install_metrics_server.sh
+</code></pre></div><p>当然，文中所提到的问题并不是全部，其他诸如安装metric server时的错误：</p>
+<pre><code>metric-server : TLS handshake error from 20.99.219.64:57467: EOF
+</code></pre><p>需要通过修改metric server deployment的启动参数解决</p>
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">- <span class="nt">args</span><span class="p">:</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">kubelet-insecure-tls</span><span class="w">
+</span><span class="w">    </span>- --<span class="l">kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span><span class="w">
+</span></code></pre></div><p>如果有其他问题，也欢迎在<a class="link" href="https://github.com/kagaya85/K8sTakeOff/issues"  target="_blank" rel="noopener"
+    >这里</a>提交issue交流。</p>
+<p>最后：</p>
+<p><strong>Kill Docker And Long Live Kubernetes!!!</strong></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/kubernetes/">Kubernetes</a>
+        
+            <a href="/tags/containerd/">Containerd</a>
+        
+            <a href="/tags/config/">Config</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+    
+</article>
+
+    <aside class="related-contents--wrapper">
+    
+    
+        <h2 class="section-title">Related contents</h2>
+        <div class="related-contents">
+            <div class="flex article-list--tile">
+                
+                    
+<article class="has-image">
+    <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png" loading="lazy" data-key="" data-hash="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot 2020-09-24 at 15.00.35@2x.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">使用Docker部署本地Wordpress开发环境</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">DeepClone深克隆</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Unix系统分析——锁</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">pthread多线程编程初探</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="">
+    <a href="/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">CSS伪类的应用——实现聊天气泡效果</h2>
+        </div>
+    </a>
+</article>
+                
+            </div>
+        </div>
+    
+</aside>
+
+
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "kagayablog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2019 - 
+        
+        2021 かがやの部屋
+    </section>
+    
+    <section class="powerby">
+        
+            Let's code the fantastic world!!! <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.2.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer="true"
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                defer="false"
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
