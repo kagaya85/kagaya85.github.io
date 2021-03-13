@@ -29,7 +29,7 @@ Docker Desktop 19.03.12
 # default.conf server { listen 80; server_name localhost; location / { root /usr/share/nginx/html; index index.'>
 <meta property='og:url' content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='article:modified_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='og:image' content='https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot 2020-09-24 at 15.00.35@2x.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='article:modified_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='og:image' content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
 <meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="使用Docker部署本地Wordpress开发环境">
 <meta name="twitter:description" content="使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。
 背景 由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。
@@ -42,13 +42,13 @@ Docker Desktop 19.03.12
  修改nginx的配置，指定php处理方式 通过设置使nginx能够访问到php容器 启动nginx与php的容器  首先，为了持久化配置，我在/Users/kagaya/Docker/nginx/conf.d/下新建了default.conf配置文件，挂载到目标文件/etc/nginx/conf.d:ro并指定只读属性
 最后对nginx的配置文件做对应修改即可：
 # default.conf server { listen 80; server_name localhost; location / { root /usr/share/nginx/html; index index."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot 2020-09-24 at 15.00.35@2x.png' />
+    <meta name="twitter:image" content='https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
     </head>
     <body class="">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "auto");
+            localStorage.setItem(colorSchemeKey, "dark");
         })();
     </script><script>
     (function() {
@@ -152,6 +152,38 @@ Docker Desktop 19.03.12
         
 
         <li >
+            <a href='https://twitter.com/kagaya_85'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path
+        d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+                
+                <span>Twitter</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://bangumi.tv/user/kagaya85'>
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <polyline points="16 3 12 7 8 3" />
+</svg>
+                
+                <span>Bangumi</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
             <a href='/search/'>
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
@@ -188,8 +220,12 @@ Docker Desktop 19.03.12
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
-                
-                    <img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png" loading="lazy" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" />
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_2.png"
+                        srcset="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_2.png 800w, /p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_1600x0_resize_box_2.png 1600w"
+                        width="800" 
+                        height="523" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Docker部署本地Wordpress开发环境" />
                 
             </a>
         </div>
@@ -417,12 +453,12 @@ RUN docker-php-ext-install mysqli
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/13341_th.66a1cde1d1a83199eb9181336c466e51_hu8efc120597fca981842d25077e5509bd_12413_250x150_fill_q75_box_smart1.jpg" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_2.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
                         data-key="" 
-                        data-hash="md5-ZqHN4dGoMZnrkYEzbEZuUQ==">
+                        data-hash="md5-uMYyvzJxx7Ic3QDhGtAc&#43;Q==">
                 
             </div>
         
@@ -434,9 +470,19 @@ RUN docker-php-ext-install mysqli
 </article>
                 
                     
-<article class="">
+<article class="has-image">
     <a href="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/">
         
+        
+            <div class="article-image">
+                <img src="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.b5ca95b84116ef5ce2456ceb92e52d80_hu68cee4137d946c56465103791d37290e_1192700_250x150_fill_q75_box_smart1.jpg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-tcqVuEEW71ziRWzrkuUtgA==">
+                
+            </div>
         
 
         <div class="article-details">
