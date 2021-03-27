@@ -6,7 +6,52 @@
     <description>Recent content in Tags on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 27 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FunctionalProgramming</title>
+      <link>https://example.com/tags/functionalprogramming/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/tags/functionalprogramming/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Golang</title>
+      <link>https://example.com/tags/golang/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Overview</title>
+      <link>https://example.com/tags/overview/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/tags/overview/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Paper</title>
+      <link>https://example.com/tags/paper/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/tags/paper/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SSA</title>
+      <link>https://example.com/tags/ssa/</link>
+      <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://example.com/tags/ssa/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Config</title>
       <link>https://example.com/tags/config/</link>
