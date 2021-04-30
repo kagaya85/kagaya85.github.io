@@ -339,7 +339,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <h3 id="fp-in-compiler">FP in Compiler</h3>
 <p>在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。</p>
 <p>将程式码转换为SSA形式，最简单的方法，就是将每个被赋值的变数，以一个新的变数来取代，而新的变数名称则为一个带着编号的旧变数。SSA通过加一个特别的描述，称之为<em>Φ 函式</em>，来实现对于变量赋值来源不确定时的表示<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>。</p>
-<p>在《SSA is Functional Programming》<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>这篇文章中，作者提出了一种观点，认为SSA from其实是一种函数式编程，对于一次赋值，左侧是对应函数的形式参数，右侧是对应函数调用的实际参数。通过函数之间的嵌套调用，可以很清楚的表现SSA中的变量的实际作用范围。</p>
+<p>在《SSA is Functional Programming》<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>这篇文章中，作者提出了一种观点，认为SSA form其实是一种函数式编程，对于一次赋值，左侧是对应函数的形式参数，右侧是对应函数调用的实际参数。通过函数之间的嵌套调用，可以很清楚的表现SSA中的变量的实际作用范围。</p>
 <p>因此，对于SSA来说，SSA form的一个重要属性是，变量的定义决定了每次的使用（或在C函数中使用的情况下，支配使用节点的前驱节点）。 SSA的解释中通常未声明此属性，但是对SSA进行许多分析和优化是必需的-它是SSA语义的一部分。 在具有嵌套作用域的函数式程序中，此限制已明确且静态地编码到函数嵌套的结构中。 变量范围的概念有助于我们构造中间形式。</p>
 <p>而对于使用函数式程序设计的成语言来说，使用SSA的过程中，往往会绘制带有方框，任务，条件和控制流边缘的流程图。 这种表示法虽然容易被滥用，但通常更适合于解释思想以及直观地可视化地表现算法和状态转换。 函数式程序员可以借鉴这样一种方法，避免迷失在函数式编程的概念中。</p>
 <h3 id="fp-in-parallel-programming">FP in Parallel Programming</h3>
@@ -675,6 +675,28 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
                 
                     
 <article class="has-image">
+    <a href="/p/2021/amazing-go-interface/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy" 
+                        data-key="" 
+                        data-hash="md5-pFaeNO48gYlRMQii977cQg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Amazing Go Interface</h2>
+        </div>
+    </a>
+</article>
+                
+                    
+<article class="has-image">
     <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
         
         
@@ -757,18 +779,6 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 
         <div class="article-details">
             <h2 class="article-title">Unix系统分析——锁</h2>
-        </div>
-    </a>
-</article>
-                
-                    
-<article class="">
-    <a href="/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/">
-        
-        
-
-        <div class="article-details">
-            <h2 class="article-title">pthread多线程编程初探</h2>
         </div>
     </a>
 </article>
