@@ -2,28 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://example.com/p/2021/bangumi-in-2021-spring/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/anime/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/bangumi/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/post/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/summary/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/tags/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://example.com/</loc>
+    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://example.com/tags/amazing-go/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/p/2021/amazing-go-interface/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/categories/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://example.com/tags/golang/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://example.com/post/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://example.com/tags/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://example.com/categories/technology/</loc>
-    <lastmod>2021-04-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://example.com/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/functionalprogramming/</loc>
@@ -137,9 +149,6 @@
     <loc>https://example.com/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</loc>
     <lastmod>2019-03-08T21:30:20+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/categories/anime/</loc>
-    <lastmod>2019-01-21T21:30:20+08:00</lastmod>
-  </url><url>
     <loc>https://example.com/tags/daring-in-the-franxx/</loc>
     <lastmod>2019-01-21T21:30:20+08:00</lastmod>
   </url><url>
@@ -149,7 +158,7 @@
     <loc>https://example.com/tags/%E7%BF%BB%E8%AF%91/</loc>
     <lastmod>2019-01-21T21:30:20+08:00</lastmod>
   </url><url>
-    <loc>https://example.com/p/2019/%E6%88%91%E4%BB%AC%E9%83%BD%E5%9C%A8%E5%90%91%E5%89%8D%E8%B5%B0%E5%8F%AA%E6%9C%89%E5%9B%9E%E5%BF%86%E9%A9%BB%E7%95%99%E5%9C%A8%E5%8E%9F%E5%9C%B0/</loc>
+    <loc>https://example.com/p/2019/flavors-of-youth/</loc>
     <lastmod>2019-01-18T21:30:20+08:00</lastmod>
   </url><url>
     <loc>https://example.com/tags/%E6%BC%AB%E8%AF%84/</loc>
@@ -163,6 +172,8 @@
   </url><url>
     <loc>https://example.com/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</loc>
     <lastmod>2019-01-01T21:30:20+08:00</lastmod>
+  </url><url>
+    <loc>https://example.com/categories/algorithm/</loc>
   </url><url>
     <loc>https://example.com/archives/</loc>
   </url><url>

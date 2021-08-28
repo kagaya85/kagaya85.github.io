@@ -80,7 +80,7 @@ Docker Desktop 19.03.12
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_2.png" width="300"
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -220,8 +220,8 @@ Docker Desktop 19.03.12
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_2.png"
-                        srcset="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_2.png 800w, /p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_1600x0_resize_box_2.png 1600w"
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_3.png"
+                        srcset="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_800x0_resize_box_3.png 800w, /p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot_hue470a64b4465831dfaa5ecda4dac4eb4_424026_1600x0_resize_box_3.png 1600w"
                         width="800" 
                         height="523" 
                         loading="lazy"
@@ -268,14 +268,14 @@ Docker Desktop 19.03.12
 <p>MacOS 10.15.6（理论上适用于所有支持Docker的环境）</p>
 <p>Docker Desktop 19.03.12</p>
 <h3 id="镜像准备">镜像准备</h3>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ docker images
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker images
 nginx                     latest              7e4d58f0e5f3        <span class="m">12</span> days ago         133MB
 mysql                     5.7.31              ef08065b0a30        <span class="m">13</span> days ago         448MB
 daocloud.io/library/php   7.2.24-fpm          48432d192e1a        <span class="m">11</span> months ago       398MB
 </code></pre></div><p>由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。</p>
 <p>可以从<a class="link" href="hub.docker.com" >docker hub</a>上搜索对应版本的镜像</p>
 <h4 id="拉取镜像">拉取镜像</h4>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ docker pull nginx:latest
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker pull nginx:latest
 $ docker pull mysql:5.7.31
 $ docker pull daocloud.io/library/php:7.2.24-fpm
 </code></pre></div><h2 id="构建nginxphp环境">构建Nginx+PHP环境</h2>
@@ -316,11 +316,11 @@ server {
 <p>最后使用<code>-p 80:80</code>将nginx的80端口开放到主机的80端口，使得主机可以通过localhost访问到nginx</p>
 <h3 id="php配置">PHP配置</h3>
 <p>php配置相对简单，只需要挂载网站根目录到容器即可</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
 </code></pre></div><h3 id="使用docker-compose一键部署多个服务">使用Docker-compose一键部署多个服务</h3>
 <p>由于涉及到了多个容器服务，可以采用Docker-compose工具来方便的同时配置部署多个容器服务</p>
 <p>新建目录，如<code>webdev</code>，目录下新建docker-compose.ym文件，配置如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
@@ -346,10 +346,10 @@ server {
 <p>对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现</p>
 <p>同时，我们还可以将mysql的3306端口映射到主机，方便我们用数据库管理软件进行操作</p>
 <p>如果相对数据库中的数据进行持久化，也可以把mysql容器中的<code>/var/lib/mysql</code>目录映射出来</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
 </code></pre></div><p>在配置好以上服务后，我们可以对wordpress目录下的<code>wp-config.php</code>文件进行配置，如数据库连接，注意：数据库的Host此时为link后的名称，如在运行nginx和php时使用了如<code>--link myslq:db</code>的参数，那么在容器中对于的数据库主机则为<code>db</code></p>
 <p>打开Wordpress调试模式，这样可以及时在浏览器中看到错误信息：</p>
-<div class="highlight"><pre class="chroma"><code class="language-php" data-lang="php"><span class="sd">/**
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="sd">/**
 </span><span class="sd"> * 开发者专用：WordPress调试模式。
 </span><span class="sd"> *
 </span><span class="sd"> * 将这个值改为true，WordPress将显示所有用于开发的提示。
@@ -367,7 +367,7 @@ server {
 <pre><code>FROM daocloud.io/library/php:7.2.24-fpm
 RUN docker-php-ext-install mysqli
 </code></pre><p>最终的docke-compose.yaml文件如下：</p>
-<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
 </span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
 </span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
@@ -401,7 +401,7 @@ RUN docker-php-ext-install mysqli
 </span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> 
 </span><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;123456&#34;</span><span class="w">
 </span></code></pre></div><p>最后，只需要在docker-compose.yaml所在目录运行以下命令</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ docker-compose up -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker-compose up -d
 </code></pre></div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
 <p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg" alt="docker-compose"  /></p>
 <p>这样，我们就可以直接在本地调试wordpress中的php代码了，并且在vscode中也可以获得代码提示</p>
@@ -453,7 +453,7 @@ RUN docker-php-ext-install mysqli
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -497,7 +497,7 @@ RUN docker-php-ext-install mysqli
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 

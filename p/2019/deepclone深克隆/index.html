@@ -95,7 +95,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_2.png" width="300"
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -284,11 +284,11 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 <p>于此同时，对于Python，PHP这种新变量直接赋值便可以使用的来说，我更喜欢JS的原因是有用于变量声明的<code>var</code>，<code>const</code>，<code>let</code>，因为这更贴近我所熟悉的C++语法，而PHP使用变量都需要打一个<code>$</code>符号也让我十分不习惯</p>
 <p>当然有利就有弊，弱类型语言带来的最大的问题就是变量类型的不明确以及对于编辑器无法做出类型推导等。弱类型语言使得编译器（或解释器）不太去关注变量的类型，同时也会帮程序员做一些看不见的类型转换，虽然一定程度上让人可以更加专注于程序逻辑上，但往往会埋下一些潜在的问题</p>
 <p>用一个最简单的例子</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//javascript
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//javascript
 </span><span class="c1"></span><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="nx">a</span> <span class="o">=</span> <span class="s2">&#34;123&#34;</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">1</span>	<span class="c1">// &#39;1231&#39;
-</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># python</span>
+</span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># python</span>
 <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;123&#39;</span>
 <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># type error</span>
@@ -298,11 +298,11 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 <p>话说回到深克隆问题</p>
 <p>用过C++的人都知道，C++最大的一个优势之一就是凭借着指针类型变量可以方便的直接对内存进行操作。而对于JavaScript其实也是有指针变量，虽然并没有单独划分出一个类型而且功能没C++那么强大，但都是表示指向了内存的一块区域。</p>
 <p>当时在学习C++类的拷贝构造函数时，老师就特意提醒对于类中的指针变量不可直接赋值，需要申请新的内存空间然后使用memcpy等函数进行内存复制。这是因为直接进行指针的赋值会导致多个指针指向同一块内存，引起访问冲突。而这，正是导致JavaScript中出现浅拷贝深拷贝问题的根源。</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span>
 </code></pre></div><p>在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。</p>
 <p>如果要实现一个浅克隆可以这样做</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">b</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
@@ -315,7 +315,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 </span><span class="c1"></span><span class="nx">b</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">a</span><span class="p">]</span>
 </code></pre></div><p>⚠之所以称之为浅克隆是因为对于有多层嵌套的对象，里面可能有不同的数据类型，使用浅克隆并不能赋值深层对象的内存空间，仍然会出现多个变量指向同一个内存空间的情况，这种情况下，我们就需要深克隆</p>
 <p>在js中有一个小技巧可以实现一个有限的深克隆</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span> <span class="mi">123</span><span class="p">,</span> <span class="nx">b</span><span class="o">:</span> <span class="p">{</span><span class="nx">c</span><span class="o">:</span> <span class="s1">&#39;356&#39;</span><span class="p">,</span> <span class="nx">d</span><span class="o">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]}}</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span><span class="nx">a</span><span class="o">:</span> <span class="mi">123</span><span class="p">,</span> <span class="nx">b</span><span class="o">:</span> <span class="p">{</span><span class="nx">c</span><span class="o">:</span> <span class="s1">&#39;356&#39;</span><span class="p">,</span> <span class="nx">d</span><span class="o">:</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]}}</span>
 <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">b</span><span class="p">))</span>
 </code></pre></div><p>利用JSON转为字符串在进行json解析，可以实现一个方便的深克隆，但是要求对象中只能是一些数值类型变量，对于对象中的函数，以及嵌套引用却无能为力</p>
 <p>接下来从JavaScript的数据类型开始讨论深克隆的实现</p>
@@ -332,7 +332,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 <p>对于Object中类型的区分，需要借助Object原型链上的toString函数，可以将数据类型表示为类似'[object Array]&lsquo;的字符串，可以很好的区分基本数据类型以及各种object</p>
 <p>特殊的，对于DOM元素需要使用<code>instanceof</code>来判断，若直接用toString判断，不同标签会返回不同的字符串</p>
 <p>这样，实现一个准确判断变量类型的函数</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">type</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">type</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">toString</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">toString</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;[object Boolean]&#39;</span>  <span class="o">:</span> <span class="s1">&#39;boolean&#39;</span><span class="p">,</span> 
@@ -354,7 +354,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
 </code></pre></div><h2 id="实现deepclone">实现DeepClone</h2>
 <p>简单版——未考虑循环引用以及dom元素</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">deepClone</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">deepClone</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">type</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">o</span><span class="p">;</span>
     
     <span class="k">if</span><span class="p">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">&#39;array&#39;</span><span class="p">)</span> <span class="p">{</span>
@@ -379,7 +379,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 <span class="p">}</span>
 </code></pre></div><p>对于function，直接引用复制即可，因为函数中的this是在运行是才决定指向，对于新的对象，调用的函数即使是原对象的函数引用，this也能正确指向</p>
 <p>考虑循环引用的版本</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/**
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/**
 </span><span class="cm"> * 区分Object数据类型
 </span><span class="cm"> * @param {Object} obj 
 </span><span class="cm"> * @returns {String} typename
@@ -425,7 +425,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 </span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">sourceList</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="kd">var</span> <span class="nx">targetList</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="kd">function</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// null 会被typeof认为是object 一个一直未被解决的bug
 </span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nx">source</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">null</span>
@@ -463,14 +463,14 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
         <span class="c1">// 递归克隆
 </span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">target</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">item</span><span class="p">])</span>
+            <span class="nx">target</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="o">=</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">item</span><span class="p">])</span>
         <span class="p">}</span>
         
         <span class="k">return</span> <span class="nx">target</span>
     <span class="p">}</span>
 
 
-    <span class="k">return</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 </section>
@@ -551,7 +551,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -573,7 +573,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -595,7 +595,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 

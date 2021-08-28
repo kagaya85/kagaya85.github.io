@@ -80,7 +80,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_2.png" width="300"
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -220,8 +220,8 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_2.png"
-                        srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_2.png 800w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_1600x0_resize_box_2.png 1600w"
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_3.png"
+                        srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_3.png 800w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_1600x0_resize_box_3.png 1600w"
                         width="800" 
                         height="450" 
                         loading="lazy"
@@ -283,7 +283,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <li>Clean Code<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。</li>
 </ul>
 <p>在Golang中，可以通过7种方法来实现函数式的编程<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// this is a higher-order-function that returns a function
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// this is a higher-order-function that returns a function
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kd">func</span><span class="p">(</span><span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
 	<span class="c1">// A function is returned here as closure
 </span><span class="c1"></span>	<span class="c1">// variable x is obtained from the outer scope of this method and memorized in the closure
@@ -306,7 +306,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 </code></pre></div><p>但是对于函数式编程中常用的递归调用来说，由于Go语言的编译器不支持对尾递归的调用优化，只能采用纯递归的方式，导致在递归时需要考虑调用堆栈的大小，因此在编写递归程序的时候我们不得不考虑递归的调用深度，或者改写为迭代方式，防止内存爆栈导致的程序异常。</p>
 <p>Golang一般使用了strict/eager的计算方式（除了<code>&amp;&amp;</code>和<code>||</code>运算符），这种方式与函数式所推崇的延迟求值相反，会在调用时立即计算出对应的结果，对于延迟求值来说，我们可以使用一些方法来模拟，像是高阶函数的方式，也可以利用Go语言中的一些特性，如sync包和channel结构来进行模拟。</p>
 <p>一个高阶函数模拟的延迟求值方法，通过传入函数名而不是传入函数的调用，避免在传参时就计算出结果，而是在函数最后return后才计算对应的结果：</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
 	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;executing add&#34;</span><span class="p">)</span>
 	<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">x</span>
 <span class="p">}</span>
@@ -379,7 +379,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <p>结果如下：</p>
 <p><figure style="flex-grow: 100; flex-basis: 240px">
 		<a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png" data-size="2099x2099"><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png"
-				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_480x0_resize_box_2.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_1024x0_resize_box_2.png 1024w"
+				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_1024x0_resize_box_3.png 1024w"
 				width="2099"
 				height="2099"
 				loading="lazy"
@@ -390,7 +390,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 		
 	</figure> <figure style="flex-grow: 100; flex-basis: 240px">
 		<a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png" data-size="2099x2099"><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png"
-				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_480x0_resize_box_2.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_1024x0_resize_box_2.png 1024w"
+				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_1024x0_resize_box_3.png 1024w"
 				width="2099"
 				height="2099"
 				loading="lazy"
@@ -402,7 +402,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 	</figure></p>
 <p><figure style="flex-grow: 100; flex-basis: 240px">
 		<a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png" data-size="2099x2099"><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png"
-				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_480x0_resize_box_2.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_1024x0_resize_box_2.png 1024w"
+				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_1024x0_resize_box_3.png 1024w"
 				width="2099"
 				height="2099"
 				loading="lazy"
@@ -413,7 +413,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 		
 	</figure> <figure style="flex-grow: 100; flex-basis: 240px">
 		<a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png" data-size="2099x2099"><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png"
-				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_480x0_resize_box_2.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_1024x0_resize_box_2.png 1024w"
+				srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_1024x0_resize_box_3.png 1024w"
 				width="2099"
 				height="2099"
 				loading="lazy"
@@ -440,7 +440,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <p>同时，作者也讨论了Serverless技术带来的影响：Serverless计算与IoT通常不需要节点间的消息传递和协调，往往比起云计算更适合用函数式编程语言来实现。</p>
 <p>Serverless技术中的代表，AWS Lambda，是一个运行代码的完全托管环境，通过将代码部署在lambda函数中，从受支持的AWS服务之一接受事件时触发我们的代码，并将事件作为参数传递。而函数式设计的程序，是将程序定义问函数，AWS Lambda提供了一个方便的抽象赖于其他的AWS服务进行交互，所有的一切都是我们作为参数接受的事件。通过函数组合的方式解决原来函数过于庞大复杂难以维护的问题，各个功能拆分为较小的函数，然后通过组合的方式实现最终的功能。遵循这种方法的优点是我们可以以可重用的方式考虑我们较小的功能。 然后，我们可以像将它们与积木一起玩时那样将它们放在一起。</p>
 <p>比如说，对于一个验证函数<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup>，为了通过验证，我们需要做很多项不同的检查：</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">queryParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">queryParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
 	<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">queryStringParameters</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
 		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
 			<span class="s1">&#39;Error parsing request query params&#39;</span><span class="p">,</span>
@@ -478,14 +478,14 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 	<span class="p">}</span>
 <span class="p">};</span>
 </code></pre></div><p>通过函数组合的方式，我们可以很方便的决定需要做哪些检查项：</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">validateCreatePostEvent</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">asUserPostEvent</span><span class="p">,</span> <span class="nx">queryParamsIsNull</span><span class="p">,</span> <span class="nx">pathParamsIsNull</span><span class="p">);</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">validateCreatePostEvent</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">asUserPostEvent</span><span class="p">,</span> <span class="nx">queryParamsIsNull</span><span class="p">,</span> <span class="nx">pathParamsIsNull</span><span class="p">);</span>
 </code></pre></div><h4 id="分布式系统开发">分布式系统开发</h4>
 <p>在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>，作者讨论了分布式环境下对于函数式编程语言F#的使用。</p>
 <p>分布式系统的开发本质上非常复杂，部分原因是在客户端和服务器端使用了不同的语言和技术，而且这些技术之间通常没有透明的无缝集成。 因此，开发人员必须将整个系统视为许多互操作的模块，始终牢记这些模块如何协同工作并交换信息。 这也使开发更加复杂，因为我们需要在源代码树中分离服务器端和客户端代码。</p>
 <p>作者强调了F＃非常适合于分布式云计算。 由于函数样式迫使我们以一种由无状态函数组成的方式分解问题，无状态函数仅在给定初始数据的情况下计算结果，因此我们自然可以在集群中的不同节点上并行运行那些独立的函数。 任务的分配仍然是开发人员的责任，但是功能分解过程的整体性质使其变得更加容易。</p>
 <h3 id="fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions</h3>
 <p>在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Server</span> <span class="kd">struct</span> <span class="p">{</span>  
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Server</span> <span class="kd">struct</span> <span class="p">{</span>  
     <span class="nx">Addr</span> <span class="kt">string</span>  
     <span class="nx">Port</span> <span class="kt">int</span>  
     <span class="nx">Protocol</span> <span class="kt">string</span> 
@@ -497,25 +497,25 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <p>前贝尔实验室成员，UTF-8与Golang的创始人之一Rob Pike曾在2014年的一篇博文《Self-referential functions and the design of options》<sup id="fnref:13"><a href="#fn:13" class="footnote-ref" role="doc-noteref">13</a></sup>中，用函数式编程的的思想巧妙的提出了一种解决程序设计中进行对象参数设置的方法，展现了函数式编程在与面向对象编程中结合的魅力。</p>
 <p>Rob Pike同样遇到了这样的问题，在他与社区的成员进行讨论后，总结并提出了Optional Function（配置函数）的方法，非常巧妙的解决了自定义配置的同时，也让代码有了自解释性，大大提高了代码的可读性。</p>
 <p>什么是Optional Functional，首先我们会定义一种新类型：</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Server</span><span class="p">)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Server</span><span class="p">)</span>
 </code></pre></div><p>我们将一个入参为对象指针，无返回值的函数定义为类型<code>option</code>，紧接着，我们可以在对象中定义一个用于设置参数的函数Option</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Option sets the options specified.  
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Option sets the options specified.  
 </span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">Option</span><span class="p">(</span><span class="nx">opts</span> <span class="o">...</span><span class="nx">option</span><span class="p">)</span> <span class="p">{</span>  
     <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">opts</span> <span class="p">{</span>  
     <span class="nf">opt</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>  
     <span class="p">}</span>  
 <span class="p">}</span>
 </code></pre></div><p>最后，我们可以定义某一个配置项的设置函数，与以往OOP中的set函数不同的是，这个函数接受一个我们想要设置的数值，返回的却是一个Option函数</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Verbosity sets Foo&#39;s verbosity level to v.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Verbosity sets Foo&#39;s verbosity level to v.
 </span><span class="c1"></span><span class="kd">func</span> <span class="nf">Verbosity</span><span class="p">(</span><span class="nx">v</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">option</span> <span class="p">{</span>
     <span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">s</span><span class="p">.</span><span class="nx">verbosity</span> <span class="p">=</span> <span class="nx">v</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div><p>这样，我们就可以通过类似下面这样的方式来方便的设置我们需要的自定义配置项，在不破坏对象封装的情况下也可以通过函数名让配置方法具有来很好的可读性:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">server</span><span class="p">.</span><span class="nf">Option</span><span class="p">(</span><span class="nf">Verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nf">Overtime</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nf">Addr</span><span class="p">(</span><span class="s">&#34;192.168.10.1&#34;</span><span class="p">),</span> <span class="nf">Port</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">server</span><span class="p">.</span><span class="nf">Option</span><span class="p">(</span><span class="nf">Verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nf">Overtime</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nf">Addr</span><span class="p">(</span><span class="s">&#34;192.168.10.1&#34;</span><span class="p">),</span> <span class="nf">Port</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
 </code></pre></div><p>当然，还有一些<strong>进阶</strong>的用法，比如将Option的定义修改为</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回一个值
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回一个值
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Foo</span><span class="p">)</span> <span class="kd">interface</span><span class="p">{}</span>
 
 <span class="c1">// 返回option函数
@@ -562,69 +562,69 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 <ol>
 <li id="fn:1" role="doc-endnote">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B&amp;oldid=63346400"  target="_blank" rel="noopener"
-    >佚名. 函数式编程[Z/OL](2020–12–21).</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. 函数式编程[Z/OL](2020–12–21).</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=Haskell&amp;oldid=63307186"  target="_blank" rel="noopener"
-    >佚名. Haskell[Z/OL](2020–12–19).</a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. Haskell[Z/OL](2020–12–19).</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3" role="doc-endnote">
 <p><a class="link" href="https://medium.com/@geisonfgfg/functional-go-bc116f4c96a4"  target="_blank" rel="noopener"
-    >GEISON. Functional Go[EB/OL](2020–04–05).</a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >GEISON. Functional Go[EB/OL](2020–04–05).</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4" role="doc-endnote">
 <p><a class="link" href="https://deepu.tech/functional-programming-in-go/"  target="_blank" rel="noopener"
-    >DEEPU. 7 Easy Functional Programming Techniques in Go[EB/OL](2019–08– 14).</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >DEEPU. 7 Easy Functional Programming Techniques in Go[EB/OL](2019–08– 14).</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5" role="doc-endnote">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E9%9D%99%E6%80%81%E5%8D%95%E8%B5%8B%E5%80%BC%E5%BD%A2%E5%BC%8F&amp;oldid=61858310"  target="_blank" rel="noopener"
-    >佚名. 静态单赋值形式[Z/OL](2020–09–21).</a> <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. 静态单赋值形式[Z/OL](2020–09–21).</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:6" role="doc-endnote">
 <p><a class="link" href="https://dl.acm.org/doi/10.1145/278283.278285"  target="_blank" rel="noopener"
-    >APPEL A W. SSA Is Functional Programming[J/OL]. ACM SIGPLAN Notices, 1998, 33(4): 17–20.</a> DOI:10.1145/278283.278285. <a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >APPEL A W. SSA Is Functional Programming[J/OL]. ACM SIGPLAN Notices, 1998, 33(4): 17–20.</a> DOI:10.1145/278283.278285.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:7" role="doc-endnote">
 <p><a class="link" href="https://doi.org/10.1093/comjnl/32.2.175"  target="_blank" rel="noopener"
-    >PEYTON JONES S L. Parallel Implementations of Functional Programming Languages[J/OL]. The Computer Journal, 1989, 32(2): 175–186.</a> DOI:10.1093/comjnl/32.2.175. <a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >PEYTON JONES S L. Parallel Implementations of Functional Programming Languages[J/OL]. The Computer Journal, 1989, 32(2): 175–186.</a> DOI:10.1093/comjnl/32.2.175.&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:8" role="doc-endnote">
 <p><a class="link" href="https://matthew-argreaves.medium.com/the-case-for-functional-programming-and-serverless-architecture-e6c805495f68"  target="_blank" rel="noopener"
-    >HARGREAVES M. The Case for Functional Programming and Serverless Architecture[EB/OL](2018–06–06).</a> <a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >HARGREAVES M. The Case for Functional Programming and Serverless Architecture[EB/OL](2018–06–06).</a>&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:9" role="doc-endnote">
 <p><a class="link" href="https://pattern-match.com/blog/functional-programming-in-serverless-world/"  target="_blank" rel="noopener"
-    >GAWROŃSKI W. Functional Programming in Serverless World | Pattern Match[EB/OL](2018–10–18).</a> <a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >GAWROŃSKI W. Functional Programming in Serverless World | Pattern Match[EB/OL](2018–10–18).</a>&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:10" role="doc-endnote">
-<p>FRITSCH J. Functional programming languages in computing clouds : practical and theoretical explorations[C]. <a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>FRITSCH J. Functional programming languages in computing clouds : practical and theoretical explorations[C].&#160;<a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:11" role="doc-endnote">
 <p><a class="link" href="https://blog.container-solutions.com/using-functional-programming-when-building-cloud-native-applications-with-aws-lambda"  target="_blank" rel="noopener"
-    >MOCCHETTI R. Using Functional Programming When Building Cloud Native Applications with AWS Lambda[EB/OL]([日期不详]).</a> <a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >MOCCHETTI R. Using Functional Programming When Building Cloud Native Applications with AWS Lambda[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:12" role="doc-endnote">
-<p>SOSHNIKOV D. Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#[J]. 2015. <a href="#fnref:12" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>SOSHNIKOV D. Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#[J]. 2015.&#160;<a href="#fnref:12" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:13" role="doc-endnote">
 <p><a class="link" href="https://commandcenter.blogspot.com/2014/01/self-referential-functions-and-design.htm"  target="_blank" rel="noopener"
-    >PIKE R. command center: Self-referential functions and the design of options[EB/OL](2014–01–24).</a> <a href="#fnref:13" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >PIKE R. command center: Self-referential functions and the design of options[EB/OL](2014–01–24).</a>&#160;<a href="#fnref:13" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:14" role="doc-endnote">
 <p><a class="link" href="https://dzone.com/articles/functional-programming-is-not-what-you-probably-th"  target="_blank" rel="noopener"
-    >佚名. Functional Programming Is Not What You (Probably) Think - DZone Java[EB/OL]([日期不详]).</a> <a href="#fnref:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. Functional Programming Is Not What You (Probably) Think - DZone Java[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:15" role="doc-endnote">
 <p><a class="link" href="https://syndicode.com/blog/pros-and-cons-of-functional-programming/"  target="_blank" rel="noopener"
-    >佚名. Find Out Pros and Cons of Functional Programming[EB/OL](2018–06– 07).</a> <a href="#fnref:15" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. Find Out Pros and Cons of Functional Programming[EB/OL](2018–06– 07).</a>&#160;<a href="#fnref:15" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:16" role="doc-endnote">
 <p><a class="link" href="https://spin.atomicobject.com/2019/08/29/functional-prog-pros-cons/"  target="_blank" rel="noopener"
-    >佚名. 5 Drawbacks of Functional Programming – Plus 4 Reasons to Use It[EB/OL](2019–08–29).</a> <a href="#fnref:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. 5 Drawbacks of Functional Programming – Plus 4 Reasons to Use It[EB/OL](2019–08–29).</a>&#160;<a href="#fnref:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:17" role="doc-endnote">
 <p><a class="link" href="https://www.quora.com/What-are-some-limitations-disadvantages-of-functional-programming-Where-does-it-break-down-when-you-want-to-get-things-done/answer/Tikhon-Jelvis"  target="_blank" rel="noopener"
-    >佚名. Tikhon Jelvis’s answer to What are some limitations/disadvantages of functional programming? Where does it break down when you want to get things done? - Quora[EB/OL](2014).</a> <a href="#fnref:17" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. Tikhon Jelvis’s answer to What are some limitations/disadvantages of functional programming? Where does it break down when you want to get things done? - Quora[EB/OL](2014).</a>&#160;<a href="#fnref:17" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -701,7 +701,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -723,7 +723,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 

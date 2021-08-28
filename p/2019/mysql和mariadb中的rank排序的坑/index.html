@@ -5,7 +5,17 @@
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的：
-/* 临时rank function 要求原表按id score_mark降序 排列好 */ delimiter // drop function if exists myrank; create function myrank(score_id int, score_mark float) returns int READS SQL DATA begin if(@pre_score_id is null or @pre_score_id != score_id) then set @pre_score_id := score_id; set @pre_score_mark := score_mark; set @row := 1; set @rank := 1; else set @row := @row &#43; 1; if(@pre_score_mark != score_mark or score_mark is null) then set @rank := @row; set @pre_score_mark = score_mark; end if; end if; return @rank; end // delimiter ; 完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：'><title>Mysql和MariaDB中的Rank排序的坑</title>
+/* 临时rank function 要求原表按id score_mark降序 排列好 */delimiter//dropfunctionifexistsmyrank;createfunctionmyrank(score_idint,score_markfloat)returnsintREADSSQLDATAbeginif(@pre_score_idisnullor@pre_score_id!=score_id)thenset@pre_score_id:=score_id;set@pre_score_mark:=score_mark;set@row:=1;set@rank:=1;elseset@row:=@row&#43;1;if(@pre_score_mark!=score_markorscore_markisnull)thenset@rank:=@row;set@pre_score_mark=score_mark;endif;endif;return@rank;end//delimiter;完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：
+droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfrom(select*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc);写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却不一样！！！
+？？？
+首先怀疑的是mysql版本的问题
+服务器上使用的mysql版本为mysql Ver 14.14 Distrib 5.6.37, for linux-glibc2.12 (x86_64) using EditLine wrapper
+虚拟机上则是mysql Ver 15.1 5.5.56-mariaDB
+按理说mariaDB本质上还是mysql，结果却不一样。。。
+在询问同学和老师后怀疑是两者在排序和调用函数的处理上有不同，理论上期望mysql先做完子查询的排序后，对排好序的表计算rank，mysql确实是这么做的，但是mariaDB似乎还没做完子查询的排序就开始调用函数计算rank，导致每个人的成绩和排名对应不上，出现错误
+针对这个怀疑，做出了如下修改：
+先将子查询放入一个临时表中，再调用该临时表
+/* 临时table, 按科目添加排名 */droptableifexiststmp_table_asc;createtabletmp_table_ascasselect*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc;droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfromtmp_table_asc;结果正确了，果然你俩还不是一个东西啊（苦笑'><title>Mysql和MariaDB中的Rank排序的坑</title>
 
 <link rel='canonical' href='https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/'>
 
@@ -14,7 +24,17 @@
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的：
-/* 临时rank function 要求原表按id score_mark降序 排列好 */ delimiter // drop function if exists myrank; create function myrank(score_id int, score_mark float) returns int READS SQL DATA begin if(@pre_score_id is null or @pre_score_id != score_id) then set @pre_score_id := score_id; set @pre_score_mark := score_mark; set @row := 1; set @rank := 1; else set @row := @row &#43; 1; if(@pre_score_mark != score_mark or score_mark is null) then set @rank := @row; set @pre_score_mark = score_mark; end if; end if; return @rank; end // delimiter ; 完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：'>
+/* 临时rank function 要求原表按id score_mark降序 排列好 */delimiter//dropfunctionifexistsmyrank;createfunctionmyrank(score_idint,score_markfloat)returnsintREADSSQLDATAbeginif(@pre_score_idisnullor@pre_score_id!=score_id)thenset@pre_score_id:=score_id;set@pre_score_mark:=score_mark;set@row:=1;set@rank:=1;elseset@row:=@row&#43;1;if(@pre_score_mark!=score_markorscore_markisnull)thenset@rank:=@row;set@pre_score_mark=score_mark;endif;endif;return@rank;end//delimiter;完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：
+droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfrom(select*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc);写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却不一样！！！
+？？？
+首先怀疑的是mysql版本的问题
+服务器上使用的mysql版本为mysql Ver 14.14 Distrib 5.6.37, for linux-glibc2.12 (x86_64) using EditLine wrapper
+虚拟机上则是mysql Ver 15.1 5.5.56-mariaDB
+按理说mariaDB本质上还是mysql，结果却不一样。。。
+在询问同学和老师后怀疑是两者在排序和调用函数的处理上有不同，理论上期望mysql先做完子查询的排序后，对排好序的表计算rank，mysql确实是这么做的，但是mariaDB似乎还没做完子查询的排序就开始调用函数计算rank，导致每个人的成绩和排名对应不上，出现错误
+针对这个怀疑，做出了如下修改：
+先将子查询放入一个临时表中，再调用该临时表
+/* 临时table, 按科目添加排名 */droptableifexiststmp_table_asc;createtabletmp_table_ascasselect*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc;droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfromtmp_table_asc;结果正确了，果然你俩还不是一个东西啊（苦笑'>
 <meta property='og:url' content='https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-01T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-01T21:30:20&#43;08:00'/><meta property='og:image' content='https://example.com/default.jpg' />
@@ -23,7 +43,17 @@
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
  先将score表中按考试课程升序，考试成绩降序，学号后两位升序做子查询 在新表中调用自定义的rank函数添加排名  rank函数是这样写的：
-/* 临时rank function 要求原表按id score_mark降序 排列好 */ delimiter // drop function if exists myrank; create function myrank(score_id int, score_mark float) returns int READS SQL DATA begin if(@pre_score_id is null or @pre_score_id != score_id) then set @pre_score_id := score_id; set @pre_score_mark := score_mark; set @row := 1; set @rank := 1; else set @row := @row &#43; 1; if(@pre_score_mark != score_mark or score_mark is null) then set @rank := @row; set @pre_score_mark = score_mark; end if; end if; return @rank; end // delimiter ; 完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名："><meta name="twitter:card" content="summary_large_image">
+/* 临时rank function 要求原表按id score_mark降序 排列好 */delimiter//dropfunctionifexistsmyrank;createfunctionmyrank(score_idint,score_markfloat)returnsintREADSSQLDATAbeginif(@pre_score_idisnullor@pre_score_id!=score_id)thenset@pre_score_id:=score_id;set@pre_score_mark:=score_mark;set@row:=1;set@rank:=1;elseset@row:=@row&#43;1;if(@pre_score_mark!=score_markorscore_markisnull)thenset@rank:=@row;set@pre_score_mark=score_mark;endif;endif;return@rank;end//delimiter;完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：
+droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfrom(select*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc);写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却不一样！！！
+？？？
+首先怀疑的是mysql版本的问题
+服务器上使用的mysql版本为mysql Ver 14.14 Distrib 5.6.37, for linux-glibc2.12 (x86_64) using EditLine wrapper
+虚拟机上则是mysql Ver 15.1 5.5.56-mariaDB
+按理说mariaDB本质上还是mysql，结果却不一样。。。
+在询问同学和老师后怀疑是两者在排序和调用函数的处理上有不同，理论上期望mysql先做完子查询的排序后，对排好序的表计算rank，mysql确实是这么做的，但是mariaDB似乎还没做完子查询的排序就开始调用函数计算rank，导致每个人的成绩和排名对应不上，出现错误
+针对这个怀疑，做出了如下修改：
+先将子查询放入一个临时表中，再调用该临时表
+/* 临时table, 按科目添加排名 */droptableifexiststmp_table_asc;createtabletmp_table_ascasselect*fromscoreorderbyscore_idasc,Score_markdesc,right(score_stuno,2)asc;droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_stuno,Score_mark,myrank(score_id,Score_mark)asrankfromtmp_table_asc;结果正确了，果然你俩还不是一个东西啊（苦笑"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://example.com/default.jpg' />
     </head>
     <body class="">
@@ -62,7 +92,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_2.png" width="300"
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -239,38 +269,38 @@
 <li>在新表中调用自定义的rank函数添加排名</li>
 </ul>
 <p>rank函数是这样写的：</p>
-<div class="highlight"><pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="cm">/* 临时rank function 要求原表按id score_mark降序 排列好 */</span>
-<span class="n">delimiter</span> <span class="o">//</span>
-<span class="k">drop</span> <span class="n">function</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">myrank</span><span class="p">;</span>
-<span class="k">create</span> <span class="n">function</span> <span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span> <span class="kt">int</span><span class="p">,</span> <span class="n">score_mark</span> <span class="kt">float</span><span class="p">)</span> 
-<span class="n">returns</span> <span class="kt">int</span>
-<span class="k">READS</span> <span class="k">SQL</span> <span class="n">DATA</span>
-<span class="n">begin</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">@</span><span class="n">pre_score_id</span> <span class="k">is</span> <span class="no">null</span> <span class="k">or</span> <span class="o">@</span><span class="n">pre_score_id</span> <span class="o">!=</span> <span class="n">score_id</span><span class="p">)</span> <span class="k">then</span>
-        <span class="kt">set</span> <span class="o">@</span><span class="n">pre_score_id</span> <span class="p">:</span><span class="o">=</span> <span class="n">score_id</span><span class="p">;</span>
-        <span class="kt">set</span> <span class="o">@</span><span class="n">pre_score_mark</span> <span class="p">:</span><span class="o">=</span> <span class="n">score_mark</span><span class="p">;</span>
-        <span class="kt">set</span> <span class="o">@</span><span class="n">row</span> <span class="p">:</span><span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="kt">set</span> <span class="o">@</span><span class="n">rank</span> <span class="p">:</span><span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">else</span>
-        <span class="kt">set</span> <span class="o">@</span><span class="n">row</span> <span class="p">:</span><span class="o">=</span> <span class="o">@</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">if</span><span class="p">(</span><span class="o">@</span><span class="n">pre_score_mark</span> <span class="o">!=</span> <span class="n">score_mark</span> <span class="k">or</span> <span class="n">score_mark</span> <span class="k">is</span> <span class="no">null</span><span class="p">)</span> <span class="k">then</span>
-            <span class="kt">set</span> <span class="o">@</span><span class="n">rank</span> <span class="p">:</span><span class="o">=</span> <span class="o">@</span><span class="n">row</span><span class="p">;</span>
-            <span class="kt">set</span> <span class="o">@</span><span class="n">pre_score_mark</span> <span class="o">=</span> <span class="n">score_mark</span><span class="p">;</span>
-        <span class="n">end</span> <span class="k">if</span><span class="p">;</span>
-    <span class="n">end</span> <span class="k">if</span><span class="p">;</span>
-    <span class="k">return</span> <span class="o">@</span><span class="n">rank</span><span class="p">;</span>
-<span class="n">end</span> <span class="o">//</span>
-<span class="n">delimiter</span> <span class="p">;</span>
-</code></pre></div><p>完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：</p>
-<div class="highlight"><pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="k">drop</span> <span class="k">table</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">tmp_table_rank</span><span class="p">;</span>
-<span class="k">create</span> <span class="k">table</span> <span class="n">tmp_table_rank</span> <span class="k">as</span>
-<span class="k">select</span> <span class="n">score_id</span><span class="p">,</span> <span class="n">score_stuno</span><span class="p">,</span> <span class="n">Score_mark</span><span class="p">,</span> <span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span><span class="p">,</span> <span class="n">Score_mark</span><span class="p">)</span> <span class="k">as</span> <span class="n">rank</span>
-<span class="k">from</span> <span class="p">(</span>
-    <span class="k">select</span> <span class="o">*</span> 
-    <span class="k">from</span> <span class="n">score</span>
-    <span class="k">order</span> <span class="k">by</span> <span class="n">score_id</span> <span class="k">asc</span><span class="p">,</span> <span class="n">Score_mark</span> <span class="k">desc</span><span class="p">,</span> <span class="k">right</span><span class="p">(</span><span class="n">score_stuno</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">asc</span>
-<span class="p">);</span>
-</code></pre></div><p>写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却<strong>不一样</strong>！！！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="cm">/* 临时rank function 要求原表按id score_mark降序 排列好 */</span><span class="w">
+</span><span class="w"></span><span class="n">delimiter</span><span class="w"> </span><span class="o">//</span><span class="w">
+</span><span class="w"></span><span class="k">drop</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">myrank</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">score_mark</span><span class="w"> </span><span class="kt">float</span><span class="p">)</span><span class="w"> 
+</span><span class="w"></span><span class="n">returns</span><span class="w"> </span><span class="kt">int</span><span class="w">
+</span><span class="w"></span><span class="k">READS</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="n">DATA</span><span class="w">
+</span><span class="w"></span><span class="n">begin</span><span class="w">
+</span><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">@</span><span class="n">pre_score_id</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="no">null</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="o">@</span><span class="n">pre_score_id</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">score_id</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span><span class="w">        </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">pre_score_id</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">score_id</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">pre_score_mark</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="n">score_mark</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">row</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">rank</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="k">else</span><span class="w">
+</span><span class="w">        </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">row</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="o">@</span><span class="n">row</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">@</span><span class="n">pre_score_mark</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">score_mark</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">score_mark</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="no">null</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w">
+</span><span class="w">            </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">rank</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="o">@</span><span class="n">row</span><span class="p">;</span><span class="w">
+</span><span class="w">            </span><span class="kt">set</span><span class="w"> </span><span class="o">@</span><span class="n">pre_score_mark</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">score_mark</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="n">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="n">end</span><span class="w"> </span><span class="k">if</span><span class="p">;</span><span class="w">
+</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">@</span><span class="n">rank</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">end</span><span class="w"> </span><span class="o">//</span><span class="w">
+</span><span class="w"></span><span class="n">delimiter</span><span class="w"> </span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>完整的临时表建立过程如下，看起来结构很简单，只是对已经排好序的表统计排名：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tmp_table_rank</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tmp_table_rank</span><span class="w"> </span><span class="k">as</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">score_id</span><span class="p">,</span><span class="w"> </span><span class="n">score_stuno</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="p">,</span><span class="w"> </span><span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">rank</span><span class="w">
+</span><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> 
+</span><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">score</span><span class="w">
+</span><span class="w">    </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">score_id</span><span class="w"> </span><span class="k">asc</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="k">right</span><span class="p">(</span><span class="n">score_stuno</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">asc</span><span class="w">
+</span><span class="w"></span><span class="p">);</span><span class="w">
+</span></code></pre></div><p>写完后在个人的云服务器上测试了一下结果符合预期，但为了保险起见，又在虚拟机上测试了同样数据和同样的代码，结果却<strong>不一样</strong>！！！</p>
 <p>？？？</p>
 <p>首先怀疑的是<code>mysql</code>版本的问题</p>
 <p>服务器上使用的<code>mysql</code>版本为<code>mysql  Ver 14.14 Distrib 5.6.37, for linux-glibc2.12 (x86_64) using  EditLine wrapper</code></p>
@@ -279,18 +309,18 @@
 <p>在询问同学和老师后怀疑是两者在<strong>排序</strong>和<strong>调用函数</strong>的处理上有不同，理论上期望<code>mysql</code>先做完子查询的排序后，对排好序的表计算rank，<code>mysql</code>确实是这么做的，但是<code>mariaDB</code>似乎还没做完子查询的排序就开始调用函数计算rank，导致每个人的成绩和排名对应不上，出现错误</p>
 <p>针对这个怀疑，做出了如下修改：</p>
 <p>先将子查询放入一个临时表中，再调用该临时表</p>
-<div class="highlight"><pre class="chroma"><code class="language-mysql" data-lang="mysql"><span class="cm">/* 临时table, 按科目添加排名 */</span>
-<span class="k">drop</span> <span class="k">table</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">tmp_table_asc</span><span class="p">;</span>
-<span class="k">create</span> <span class="k">table</span> <span class="n">tmp_table_asc</span> <span class="k">as</span>
-<span class="k">select</span> <span class="o">*</span> 
-<span class="k">from</span> <span class="n">score</span>
-<span class="k">order</span> <span class="k">by</span> <span class="n">score_id</span> <span class="k">asc</span><span class="p">,</span> <span class="n">Score_mark</span> <span class="k">desc</span><span class="p">,</span> <span class="k">right</span><span class="p">(</span><span class="n">score_stuno</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">asc</span><span class="p">;</span>
-
-<span class="k">drop</span> <span class="k">table</span> <span class="k">if</span> <span class="k">exists</span> <span class="n">tmp_table_rank</span><span class="p">;</span>
-<span class="k">create</span> <span class="k">table</span> <span class="n">tmp_table_rank</span> <span class="k">as</span>
-<span class="k">select</span> <span class="n">score_id</span><span class="p">,</span> <span class="n">score_stuno</span><span class="p">,</span> <span class="n">Score_mark</span><span class="p">,</span> <span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span><span class="p">,</span> <span class="n">Score_mark</span><span class="p">)</span> <span class="k">as</span> <span class="n">rank</span>
-<span class="k">from</span> <span class="n">tmp_table_asc</span><span class="p">;</span>
-</code></pre></div><p>结果正确了，果然你俩还不是一个东西啊（苦笑</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="cm">/* 临时table, 按科目添加排名 */</span><span class="w">
+</span><span class="w"></span><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tmp_table_asc</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tmp_table_asc</span><span class="w"> </span><span class="k">as</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> 
+</span><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">score</span><span class="w">
+</span><span class="w"></span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">score_id</span><span class="w"> </span><span class="k">asc</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="w"> </span><span class="k">desc</span><span class="p">,</span><span class="w"> </span><span class="k">right</span><span class="p">(</span><span class="n">score_stuno</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">asc</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">tmp_table_rank</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">tmp_table_rank</span><span class="w"> </span><span class="k">as</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">score_id</span><span class="p">,</span><span class="w"> </span><span class="n">score_stuno</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="p">,</span><span class="w"> </span><span class="nf">myrank</span><span class="p">(</span><span class="n">score_id</span><span class="p">,</span><span class="w"> </span><span class="n">Score_mark</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">rank</span><span class="w">
+</span><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tmp_table_asc</span><span class="p">;</span><span class="w">
+</span></code></pre></div><p>结果正确了，果然你俩还不是一个东西啊（苦笑</p>
 
 </section>
 
@@ -370,7 +400,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -392,7 +422,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
@@ -414,7 +444,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_2.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy" 
