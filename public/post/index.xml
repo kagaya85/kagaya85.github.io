@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on かがやの部屋</title>
-    <link>https://example.com/post/</link>
+    <link>https://kagaya85.github.io/post/</link>
     <description>Recent content in Posts on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://kagaya85.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2021春季看番总结与推荐</title>
-      <link>https://example.com/p/2021/bangumi-in-2021-spring/</link>
+      <link>https://kagaya85.github.io/p/2021/bangumi-in-2021-spring/</link>
       <pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/p/2021/bangumi-in-2021-spring/</guid>
+      <guid>https://kagaya85.github.io/p/2021/bangumi-in-2021-spring/</guid>
       <description>打开我的bangumi简单回顾一下2021年年初看过的动漫：如果算上从去年秋季开播的半年番和剧场版，总共看了15部，其中只有一部剧场版，即前几天刚上映的《绯红的子弹》。这个追番量对我个人来说其实还蛮多的，毕竟平时学校实验室的事情也比较短，工作日的话基本只有晚上回家才能看一两集，因此只有一部分番剧让我可以保持足够的兴趣在刚刚更新的时候去看，有一部分番剧只能等冬季番结束，春季番开始但没有完全开始的这个空档补回来。后面简单回顾总结一下看过的冬季番，特别是安利一下我比较喜欢的番剧。
 TL;DR 推荐：
  摇曳露营∆ 奇蛋物语 无职转生～在异世界认真地活下去～ 弱势角色友崎君 工作细胞Black 进击的巨人最终季 上半 咒术回战  还不错：
@@ -38,10 +38,10 @@ TL;DR 推荐：
     
     <item>
       <title>Amazing Go Interface</title>
-      <link>https://example.com/p/2021/amazing-go-interface/</link>
+      <link>https://kagaya85.github.io/p/2021/amazing-go-interface/</link>
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/p/2021/amazing-go-interface/</guid>
+      <guid>https://kagaya85.github.io/p/2021/amazing-go-interface/</guid>
       <description>从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
 希望能对你有所帮助。
 本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
@@ -55,10 +55,10 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
     
     <item>
       <title>函数式程序设计的影响与应用</title>
-      <link>https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
+      <link>https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
       <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
+      <guid>https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
       <description>简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
 尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。
 当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用
@@ -74,10 +74,10 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
     
     <item>
       <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
-      <link>https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
+      <link>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
       <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
       
-      <guid>https://example.com/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
+      <guid>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
       <description>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）
 本文所需shell脚本都在这个repo，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。
 配置基本环境 这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：
@@ -99,10 +99,10 @@ CONTAINERD_VERSION=1.4.3 wget https://github.com/containerd/containerd/releases/
     
     <item>
       <title>使用Docker部署本地Wordpress开发环境</title>
-      <link>https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+      <link>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
       <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
       
-      <guid>https://example.com/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+      <guid>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
       <description>使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。
 背景 由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。
 本机环境 MacOS 10.15.6（理论上适用于所有支持Docker的环境）
@@ -118,10 +118,10 @@ Docker Desktop 19.03.12
     
     <item>
       <title>八佰看完了随便谈谈</title>
-      <link>https://example.com/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
+      <link>https://kagaya85.github.io/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
       <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
       
-      <guid>https://example.com/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
+      <guid>https://kagaya85.github.io/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
       <description>八佰看完了随便谈谈 我先给《八佰》一个好评 《八佰》看完了，还专门去看了IMAX版。尽管这部电影从宣发到撤档再到重新定档上映，之间备受争议。但我还说要说，仅从抗战电影本身来说，这是部好电影，甚至超出了我之前看过的所有抗战片，我要给它很高的评价。《八佰》的出现对于中国抗战片来说有一定的特殊意义，类似《流浪地球》对于中国科幻片。这不仅因为它是一部少有的大陆拍摄的国军战役，而且制作团队对于电影的取材，伴奏配乐，画面分镜以及叙事节奏的掌握都十分出色。最后所表达的主题也很明确：**尽管这是一场必然失败的“表演”战役，但是“八佰壮士”用自己的行动向江对岸的人展示了中国军人真正的气魄，以此来唤醒更多中国人参与抗战。**这点我深表赞同。
 个人认为唯一的争议 说说争议点，对我来说唯一让我非常不满的是导演管虎本人，《八佰》是部好电影，但是宣发的时候特意要去找八十八师师长“飞将军”孙元良的后人，孙的行为在抗战期间颇有争议，尽管是孙元良当时亲自给谢晋元下令死守四行仓库，但是因为本人的污点，不应该成为宣发时的素材。
 历史虚无主义？ 历史虚无主义——指不加具体分析而盲目否定人类社会的历史发展过程
@@ -138,10 +138,10 @@ ps: 金刚川看完了，属实给人看嗯了。。。</description>
     
     <item>
       <title>DeepClone深克隆</title>
-      <link>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+      <link>https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
       <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+      <guid>https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
       <description>DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
 于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
 为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
@@ -162,10 +162,10 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.</description>
     
     <item>
       <title>Unix系统分析——锁</title>
-      <link>https://example.com/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
+      <link>https://kagaya85.github.io/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
       <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
+      <guid>https://kagaya85.github.io/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
       <description>Unix系统分析——锁 总结Unix系统中锁的相关知识
 Linux各种锁的实现 原子操作 原子操作是最小的执行单位，保证在执行完毕前不会被其他任何事物或事件打断，也就是说不能有比它更小的执行单位，命名也借用了物理学中物质稳定存在的最小单位——原子。
 原子操作于硬件架构相关，由汇编语言实现，一般用于实现计数等操作
@@ -198,10 +198,10 @@ void downgrade_write(struct rw_semaphore *sem); 函数用于把写者降级为�
     
     <item>
       <title>pthread多线程编程初探</title>
-      <link>https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
+      <link>https://kagaya85.github.io/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
       <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
+      <guid>https://kagaya85.github.io/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
       <description>pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
 实验要求 使用pthread实现图像卷积的并行计算
 由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。
@@ -224,10 +224,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>CSS伪类的应用——实现聊天气泡效果</title>
-      <link>https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
+      <link>https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
       <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
+      <guid>https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
       <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
@@ -241,10 +241,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>记人生中第一次面试</title>
-      <link>https://example.com/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
+      <link>https://kagaya85.github.io/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
       <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
+      <guid>https://kagaya85.github.io/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
       <description>记人生中第一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。
 微软分网测和面试两个部分，投简历后不久就先收到了网测通知的邮件，也就是某天下午7点到9点要在电脑前完成一个测试。邮件里附了一个考试连接和一个体验连接，后者可以让你提前熟悉一下操作环境，测试一下你的电脑环境（摄像头）。对了，网测通知的全程要开摄像头，也就是说会有监考，内容是两小时做四道题。但是我测的时候全程摄像头的指示灯都没有亮，甚至倒计时的计时器都是6小时？？？
 考试界面和leetcode很像，题目都是英文的，前两道题比较简单，后两道难度一下就提高了。除非打过acm的选手或特别练过的，我觉得就算有思路也很难下手。当然我也只是完成了前两道，到了两小时就交卷了。
@@ -258,10 +258,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>SQL变量总结</title>
-      <link>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+      <link>https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
       <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
       <description>SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
 请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
    id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出</description>
@@ -269,10 +269,10 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
     
     <item>
       <title>Mysql和MariaDB中的Rank排序的坑</title>
-      <link>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+      <link>https://kagaya85.github.io/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
       <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+      <guid>https://kagaya85.github.io/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
       <description>Mysql和MariaDB中的Rank排序的坑 题目中需要对一个成绩表按考试科目以及学生做排名
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
@@ -292,10 +292,10 @@ droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_
     
     <item>
       <title>难得看次电影，随便写写</title>
-      <link>https://example.com/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
+      <link>https://kagaya85.github.io/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
       <pubDate>Fri, 08 Mar 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
+      <guid>https://kagaya85.github.io/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
       <description>难得看次电影，随便写写 ​	趁着周五+惊奇队长第一天上映，拉着基友去学校边上的电影院一睹为快，顺便看了广受好评的奥斯卡最佳影片——Green Book 绿皮书
 ​	不得不说我真是很庆幸自己先看了惊奇队长，再看了绿皮书，然后心满意足地回到寝室。先说说惊奇队长，作为复仇者联盟的最强战力，上映的这部《惊奇队长》基本上是为了一个月后的《复联4》做铺垫的。一方面为了新加入的成员交代好故事背景，另一方面补充一些主线上的剧情。总得来说没有什么惊喜的地方，哦，对我来说最惊喜的地方是能再次在荧幕上看到富瑞和科尔森，两位在神盾局中举足轻重的人物。说真的，富瑞那时候还没有戴他那个标志性的眼罩，而且显得非常年轻，体态虽然宽大但丝毫不显臃肿，甚至当时作为三级特工的富瑞已经显得十分老练。刚出场的时候我一时还没认出来，直到科尔森喊出富瑞的名字，我惊喜的差点叫出来。富瑞的形象一直是那样稳重，看到他总会给人一种莫名的安全感，仿佛一切都在他的掌握之中。惊喜之余，也顺便给神盾局上柱香。另外，关于剧情主要还是意料之中地交代了惊奇队长身世以及能力的来源，虽然可能没有人看这篇blog，但我还是没有剧透的习惯，就不细说了，个人觉得就算没有看《惊奇队长》对于接下来的复联也不会有什么影响，比较关键的内容就是宇宙魔方是怎么到富瑞手里的以及富瑞在《复联3》里联系惊奇队长的那个寻呼机的来历，不过全身发出耀眼光芒的女侠还是蛮帅的，就凭一个人就能单挑一支舰队的能力（特效）来看，还是非常适合边吃爆米花边看的。
 ​	看完《惊奇队长》紧接着就去看了一直被各种吹爆的《绿皮书》，没错，我也要吹爆“小绿本”了。之前看到海报上一个人开着一辆绿色的车，我大致就可以猜到这可能是一部公路电影，但不清楚具体的内容，如果没有获得这么高的舆论评价我可能也不会在影院下架前赶着去看了最后一场。对这类题材其实并不是很感冒，而且看过的公路片印象深的也并不多（如果阿甘也算的话），看完以后确实感叹，小绿本是真的物有所值，它值得那个小金人。
@@ -308,10 +308,10 @@ droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_
     
     <item>
       <title>DitF第十三集ed绘本《魔物与王子》翻译</title>
-      <link>https://example.com/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
+      <link>https://kagaya85.github.io/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
       <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
+      <guid>https://kagaya85.github.io/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
       <description>DitF第十三集ed绘本《魔物与王子》翻译 一个挺悲伤的故事（有翻译错误还请指教）
 在某个国家漆黑的森林深处，有一个不为人知的种族生活在那里。背上长着巨大的他们十分的美丽，但是确实被成为“魔物”般的存在。那里生活着的“魔物”的公主。她的背上也有着巨大的灰色翅膀，当她成长到十六岁的时候，就被允许用翅膀飞到森林的外面。
 然后，当过完十六岁生日的时候，公主第一次飞出森林，穿越过了险峻的山峰，飞过了河流。好不容易到达了一个住着不同种族的地方——人类的国家。空中的月光照映着她的脸庞。
@@ -327,10 +327,10 @@ droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_
     
     <item>
       <title>我们都在向前走，只有回忆驻留在原地</title>
-      <link>https://example.com/p/2019/flavors-of-youth/</link>
+      <link>https://kagaya85.github.io/p/2019/flavors-of-youth/</link>
       <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/flavors-of-youth/</guid>
+      <guid>https://kagaya85.github.io/p/2019/flavors-of-youth/</guid>
       <description>我们都在向前走，只有回忆驻留在原地 电影《肆式青春》短评
 观看建议：这部电影是三位导演通过中国这个舞台来描绘他们眼中青春的故事，三个篇章之间关系不大，但各自讲述一段完整的故事，虽然篇幅较短，但请用心体会，如果能在将自己的经历带入其中一段故事中的话能获得最好的观看体验。
 首先很遗憾，限于排片过少没能够第一时间去影院支持一下。其实很早就开始关注这部电影了，随着中国资本进入动画市场，也一直期待着有能有一部讲述中国自己故事的动画，不得不说，绘梦这次做的不错。整体看完以后觉得基本上没让我失望，个人看来第一篇与第三篇是比较出彩的，可以看到叫兽和李导真的是十分想把属于那个时代的回忆和情感通过动画的形式传达出来，各个细节十分到位，电影中的各种中国式场景想必各位也看得十分有亲切感。也许限于篇幅原因，有许多内容没能够呈现出来，但也确实足够表现出两位在中国这片土地上长大的年轻人对于那个一段美好时光的不舍之情，叙事节奏的把握我觉得真的是十分不错了。但我觉得缺点也是有的，题材的限制使得只有相似经历的人更容易在这个电影里获得共鸣，另外篇幅限制使得许多地方存在铺垫不足的问题。但个人认为这些不至于影响到整个电影所表达的东西，所以我还是会推荐更多人来看的。 正如《一碗乡愁》的导演叫兽所说的一样，他的目的是要引起一部分人的共鸣，如果你在看这部电影的时候，电影中的一个事物，一个情节，或者一个人物，能让你不由自主地将自己代入到电影之中，那可以说这部电影是成功的。无论是自己的那位和蔼的长辈，还是小时候最喜欢的一道美食，抑或是那个曾经羞涩的自己所暗恋的ta。尽管每个人的青春时光都不尽相同，但大家都经历过那个年代，总能找到一些只属于那个年代的印记，电影讲述的不只是导演们自己的故事，也是在讲述我们每一个80后，90后甚至00后的青春。
@@ -339,10 +339,10 @@ droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_
     
     <item>
       <title>打算重启kgyzone</title>
-      <link>https://example.com/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
+      <link>https://kagaya85.github.io/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
       <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
+      <guid>https://kagaya85.github.io/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
       <description>打算重启kgyzone 离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。
 之后可以慢慢在这里发一下心得体会。或许可以直接将markdown格式的文件直接发上来，那样的话会方便很多。
 markdown真好用啊</description>

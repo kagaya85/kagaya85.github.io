@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>碎碎念 on かがやの部屋</title>
-    <link>https://example.com/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
+    <link>https://kagaya85.github.io/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
     <description>Recent content in 碎碎念 on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 17 Aug 2020 22:42:52 +0800</lastBuildDate><atom:link href="https://example.com/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Aug 2020 22:42:52 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>八佰看完了随便谈谈</title>
-      <link>https://example.com/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
+      <link>https://kagaya85.github.io/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
       <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
       
-      <guid>https://example.com/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
+      <guid>https://kagaya85.github.io/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
       <description>八佰看完了随便谈谈 我先给《八佰》一个好评 《八佰》看完了，还专门去看了IMAX版。尽管这部电影从宣发到撤档再到重新定档上映，之间备受争议。但我还说要说，仅从抗战电影本身来说，这是部好电影，甚至超出了我之前看过的所有抗战片，我要给它很高的评价。《八佰》的出现对于中国抗战片来说有一定的特殊意义，类似《流浪地球》对于中国科幻片。这不仅因为它是一部少有的大陆拍摄的国军战役，而且制作团队对于电影的取材，伴奏配乐，画面分镜以及叙事节奏的掌握都十分出色。最后所表达的主题也很明确：**尽管这是一场必然失败的“表演”战役，但是“八佰壮士”用自己的行动向江对岸的人展示了中国军人真正的气魄，以此来唤醒更多中国人参与抗战。**这点我深表赞同。
 个人认为唯一的争议 说说争议点，对我来说唯一让我非常不满的是导演管虎本人，《八佰》是部好电影，但是宣发的时候特意要去找八十八师师长“飞将军”孙元良的后人，孙的行为在抗战期间颇有争议，尽管是孙元良当时亲自给谢晋元下令死守四行仓库，但是因为本人的污点，不应该成为宣发时的素材。
 历史虚无主义？ 历史虚无主义——指不加具体分析而盲目否定人类社会的历史发展过程
@@ -29,10 +29,10 @@ ps: 金刚川看完了，属实给人看嗯了。。。</description>
     
     <item>
       <title>打算重启kgyzone</title>
-      <link>https://example.com/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
+      <link>https://kagaya85.github.io/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
       <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
+      <guid>https://kagaya85.github.io/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
       <description>打算重启kgyzone 离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。
 之后可以慢慢在这里发一下心得体会。或许可以直接将markdown格式的文件直接发上来，那样的话会方便很多。
 markdown真好用啊</description>

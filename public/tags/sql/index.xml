@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>SQL on かがやの部屋</title>
-    <link>https://example.com/tags/sql/</link>
+    <link>https://kagaya85.github.io/tags/sql/</link>
     <description>Recent content in SQL on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 07 Apr 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://example.com/tags/sql/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 07 Apr 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/tags/sql/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SQL变量总结</title>
-      <link>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+      <link>https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
       <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+      <guid>https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
       <description>SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
 请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
    id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出</description>
@@ -20,10 +20,10 @@
     
     <item>
       <title>Mysql和MariaDB中的Rank排序的坑</title>
-      <link>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+      <link>https://kagaya85.github.io/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
       <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+      <guid>https://kagaya85.github.io/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
       <description>Mysql和MariaDB中的Rank排序的坑 题目中需要对一个成绩表按考试科目以及学生做排名
 为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表
 想法是
