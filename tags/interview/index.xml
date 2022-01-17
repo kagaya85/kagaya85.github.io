@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Interview on かがやの部屋</title>
-    <link>https://example.com/tags/interview/</link>
+    <link>https://kagaya85.github.io/tags/interview/</link>
     <description>Recent content in Interview on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 07 May 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://example.com/tags/interview/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 May 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/tags/interview/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>记人生中第一次面试</title>
-      <link>https://example.com/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
+      <link>https://kagaya85.github.io/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
       <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
       
-      <guid>https://example.com/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
+      <guid>https://kagaya85.github.io/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
       <description>记人生中第一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。
 微软分网测和面试两个部分，投简历后不久就先收到了网测通知的邮件，也就是某天下午7点到9点要在电脑前完成一个测试。邮件里附了一个考试连接和一个体验连接，后者可以让你提前熟悉一下操作环境，测试一下你的电脑环境（摄像头）。对了，网测通知的全程要开摄像头，也就是说会有监考，内容是两小时做四道题。但是我测的时候全程摄像头的指示灯都没有亮，甚至倒计时的计时器都是6小时？？？
 考试界面和leetcode很像，题目都是英文的，前两道题比较简单，后两道难度一下就提高了。除非打过acm的选手或特别练过的，我觉得就算有思路也很难下手。当然我也只是完成了前两道，到了两小时就交卷了。

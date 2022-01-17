@@ -20,7 +20,7 @@ int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的�
 由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
 g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid'><title>pthread多线程编程初探</title>
 
-<link rel='canonical' href='https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
+<link rel='canonical' href='https://kagaya85.github.io/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='pthread多线程编程初探'>
 <meta property='og:description' content='pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
@@ -41,9 +41,9 @@ int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的�
 编译
 由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
 g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid'>
-<meta property='og:url' content='https://example.com/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
+<meta property='og:url' content='https://kagaya85.github.io/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='pthread' /><meta property='article:tag' content='并行计算' /><meta property='article:published_time' content='2019-06-01T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-06-01T21:30:20&#43;08:00'/><meta property='og:image' content='https://example.com/default.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='C&#43;&#43;' /><meta property='article:tag' content='pthread' /><meta property='article:tag' content='并行计算' /><meta property='article:published_time' content='2019-06-01T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-06-01T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/default.jpg' />
 <meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="pthread多线程编程初探">
 <meta name="twitter:description" content="pthread多线程编程初探 POSIX线程（POSIX threads），简称Pthreads，是线程的POSIX标准。该标准定义了创建和操纵线程的一整套API。
 实验要求 使用pthread实现图像卷积的并行计算
@@ -63,7 +63,7 @@ int pthread_join(pthread_t thread, void **retval); 第一个参数为回收的�
 编译
 由于pthread.h不是标准库函数，之前需要指定-lpthread，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定-pthread参数即可编译成功
 g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个东西，pid，thread_id，tid"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/default.jpg' />
+    <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
     </head>
     <body class="">
     <script>
@@ -111,7 +111,7 @@ g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id �
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://example.com">かがやの部屋</a></h1>
+        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
         <h2 class="site-description">明日は晴れるかな〜</h2>
     </header>
 
@@ -225,7 +225,7 @@ g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id �
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://example.com" class="back-home">
+        <a href="https://kagaya85.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -389,6 +389,29 @@ g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id �
     </section>
     </footer>
 
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
     
 </article>
 
@@ -567,7 +590,7 @@ g&#43;&#43; pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id �
         
             2019 - 
         
-        2021 かがやの部屋
+        2022 かがやの部屋
     </section>
     
     <section class="powerby">

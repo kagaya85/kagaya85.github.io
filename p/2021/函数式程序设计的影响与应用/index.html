@@ -13,7 +13,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
  No side-effect：函数和操作不应该在其函数范围外更改任何变量，函数应该将值返回给调用方，并且不影响任何外部状态，程序也更容易被理解，从而无需担心任何的“副作用”。 使用纯函数：函数应该是是幂等的，同样的入参只会得到相同的结果。一个函数的返回值应该只基于输入参数而没有任何的side-effect或依赖任何的全局变量。 Clean Code3：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。  在Golang中，可以通过7种方法来实现函数式的编程4，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。
 // this is a higher-order-function that returns a function func add(x int) func(y int) int { // A function is returned here as closure 	// variable x is obtained from the outer scope of this method and memorized in the closure 	return func(y int) int { return x &#43; y } } func main() { // we are currying the add method to create more variations 	var add10 = add(10) var add20 = add(20) var add30 = add(30) fmt.'><title>函数式程序设计的影响与应用</title>
 
-<link rel='canonical' href='https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
+<link rel='canonical' href='https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='函数式程序设计的影响与应用'>
 <meta property='og:description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
@@ -27,9 +27,9 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
  没有数据赋值：数据对象赋值后不再改变 没有隐藏状态：隐藏在内部的状态在设计的使用就应该被避免。对于函数式编程来说，状态没有消失，而是变得明确而且可见。  当我们在Go中使用了函数式的设计思维，意味着：
  No side-effect：函数和操作不应该在其函数范围外更改任何变量，函数应该将值返回给调用方，并且不影响任何外部状态，程序也更容易被理解，从而无需担心任何的“副作用”。 使用纯函数：函数应该是是幂等的，同样的入参只会得到相同的结果。一个函数的返回值应该只基于输入参数而没有任何的side-effect或依赖任何的全局变量。 Clean Code3：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。  在Golang中，可以通过7种方法来实现函数式的编程4，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。
 // this is a higher-order-function that returns a function func add(x int) func(y int) int { // A function is returned here as closure 	// variable x is obtained from the outer scope of this method and memorized in the closure 	return func(y int) int { return x &#43; y } } func main() { // we are currying the add method to create more variations 	var add10 = add(10) var add20 = add(20) var add30 = add(30) fmt.'>
-<meta property='og:url' content='https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
+<meta property='og:url' content='https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='FunctionalProgramming' /><meta property='article:tag' content='Paper' /><meta property='article:tag' content='Overview' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='SSA' /><meta property='article:published_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='og:image' content='https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='FunctionalProgramming' /><meta property='article:tag' content='Paper' /><meta property='article:tag' content='Overview' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='SSA' /><meta property='article:published_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
 <meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="函数式程序设计的影响与应用">
 <meta name="twitter:description" content="简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
 尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。
@@ -42,7 +42,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
  没有数据赋值：数据对象赋值后不再改变 没有隐藏状态：隐藏在内部的状态在设计的使用就应该被避免。对于函数式编程来说，状态没有消失，而是变得明确而且可见。  当我们在Go中使用了函数式的设计思维，意味着：
  No side-effect：函数和操作不应该在其函数范围外更改任何变量，函数应该将值返回给调用方，并且不影响任何外部状态，程序也更容易被理解，从而无需担心任何的“副作用”。 使用纯函数：函数应该是是幂等的，同样的入参只会得到相同的结果。一个函数的返回值应该只基于输入参数而没有任何的side-effect或依赖任何的全局变量。 Clean Code3：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。  在Golang中，可以通过7种方法来实现函数式的编程4，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。
 // this is a higher-order-function that returns a function func add(x int) func(y int) int { // A function is returned here as closure 	// variable x is obtained from the outer scope of this method and memorized in the closure 	return func(y int) int { return x &#43; y } } func main() { // we are currying the add method to create more variations 	var add10 = add(10) var add20 = add(20) var add30 = add(30) fmt."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
+    <meta name="twitter:image" content='https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
     </head>
     <body class="">
     <script>
@@ -90,7 +90,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://example.com">かがやの部屋</a></h1>
+        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
         <h2 class="site-description">明日は晴れるかな〜</h2>
     </header>
 
@@ -204,7 +204,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://example.com" class="back-home">
+        <a href="https://kagaya85.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -664,6 +664,29 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
     </footer>
 
     
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
 </article>
 
     <aside class="related-contents--wrapper">
@@ -841,7 +864,7 @@ FP in Golang Go语言是Google开发的一种静态强类型、编译型、并�
         
             2019 - 
         
-        2021 かがやの部屋
+        2022 かがやの部屋
     </section>
     
     <section class="powerby">

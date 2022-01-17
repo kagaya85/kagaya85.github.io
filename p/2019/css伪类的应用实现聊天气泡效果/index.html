@@ -11,7 +11,7 @@
 .bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'><title>CSS伪类的应用——实现聊天气泡效果</title>
 
-<link rel='canonical' href='https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
+<link rel='canonical' href='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='CSS伪类的应用——实现聊天气泡效果'>
 <meta property='og:description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
@@ -23,9 +23,9 @@
 :before
 .bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'>
-<meta property='og:url' content='https://example.com/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
+<meta property='og:url' content='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSS' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='og:image' content='https://example.com/default.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSS' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/default.jpg' />
 <meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="CSS伪类的应用——实现聊天气泡效果">
 <meta name="twitter:description" content="CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
@@ -36,7 +36,7 @@
 :before
 .bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/default.jpg' />
+    <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
     </head>
     <body class="">
     <script>
@@ -84,7 +84,7 @@
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://example.com">かがやの部屋</a></h1>
+        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
         <h2 class="site-description">明日は晴れるかな〜</h2>
     </header>
 
@@ -198,7 +198,7 @@
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://example.com" class="back-home">
+        <a href="https://kagaya85.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -327,6 +327,29 @@
     </section>
     </footer>
 
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
     
 </article>
 
@@ -505,7 +528,7 @@
         
             2019 - 
         
-        2021 かがやの部屋
+        2022 かがやの部屋
     </section>
     
     <section class="powerby">

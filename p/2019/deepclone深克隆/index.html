@@ -18,7 +18,7 @@ var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时�
 如果要实现一个浅克隆可以这样做
 var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'><title>DeepClone深克隆</title>
 
-<link rel='canonical' href='https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
+<link rel='canonical' href='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
 
 <link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='DeepClone深克隆'>
 <meta property='og:description' content='DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
@@ -37,9 +37,9 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'><title>DeepClone深�
 var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
 如果要实现一个浅克隆可以这样做
 var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'>
-<meta property='og:url' content='https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
+<meta property='og:url' content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='JavaScript' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='og:image' content='https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='JavaScript' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
 <meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="DeepClone深克隆">
 <meta name="twitter:description" content="DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
 于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
@@ -57,7 +57,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'>
 var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
 如果要实现一个浅克隆可以这样做
 var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://example.com/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
+    <meta name="twitter:image" content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
     </head>
     <body class="">
     <script>
@@ -105,7 +105,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
                 
             </figure>
         
-        <h1 class="site-name"><a href="https://example.com">かがやの部屋</a></h1>
+        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
         <h2 class="site-description">明日は晴れるかな〜</h2>
     </header>
 
@@ -219,7 +219,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
             <main class="main full-width">
     <div id="article-toolbar">
-        <a href="https://example.com" class="back-home">
+        <a href="https://kagaya85.github.io" class="back-home">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
@@ -425,7 +425,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 </span><span class="c1"></span>    <span class="kd">var</span> <span class="nx">sourceList</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="kd">var</span> <span class="nx">targetList</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="kd">function</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// null 会被typeof认为是object 一个一直未被解决的bug
 </span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nx">source</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">null</span>
@@ -463,14 +463,14 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
         <span class="c1">// 递归克隆
 </span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">item</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">target</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="o">=</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">item</span><span class="p">])</span>
+            <span class="nx">target</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="o">=</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">source</span><span class="p">[</span><span class="nx">item</span><span class="p">])</span>
         <span class="p">}</span>
         
         <span class="k">return</span> <span class="nx">target</span>
     <span class="p">}</span>
 
 
-    <span class="k">return</span> <span class="mi">_</span><span class="nx">clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">_clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 </section>
@@ -501,6 +501,29 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
     </section>
     </footer>
 
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                defer="true"
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
     
 </article>
 
@@ -669,7 +692,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
         
             2019 - 
         
-        2021 かがやの部屋
+        2022 かがやの部屋
     </section>
     
     <section class="powerby">
