@@ -229,13 +229,16 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
       
       <guid>https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
       <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+ bili 
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
 首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
+之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
 :before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
+:after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同</description>
     </item>
     
@@ -246,6 +249,7 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
       
       <guid>https://kagaya85.github.io/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
       <description>记人生中第一次面试 在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。
+ ms 
 微软分网测和面试两个部分，投简历后不久就先收到了网测通知的邮件，也就是某天下午7点到9点要在电脑前完成一个测试。邮件里附了一个考试连接和一个体验连接，后者可以让你提前熟悉一下操作环境，测试一下你的电脑环境（摄像头）。对了，网测通知的全程要开摄像头，也就是说会有监考，内容是两小时做四道题。但是我测的时候全程摄像头的指示灯都没有亮，甚至倒计时的计时器都是6小时？？？
 考试界面和leetcode很像，题目都是英文的，前两道题比较简单，后两道难度一下就提高了。除非打过acm的选手或特别练过的，我觉得就算有思路也很难下手。当然我也只是完成了前两道，到了两小时就交卷了。
 没想到过了几天竟然受到了微软的面试通知，这确实让我蛮惊喜意外的，但更多的还是不安。因为对于面试经验几乎为0的我来说，第一次就是面微软确实是一个巨大的挑战。准备时间大概只有两周，于是翻开了各大论坛的面经指南寻找准备方法。一直在忙于做各种课设的我也没怎么刷leetcode，甚至面试前在车上还在看全排列的题（我甚至没想到看的这道题三小时后就考了！！！🙄🙃👻）
@@ -302,6 +306,7 @@ droptableifexiststmp_table_rank;createtabletmp_table_rankasselectscore_id,score_
 ​	《绿皮书》的核心内容其实还是黑人与种族歧视问题，对于这种在美国算作政治正确题材的电影，就像国内抗日爱国题材的电影，总能成为稳定的创作素材，的确能让我获得如此舒服的观后体验着实出乎我的意料。尤其是整部电影从头到尾基本都保持在一个轻松愉快的气氛中，甚至在刚开始我误以为它是一部喜剧片。影片一开始展示的“本片改编自真实故事”确实就已经吸引了我的注意力，这种真人真事的电影确实更能说服观众。大致的内容就是一名退役的白人士兵，托尼，为了生计给一位黑人钢琴家，雪利，做司机，一路上陪伴他在美国的南部进行了两个月的巡演的故事。时间背景大致是在上个世纪，种族歧视在美国南部盛行的年代。这样题材的电影也很容易就落入俗套，比如很可能就是黑人兄弟们是怎样活在白人歧视和压迫下一步一步克服艰难获得成功的故事。当然，这样也可以是一部好电影，比如《42号传奇》，我还蛮喜欢这部的，推荐。
 ​	《绿皮书》中的黑人主角一开始就是功成名就的黑人音乐家，甚至受到总统邀请在白宫演奏过两次。于是，这次站在这样新颖一个角度来看待这样一个严肃的问题，编剧也似乎十分强调雪利的身份来营造一种对立，制造矛盾体，要知道，对于黑人中混的比较好的人，面对种族歧视时往往是白人黑人两边都不讨好，片中也有不少用雪利和在南方生活的普通黑人对比的镜头，有些还是蛮令人心酸的，比如在公路上修车那段，路边农场里的黑人农民隔着栅栏望着车里后座上的雪利，看着一位白人在给他开门，修车，大家不约而同地停下手中地农活，就这样一言不发地默默注视着雪利。这个片段从头到尾没有一句台词，长度可能也就几十秒，但是确是我最喜欢，意义最丰富的一段。
 ​	好的电影可能没必要通过悲伤的情景把你感动到流泪，或通过激烈的场面和配乐让你热血沸腾。也许可以是这样一部轻松愉快，让观影者不时发出欢笑声的电影，也能引发人们对问题矛盾的无限深思。
+ 1551 
  2019年3月8日23点13分
  </description>
     </item>

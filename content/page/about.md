@@ -10,8 +10,9 @@ license: CC BY-NC-ND
 lastmod: '2020-10-09'
 menu:
     main: 
-        weight: -90
-        pre: user
+        weight: -80
+        params: 
+            icon: user
 ---
 
 你好，欢迎来到我的Page，很高兴能在这里遇见你

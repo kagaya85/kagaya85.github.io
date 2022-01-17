@@ -13,7 +13,7 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='Amazing Go Interface'>
+<link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='Amazing Go Interface'>
 <meta property='og:description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
 希望能对你有所帮助。
 本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
@@ -26,7 +26,8 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 <meta property='og:url' content='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
-<meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="Amazing Go Interface">
+<meta name="twitter:site" content="@kagaya_85">
+    <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Amazing Go Interface">
 <meta name="twitter:description" content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
 希望能对你有所帮助。
 本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
@@ -38,7 +39,9 @@ C&#43;&#43; Interface 我们先简单复习一下C&#43;&#43;，接口在C&#43;&#
 class Pat { public: string name; // 纯虚函数，要求派生类必须实现  virtual void bark() = 0; // 虚函数，提供默认实现  virtual string getName() { return name; } }; class Cat : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;喵喵喵&amp;#34; &amp;lt;&amp;lt; endl; } }; class Dog : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;汪汪汪&amp;#34; &amp;lt;&amp;lt; endl; } string getName() { return &amp;#34;this dog&amp;#39;s name is &amp;#34; &#43; this-&amp;gt;name; } }; 我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
     </head>
-    <body class="">
+    <body class="
+    article-page has-toc
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -53,163 +56,32 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
-        <span class="hamburger-box">
-            <span class="hamburger-inner"></span>
-        </span>
-    </button>
-
-    <header class="site-info">
-        
-            <figure class="site-avatar">
-                
-                    
-                    
-                    
-                        
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
-                            height="300" class="site-logo" loading="lazy" alt="Avatar">
-                    
-                
-
-                
-                    <span class="emoji">🚀</span>
-                
-            </figure>
-        
-        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
-        <h2 class="site-description">明日は晴れるかな〜</h2>
-    </header>
-
-    <ol class="menu" id="main-menu">
-        
-        
-        
-
-        <li >
-            <a href='/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
-  viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-  <polyline points="5 12 3 12 12 3 21 12 19 12" />
-  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-</svg>
-                
-                <span>Home</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/about/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
-    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <circle cx="12" cy="7" r="4" />
-    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-</svg>
-                
-                <span>About</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/archives/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <rect x="3" y="4" width="18" height="4" rx="2" />
-  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
-  <line x1="10" y1="12" x2="14" y2="12" />
-</svg>
-
-
-
-                
-                <span>Archives</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='https://twitter.com/kagaya_85'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="44" height="44"
-    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <path
-        d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
-</svg>
-                
-                <span>Twitter</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='https://bangumi.tv/user/kagaya85'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
-    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <rect x="3" y="7" width="18" height="13" rx="2" />
-    <polyline points="16 3 12 7 8 3" />
-</svg>
-                
-                <span>Bangumi</span>
-            </a>
-        </li>
-        
-        
-
-        <li >
-            <a href='/search/'>
-                
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
-    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <circle cx="10" cy="10" r="7" />
-    <line x1="21" y1="21" x2="15" y2="15" />
-</svg>
-                
-                <span>Search</span>
-            </a>
-        </li>
-        
-
-        
-    </ol>
-</aside>
-
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a href="https://kagaya85.github.io" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+</script>
+<div class="container main-container flex 
+    
+        extended
+    
+">
+    
+        <div id="article-toolbar">
+            <a href="/" class="back-home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <polyline points="15 6 9 12 15 18" />
 </svg>
 
 
 
-            <span>Back</span>
-        </a>
-    </div>
-
+                <span>Back</span>
+            </a>
+        </div>
+    
+<main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
@@ -240,8 +112,28 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
         <a href="/p/2021/amazing-go-interface/">Amazing Go Interface</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Apr 12, 2021</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -249,8 +141,14 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 
 
 
-        <time class="article-time--published">Apr 12, 2021</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    6 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
@@ -319,18 +217,25 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><p>输出结果：</p>
-<p><figure style="flex-grow: 296; flex-basis: 712px">
-		<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png" data-size="772x260"><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png"
-				srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_1024x0_resize_box_3.png 1024w"
-				width="772"
-				height="260"
-				loading="lazy"
-				alt="CleanShot_2021-04-04_at_19.16.38@2x">
-		</a>
-		
-		<figcaption>CleanShot_2021-04-04_at_19.16.38@2x</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 296; 
+			flex-basis: 712px"
+	>
+	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png" data-size="772x260">
+		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png"
+			width="772"
+			height="260"
+			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="CleanShot_2021-04-04_at_19.16.38@2x">
+	</a>
+	
+	<figcaption>CleanShot_2021-04-04_at_19.16.38@2x</figcaption>
+	
+</figure></p>
 <p>这里本质上就是实现了一个接口<code>Pat</code>，对于使用者来说，不需要去关心<code>Pat</code>到底是<code>Dog</code>还是<code>Cat</code>，只需要知道它有两个方法，<code>bark</code>和<code>getName</code>，其中<code>bark</code>对于派生类来说必须有自己的实现方式，而<code>getName</code>提供了默认的实现，即便<code>Cat</code>类没有定义这个方法，但仍然可以可以通过基类指针调用并输出。对外只需提供<code>Pat</code>接口，隐藏了内部具体的实现细节。</p>
 <p>C++没有专门的Interface关键字，通过提供虚函数来实现接口特性，一个类只能继承一个虚函数，同时额外区分了提供默认实现和强制子类实现的函数，不含纯虚函数的抽象类是可以被实例化的，这是非常不合理的。除此之外，理论上接口应该<strong>只关注操作方法</strong>，作为接口的基类函数却可以定义自己的公有和私有变量，造成一定的耦合，对于接口的实现来说往往会带来一些麻烦。</p>
 <p>另外，作为动态语言的Python，也是通过抽象类来实现类似接口的功能。</p>
@@ -584,18 +489,25 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 </span></code></pre></div><h3 id="easy-to-test">Easy to test</h3>
 <p>使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 <code>Mock</code>。</p>
 <p>对于上文的接口Pet，我们使用mockery来生成对应的mock</p>
-<p><figure style="flex-grow: 994; flex-basis: 2386px">
-		<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png" data-size="1830x184"><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png"
-				srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_1024x0_resize_box_3.png 1024w"
-				width="1830"
-				height="184"
-				loading="lazy"
-				alt="CleanShot_2021-04-11_at_17.07.31">
-		</a>
-		
-		<figcaption>CleanShot_2021-04-11_at_17.07.31</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 994; 
+			flex-basis: 2386px"
+	>
+	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png" data-size="1830x184">
+		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png"
+			width="1830"
+			height="184"
+			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="CleanShot_2021-04-11_at_17.07.31">
+	</a>
+	
+	<figcaption>CleanShot_2021-04-11_at_17.07.31</figcaption>
+	
+</figure></p>
 <p>自动生成<code>mocks/Pat.go</code>，内容如下：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">// Code generated by mockery 2.7.4. DO NOT EDIT.
 
@@ -644,18 +556,25 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
 </span><span class="c1"></span>
 	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="nx">myPat</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// 调用Pat.GetName
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p><figure style="flex-grow: 409; flex-basis: 983px">
-		<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png" data-size="1336x326"><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png"
-				srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_1024x0_resize_box_3.png 1024w"
-				width="1336"
-				height="326"
-				loading="lazy"
-				alt="CleanShot_2021-04-11_at_17.12.28@2x">
-		</a>
-		
-		<figcaption>CleanShot_2021-04-11_at_17.12.28@2x</figcaption>
-		
-	</figure></p>
+</code></pre></div><p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 409; 
+			flex-basis: 983px"
+	>
+	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png" data-size="1336x326">
+		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png"
+			width="1336"
+			height="326"
+			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="CleanShot_2021-04-11_at_17.12.28@2x">
+	</a>
+	
+	<figcaption>CleanShot_2021-04-11_at_17.12.28@2x</figcaption>
+	
+</figure></p>
 <p>同理，我们可以模拟sql语句，http请求等，保证单元测试的上下文无关，提高单元测试的覆盖度来保证代码质量。</p>
 <h2 id="behind-the-go-interface">Behind the Go Interface</h2>
 <p>Gopher们常说Go语言写起来像动态类型的语言一样轻松，除了对于变量类型的自动推导，Interface所带来的Duck Typing特性也功不可没，这样类似动态语言的特性究竟是如何实现的呢？</p>
@@ -690,79 +609,114 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
     <span class="k">return</span> <span class="nb">uint64</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div><p>此时我们声明一个变量为Binary类型，在内存中的结构如下（假设为32bits系统），需要占用两个32bits空间</p>
-<p><figure style="flex-grow: 191; flex-basis: 459px">
-		<a href="/p/2021/amazing-go-interface/gointer1.png" data-size="159x83"><img src="/p/2021/amazing-go-interface/gointer1.png"
-				srcset="/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_1024x0_resize_box_3.png 1024w"
-				width="159"
-				height="83"
-				loading="lazy"
-				alt="gointer1">
-		</a>
-		
-		<figcaption>gointer1</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 191; 
+			flex-basis: 459px"
+	>
+	<a href="/p/2021/amazing-go-interface/gointer1.png" data-size="159x83">
+		<img src="/p/2021/amazing-go-interface/gointer1.png"
+			width="159"
+			height="83"
+			srcset="/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gointer1">
+	</a>
+	
+	<figcaption>gointer1</figcaption>
+	
+</figure></p>
 <p>紧接着我们把它复制给一个Stringer接口类型或者通过强制类型转换把它转换为Stringer，那么在内存中会分配一个interface结构体来保存我们的Binary变量</p>
-<p><figure style="flex-grow: 204; flex-basis: 490px">
-		<a href="/p/2021/amazing-go-interface/gointer2.png" data-size="486x238"><img src="/p/2021/amazing-go-interface/gointer2.png"
-				srcset="/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_1024x0_resize_box_3.png 1024w"
-				width="486"
-				height="238"
-				loading="lazy"
-				alt="gointer2">
-		</a>
-		
-		<figcaption>gointer2</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 204; 
+			flex-basis: 490px"
+	>
+	<a href="/p/2021/amazing-go-interface/gointer2.png" data-size="486x238">
+		<img src="/p/2021/amazing-go-interface/gointer2.png"
+			width="486"
+			height="238"
+			srcset="/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gointer2">
+	</a>
+	
+	<figcaption>gointer2</figcaption>
+	
+</figure></p>
 <p>可以看到，这个interface结构体主要包含两个指针字段，其中data指针指向的内存存放了具体的数据，而tab指针指向一个itable表，包含了data部分的数据类型和保护的方法指针表。而生成这样一个itab表是可以在编译时就确定的，接口类型可能有$ni$个方法，具体类型可能有$nt$个方法，一般寻找从接口方法到具体方法的映射需要$O(ni\times nt)$的时间复杂度，Go编译器通过对两个方法表进行分类，同时进行搜索可以优化到$O(ni+nt)$的时间复杂度<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>。</p>
 <p>从Russ Cox的<a class="link" href="https://research.swtch.com/interfaces"  target="_blank" rel="noopener"
     >博客</a>中可以看到，Go的设计者还对interface进行了<strong>内存优化</strong></p>
 <ul>
 <li>如果一个interface不包含任何方法，就可以用实际的类型变量存储在itab指针的位置</li>
 </ul>
-<p><figure style="flex-grow: 186; flex-basis: 447px">
-		<a href="/p/2021/amazing-go-interface/gointer3.png" data-size="317x170"><img src="/p/2021/amazing-go-interface/gointer3.png"
-				srcset="/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_1024x0_resize_box_3.png 1024w"
-				width="317"
-				height="170"
-				loading="lazy"
-				alt="gointer3">
-		</a>
-		
-		<figcaption>gointer3</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 186; 
+			flex-basis: 447px"
+	>
+	<a href="/p/2021/amazing-go-interface/gointer3.png" data-size="317x170">
+		<img src="/p/2021/amazing-go-interface/gointer3.png"
+			width="317"
+			height="170"
+			srcset="/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gointer3">
+	</a>
+	
+	<figcaption>gointer3</figcaption>
+	
+</figure></p>
 <ul>
 <li>而对于占用不大于32bits的变量，则可以直接存放在data部分替换原来的data指针</li>
 </ul>
-<p><figure style="flex-grow: 175; flex-basis: 421px">
-		<a href="/p/2021/amazing-go-interface/gointer4.png" data-size="418x238"><img src="/p/2021/amazing-go-interface/gointer4.png"
-				srcset="/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_1024x0_resize_box_3.png 1024w"
-				width="418"
-				height="238"
-				loading="lazy"
-				alt="gointer4">
-		</a>
-		
-		<figcaption>gointer4</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 175; 
+			flex-basis: 421px"
+	>
+	<a href="/p/2021/amazing-go-interface/gointer4.png" data-size="418x238">
+		<img src="/p/2021/amazing-go-interface/gointer4.png"
+			width="418"
+			height="238"
+			srcset="/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gointer4">
+	</a>
+	
+	<figcaption>gointer4</figcaption>
+	
+</figure></p>
 <ul>
 <li>又或者同时满足上面两种情况下</li>
 </ul>
-<p><figure style="flex-grow: 360; flex-basis: 864px">
-		<a href="/p/2021/amazing-go-interface/gointer5.png" data-size="299x83"><img src="/p/2021/amazing-go-interface/gointer5.png"
-				srcset="/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_1024x0_resize_box_3.png 1024w"
-				width="299"
-				height="83"
-				loading="lazy"
-				alt="gointer5">
-		</a>
-		
-		<figcaption>gointer5</figcaption>
-		
-	</figure></p>
+<p><figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 360; 
+			flex-basis: 864px"
+	>
+	<a href="/p/2021/amazing-go-interface/gointer5.png" data-size="299x83">
+		<img src="/p/2021/amazing-go-interface/gointer5.png"
+			width="299"
+			height="83"
+			srcset="/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_1024x0_resize_box_3.png 1024w"
+			loading="lazy"
+			alt="gointer5">
+	</a>
+	
+	<figcaption>gointer5</figcaption>
+	
+</figure></p>
 <p>然而在实际的Golang interface实现中，只对不包含任何方法的interface做了优化，即eface</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 64bit golang src/runtime/runtime2.go
 </span><span class="c1"></span><span class="kd">type</span> <span class="nx">eface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes
@@ -907,16 +861,17 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
     </section>
     </footer>
 
+
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
                 defer="true"
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
                 defer="true"
                 >
             </script><script>
@@ -932,6 +887,8 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
 </script>
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -949,8 +906,9 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 函数式程序设计的影响与应用"
+                        
                         data-hash="md5-YHCkMOQs8uldcgu1Yc44sA==">
                 
             </div>
@@ -971,8 +929,9 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群"
+                        
                         data-hash="md5-uMYyvzJxx7Ic3QDhGtAc&#43;Q==">
                 
             </div>
@@ -993,8 +952,9 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Docker部署本地Wordpress开发环境"
+                        
                         data-hash="md5-VUpTd3P7cW/YZCUoSeJuPA==">
                 
             </div>
@@ -1015,8 +975,9 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 <img src="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.b5ca95b84116ef5ce2456ceb92e52d80_hu68cee4137d946c56465103791d37290e_1192700_250x150_fill_q75_box_smart1.jpg" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post DeepClone深克隆"
+                        
                         data-hash="md5-tcqVuEEW71ziRWzrkuUtgA==">
                 
             </div>
@@ -1037,8 +998,9 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 <img src="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.5584b6cb1e2cc2c5227c87c0d3770dd9_hudbcdd69a41f55724887045d593c3afc0_3384791_250x150_fill_q75_box_smart1.jpg" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post Unix系统分析——锁"
+                        
                         data-hash="md5-VYS2yx4swsUifIfA03cN2Q==">
                 
             </div>
@@ -1055,7 +1017,7 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
     
 </aside>
 
-
+     
     
         
     <div class="disqus-container">
@@ -1115,9 +1077,12 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.2.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -1194,7 +1159,53 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+        <aside class="sidebar right-sidebar sticky">
+            <section class="widget archives">
+                <div class="widget-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+                </div>
+                <h2 class="widget-title section-title">Table of contents</h2>
+                
+                <div class="widget--toc">
+                    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#why-interface">Why Interface?</a>
+      <ul>
+        <li><a href="#c-interface">C++ Interface</a></li>
+        <li><a href="#java-interface">Java Interface</a></li>
+      </ul>
+    </li>
+    <li><a href="#interface-in-go">Interface in Go</a>
+      <ul>
+        <li><a href="#duck-typing">Duck Typing</a></li>
+        <li><a href="#whats-different-in-go">What&rsquo;s different in go</a></li>
+        <li><a href="#one-more-case">One more case</a></li>
+        <li><a href="#easy-to-test">Easy to test</a></li>
+      </ul>
+    </li>
+    <li><a href="#behind-the-go-interface">Behind the Go Interface</a></li>
+    <li><a href="#generic-type">Generic Type</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+    <li><a href="#reference">Reference</a></li>
+  </ul>
+</nav>
+                </div>
+            </section>
+        </aside>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"

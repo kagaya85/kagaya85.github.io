@@ -108,17 +108,31 @@ menu:
           name: Home
           url: /
           weight: -100
-          pre: home
+          params: 
+              icon: home
+        
+        - identifier: post
+          name: Post
+          url: /post
+          weight: -90
+          params:
+              icon: post
+
         - identifier: twitter
           name: Twitter
           url: https://twitter.com/kagaya_85
           weight: -50
-          pre: twitter
+          params: 
+              icon: twitter
+              newTab: true
+
         - identifier: bangumi
           name: Bangumi
           url: https://bangumi.tv/user/kagaya85
           weight: -40
-          pre: tv
+          params: 
+              icon: tv
+              newTab: true
 
 related:
     includeNewer: true

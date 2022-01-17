@@ -180,13 +180,16 @@ g++ pthread.cpp -o pthread -pthread 遇到的问题及解决方法 Id 有三个�
       
       <guid>https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
       <description>CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+ bili 
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
 首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
+之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
 :before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
+:after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同</description>
     </item>
     

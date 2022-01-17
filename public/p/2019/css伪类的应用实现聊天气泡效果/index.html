@@ -2,43 +2,55 @@
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+ bili 
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
 首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
+之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
 :before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
+:after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'><title>CSS伪类的应用——实现聊天气泡效果</title>
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 
-<link rel="stylesheet" href="/scss/style.min.css"><meta property='og:title' content='CSS伪类的应用——实现聊天气泡效果'>
+<link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='CSS伪类的应用——实现聊天气泡效果'>
 <meta property='og:description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+ bili 
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
 首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
+之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
 :before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
+:after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'>
 <meta property='og:url' content='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSS' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/default.jpg' />
-<meta name="twitter:site" content="kagaya_85"><meta name="twitter:title" content="CSS伪类的应用——实现聊天气泡效果">
+<meta name="twitter:site" content="@kagaya_85">
+    <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="CSS伪类的应用——实现聊天气泡效果">
 <meta name="twitter:description" content="CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
+ bili 
 主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
 消息气泡的模板定义如下
 &amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
 首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; } 之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
+.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
+之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
 :before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; } :after
+.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
+:after
 .bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
     </head>
-    <body class="">
+    <body class="
+    article-page 
+">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -53,13 +65,19 @@
         if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
             
 
-            document.body.dataset.scheme = 'dark';
+            document.documentElement.dataset.scheme = 'dark';
         } else {
-            document.body.dataset.scheme = 'light';
+            document.documentElement.dataset.scheme = 'light';
         }
     })();
-</script><div class="container main-container flex on-phone--column extended article-page with-toolbar">
-            <aside class="sidebar left-sidebar sticky">
+</script>
+<div class="container main-container flex 
+    
+        on-phone--column extended
+    
+">
+    
+        <aside class="sidebar left-sidebar sticky">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
@@ -68,6 +86,7 @@
 
     <header class="site-info">
         
+            
             <figure class="site-avatar">
                 
                     
@@ -83,10 +102,11 @@
                     <span class="emoji">🚀</span>
                 
             </figure>
+            
         
-        <h1 class="site-name"><a href="https://kagaya85.github.io">かがやの部屋</a></h1>
-        <h2 class="site-description">明日は晴れるかな〜</h2>
-    </header>
+        
+        <h1 class="site-name"><a href="/">かがやの部屋</a></h1>
+        <h2 class="site-description">明日は晴れるかな〜</h2></header>
 
     <ol class="menu" id="main-menu">
         
@@ -94,7 +114,9 @@
         
 
         <li >
-            <a href='/'>
+            <a href='/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
   viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -111,7 +133,30 @@
         
 
         <li >
-            <a href='/about/'>
+            <a href='/post' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+  <line x1="9" y1="9" x2="10" y2="9" />
+  <line x1="9" y1="13" x2="15" y2="13" />
+  <line x1="9" y1="17" x2="15" y2="17" />
+</svg>
+
+                
+                <span>Post</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
     viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -127,7 +172,9 @@
         
 
         <li >
-            <a href='/archives/'>
+            <a href='/archives/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
@@ -146,7 +193,9 @@
         
 
         <li >
-            <a href='https://twitter.com/kagaya_85'>
+            <a href='https://twitter.com/kagaya_85' target="_blank">
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="44" height="44"
     viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -162,7 +211,9 @@
         
 
         <li >
-            <a href='https://bangumi.tv/user/kagaya85'>
+            <a href='https://bangumi.tv/user/kagaya85' target="_blank">
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
     viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -178,7 +229,9 @@
         
 
         <li >
-            <a href='/search/'>
+            <a href='/search/' >
+                
+                
                 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
     viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -196,20 +249,8 @@
     </ol>
 </aside>
 
-            <main class="main full-width">
-    <div id="article-toolbar">
-        <a href="https://kagaya85.github.io" class="back-home">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
-</svg>
-
-
-
-            <span>Back</span>
-        </a>
-    </div>
-
+    
+<main class="main full-width">
     <article class="main-article">
     <header class="article-header">
 
@@ -228,8 +269,28 @@
         <a href="/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/">CSS伪类的应用——实现聊天气泡效果</a>
     </h2>
 
+    
+
+    
     <footer class="article-time">
-        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">May 17, 2019</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="12" cy="12" r="9" />
   <polyline points="12 7 12 12 15 15" />
@@ -237,14 +298,33 @@
 
 
 
-        <time class="article-time--published">May 17, 2019</time>
-    </footer></div>
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+</div>
 </header>
 
     <section class="article-content">
     <h1 id="css伪类的应用实现聊天气泡效果">CSS伪类的应用——实现聊天气泡效果</h1>
 <p>在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉</p>
-<p><img src="/images/bili.jpg" alt="bili"  /></p>
+<p><figure 
+	>
+	<a href="/images/bili.jpg" >
+		<img src="/images/bili.jpg"
+			
+			
+			
+			loading="lazy"
+			alt="bili">
+	</a>
+	
+	<figcaption>bili</figcaption>
+	
+</figure></p>
 <p>主要原理是利用css伪类的<code>:before</code>和<code>:after</code>在圆角<code>div</code>前后插入两个方块，利用圆角叠加遮盖实现气泡的效果</p>
 <p>消息气泡的模板定义如下</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">template</span><span class="p">&gt;</span>
@@ -265,7 +345,20 @@
   <span class="k">background</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
   <span class="k">border-radius</span><span class="p">:</span> <span class="mi">15</span><span class="kt">px</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div><p><img src="/images/inlineblock.jpg" alt="inline"  /></p>
+</code></pre></div><p><figure 
+	>
+	<a href="/images/inlineblock.jpg" >
+		<img src="/images/inlineblock.jpg"
+			
+			
+			
+			loading="lazy"
+			alt="inline">
+	</a>
+	
+	<figcaption>inline</figcaption>
+	
+</figure></p>
 <p>之后插入先后插入一个<code>:before</code>和<code>:after</code>块，位置定义为absolute（注意<code>.bubble</code>需定义为relative才能做到相对<code>.bubble</code>块偏移）</p>
 <p>:before</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">bubble</span><span class="p">:</span><span class="nd">before</span> <span class="p">{</span>
@@ -278,7 +371,20 @@
   <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>  
   <span class="k">border-bottom-left-radius</span><span class="p">:</span> <span class="mi">40</span><span class="kt">px</span> <span class="mi">60</span><span class="kt">px</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre></div><p><img src="/images/before.jpg" alt="before"  /></p>
+</code></pre></div><p><figure 
+	>
+	<a href="/images/before.jpg" >
+		<img src="/images/before.jpg"
+			
+			
+			
+			loading="lazy"
+			alt="before">
+	</a>
+	
+	<figcaption>before</figcaption>
+	
+</figure></p>
 <p>:after</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="p">.</span><span class="nc">bubble</span><span class="p">:</span><span class="nd">after</span> <span class="p">{</span>
   <span class="k">content</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
@@ -291,12 +397,38 @@
   <span class="k">border-bottom-left-radius</span><span class="p">:</span> <span class="mi">100</span><span class="kt">px</span> <span class="mi">40</span><span class="kt">px</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div><p>这里的<code>background-color</code>和背景色设置为相同</p>
-<p><img src="/images/after.jpg" alt="before"  /></p>
+<p><figure 
+	>
+	<a href="/images/after.jpg" >
+		<img src="/images/after.jpg"
+			
+			
+			
+			loading="lazy"
+			alt="before">
+	</a>
+	
+	<figcaption>before</figcaption>
+	
+</figure></p>
 <p><code>border-bottom-left-radius</code>熟悉后的两个值分别表示椭圆的半长轴和半短轴，用来调整角的弯曲度</p>
 <p>值得注意的是这里实现的角右侧只能紧贴垂直的边，理论上通过调整<code>top</code>、<code>left</code>、<code>width</code>、<code>height</code>四个值应该可以实现将角移到圆角的部位</p>
 <p>最终效果虽然还是有点差别但还是很接近了，</p>
 <p>但是b站对于图片气泡直接使用了canvas实现，画一个气泡然后用图片填充</p>
-<p><img src="/images/canvas.jpg" alt="canvas"  /></p>
+<p><figure 
+	>
+	<a href="/images/canvas.jpg" >
+		<img src="/images/canvas.jpg"
+			
+			
+			
+			loading="lazy"
+			alt="canvas">
+	</a>
+	
+	<figcaption>canvas</figcaption>
+	
+</figure></p>
 <p>(⊙﹏⊙)学到了</p>
 
 </section>
@@ -327,16 +459,17 @@
     </section>
     </footer>
 
+
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3&#43;Aro6EYUG4&#43;cU&#43;KJWu/X"crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"integrity="sha384-g7c&#43;Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI&#43;sEnkvrMWph2EDg4"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
                 defer="true"
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC&#43;Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
                 defer="true"
                 >
             </script><script>
@@ -352,6 +485,8 @@
 </script>
     
 </article>
+
+    
 
     <aside class="related-contents--wrapper">
     
@@ -369,8 +504,9 @@
                 <img src="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.b5ca95b84116ef5ce2456ceb92e52d80_hu68cee4137d946c56465103791d37290e_1192700_250x150_fill_q75_box_smart1.jpg" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post DeepClone深克隆"
+                        
                         data-hash="md5-tcqVuEEW71ziRWzrkuUtgA==">
                 
             </div>
@@ -391,8 +527,9 @@
                 <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post Amazing Go Interface"
+                        
                         data-hash="md5-pFaeNO48gYlRMQii977cQg==">
                 
             </div>
@@ -413,8 +550,9 @@
                 <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 函数式程序设计的影响与应用"
+                        
                         data-hash="md5-YHCkMOQs8uldcgu1Yc44sA==">
                 
             </div>
@@ -435,8 +573,9 @@
                 <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群"
+                        
                         data-hash="md5-uMYyvzJxx7Ic3QDhGtAc&#43;Q==">
                 
             </div>
@@ -457,8 +596,9 @@
                 <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
                         width="250" 
                         height="150" 
-                        loading="lazy" 
-                        data-key="" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Docker部署本地Wordpress开发环境"
+                        
                         data-hash="md5-VUpTd3P7cW/YZCUoSeJuPA==">
                 
             </div>
@@ -475,7 +615,7 @@
     
 </aside>
 
-
+     
     
         
     <div class="disqus-container">
@@ -535,9 +675,12 @@
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="2.2.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
     </section>
 </footer>
+
+
+    
 <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
 
     
@@ -614,7 +757,10 @@
                 rel="stylesheet" 
                 href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
             >
+
             </main>
+    
+
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
