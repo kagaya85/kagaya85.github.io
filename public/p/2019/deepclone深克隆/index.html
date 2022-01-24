@@ -1,64 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
-于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
-为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
-说到类型机制，JavaScript作为一门弱类型的语言，在变量类型上帮助程序员做了太多的工作，由于我之前是以写C/C&#43;&#43;为主，在刚接触JavaScript、Python和PHP的时候，惊奇于竟然有语言不需要再申明变量的时候使用类型定义符，感叹于总算不需要为某种变量不知该定义哪种类型头疼了。
-于此同时，对于Python，PHP这种新变量直接赋值便可以使用的来说，我更喜欢JS的原因是有用于变量声明的var，const，let，因为这更贴近我所熟悉的C&#43;&#43;语法，而PHP使用变量都需要打一个$符号也让我十分不习惯
-当然有利就有弊，弱类型语言带来的最大的问题就是变量类型的不明确以及对于编辑器无法做出类型推导等。弱类型语言使得编译器（或解释器）不太去关注变量的类型，同时也会帮程序员做一些看不见的类型转换，虽然一定程度上让人可以更加专注于程序逻辑上，但往往会埋下一些潜在的问题
-用一个最简单的例子
-//javascript var a = 1 a = &amp;#34;123&amp;#34; var b = a &#43; 1	// &amp;#39;1231&amp;#39; # python a = 1 a = &amp;#39;123&amp;#39; b = a &#43; 1 # type error JavaScript是直接可以字符串&#43;int值的，然而python中会报错，但是两者对于一个int型的变量赋值一个字符串都是合法的。这在c&#43;&#43;里是不可想象的。
-这就导致了在函数传参的时候又可能传进去参数的类型并不是所期待的类型，而这种错往往很难发现。
-好在对于JavaScript，微软发明了一种TypeScript的语言作为JavaScript的超集，很好的解决了JavaScript最大的痛点，类型问题，而且在编辑器里有着很好的类型推导，这简直让人更加喜爱这门语言
-话说回到深克隆问题
-用过C&#43;&#43;的人都知道，C&#43;&#43;最大的一个优势之一就是凭借着指针类型变量可以方便的直接对内存进行操作。而对于JavaScript其实也是有指针变量，虽然并没有单独划分出一个类型而且功能没C&#43;&#43;那么强大，但都是表示指向了内存的一块区域。
-当时在学习C&#43;&#43;类的拷贝构造函数时，老师就特意提醒对于类中的指针变量不可直接赋值，需要申请新的内存空间然后使用memcpy等函数进行内存复制。这是因为直接进行指针的赋值会导致多个指针指向同一块内存，引起访问冲突。而这，正是导致JavaScript中出现浅拷贝深拷贝问题的根源。
-var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
-如果要实现一个浅克隆可以这样做
-var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'><title>DeepClone深克隆</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什'><title>DeepClone深克隆</title>
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
 
 <link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='DeepClone深克隆'>
-<meta property='og:description' content='DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
-于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
-为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
-说到类型机制，JavaScript作为一门弱类型的语言，在变量类型上帮助程序员做了太多的工作，由于我之前是以写C/C&#43;&#43;为主，在刚接触JavaScript、Python和PHP的时候，惊奇于竟然有语言不需要再申明变量的时候使用类型定义符，感叹于总算不需要为某种变量不知该定义哪种类型头疼了。
-于此同时，对于Python，PHP这种新变量直接赋值便可以使用的来说，我更喜欢JS的原因是有用于变量声明的var，const，let，因为这更贴近我所熟悉的C&#43;&#43;语法，而PHP使用变量都需要打一个$符号也让我十分不习惯
-当然有利就有弊，弱类型语言带来的最大的问题就是变量类型的不明确以及对于编辑器无法做出类型推导等。弱类型语言使得编译器（或解释器）不太去关注变量的类型，同时也会帮程序员做一些看不见的类型转换，虽然一定程度上让人可以更加专注于程序逻辑上，但往往会埋下一些潜在的问题
-用一个最简单的例子
-//javascript var a = 1 a = &amp;#34;123&amp;#34; var b = a &#43; 1	// &amp;#39;1231&amp;#39; # python a = 1 a = &amp;#39;123&amp;#39; b = a &#43; 1 # type error JavaScript是直接可以字符串&#43;int值的，然而python中会报错，但是两者对于一个int型的变量赋值一个字符串都是合法的。这在c&#43;&#43;里是不可想象的。
-这就导致了在函数传参的时候又可能传进去参数的类型并不是所期待的类型，而这种错往往很难发现。
-好在对于JavaScript，微软发明了一种TypeScript的语言作为JavaScript的超集，很好的解决了JavaScript最大的痛点，类型问题，而且在编辑器里有着很好的类型推导，这简直让人更加喜爱这门语言
-话说回到深克隆问题
-用过C&#43;&#43;的人都知道，C&#43;&#43;最大的一个优势之一就是凭借着指针类型变量可以方便的直接对内存进行操作。而对于JavaScript其实也是有指针变量，虽然并没有单独划分出一个类型而且功能没C&#43;&#43;那么强大，但都是表示指向了内存的一块区域。
-当时在学习C&#43;&#43;类的拷贝构造函数时，老师就特意提醒对于类中的指针变量不可直接赋值，需要申请新的内存空间然后使用memcpy等函数进行内存复制。这是因为直接进行指针的赋值会导致多个指针指向同一块内存，引起访问冲突。而这，正是导致JavaScript中出现浅拷贝深拷贝问题的根源。
-var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
-如果要实现一个浅克隆可以这样做
-var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a.'>
+<meta property='og:description' content='DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什'>
 <meta property='og:url' content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='JavaScript' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-07-02T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="DeepClone深克隆">
-<meta name="twitter:description" content="DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。
-于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识
-为什么会有深克隆的问题——谈谈弱类型 有深克隆就会有浅克隆，出现这两者的原因还是由于JavaScript的类型机制
-说到类型机制，JavaScript作为一门弱类型的语言，在变量类型上帮助程序员做了太多的工作，由于我之前是以写C/C&#43;&#43;为主，在刚接触JavaScript、Python和PHP的时候，惊奇于竟然有语言不需要再申明变量的时候使用类型定义符，感叹于总算不需要为某种变量不知该定义哪种类型头疼了。
-于此同时，对于Python，PHP这种新变量直接赋值便可以使用的来说，我更喜欢JS的原因是有用于变量声明的var，const，let，因为这更贴近我所熟悉的C&#43;&#43;语法，而PHP使用变量都需要打一个$符号也让我十分不习惯
-当然有利就有弊，弱类型语言带来的最大的问题就是变量类型的不明确以及对于编辑器无法做出类型推导等。弱类型语言使得编译器（或解释器）不太去关注变量的类型，同时也会帮程序员做一些看不见的类型转换，虽然一定程度上让人可以更加专注于程序逻辑上，但往往会埋下一些潜在的问题
-用一个最简单的例子
-//javascript var a = 1 a = &amp;#34;123&amp;#34; var b = a &#43; 1	// &amp;#39;1231&amp;#39; # python a = 1 a = &amp;#39;123&amp;#39; b = a &#43; 1 # type error JavaScript是直接可以字符串&#43;int值的，然而python中会报错，但是两者对于一个int型的变量赋值一个字符串都是合法的。这在c&#43;&#43;里是不可想象的。
-这就导致了在函数传参的时候又可能传进去参数的类型并不是所期待的类型，而这种错往往很难发现。
-好在对于JavaScript，微软发明了一种TypeScript的语言作为JavaScript的超集，很好的解决了JavaScript最大的痛点，类型问题，而且在编辑器里有着很好的类型推导，这简直让人更加喜爱这门语言
-话说回到深克隆问题
-用过C&#43;&#43;的人都知道，C&#43;&#43;最大的一个优势之一就是凭借着指针类型变量可以方便的直接对内存进行操作。而对于JavaScript其实也是有指针变量，虽然并没有单独划分出一个类型而且功能没C&#43;&#43;那么强大，但都是表示指向了内存的一块区域。
-当时在学习C&#43;&#43;类的拷贝构造函数时，老师就特意提醒对于类中的指针变量不可直接赋值，需要申请新的内存空间然后使用memcpy等函数进行内存复制。这是因为直接进行指针的赋值会导致多个指针指向同一块内存，引起访问冲突。而这，正是导致JavaScript中出现浅拷贝深拷贝问题的根源。
-var a = [1, 2, 3] var b = a 在这里，a和b可以看作两个指针，同时指向了一个数组，对其中一个做出修改，另一个也会同时变化。
-如果要实现一个浅克隆可以这样做
-var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:description" content="DeepClone深克隆 之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
     </head>
     <body class="
     article-page has-toc
@@ -66,7 +32,9 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
         })();
     </script><script>
     (function() {
@@ -98,7 +66,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
 
 
-                <span>Back</span>
+                <span>返回</span>
             </a>
         </div>
     
@@ -163,7 +131,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    阅读时长: 5 分钟
                 </time>
             </div>
         
@@ -431,7 +399,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
     <aside class="related-contents--wrapper">
     
     
-        <h2 class="section-title">Related contents</h2>
+        <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
                 
@@ -703,7 +671,7 @@ var a = [1, 2, 3] var b = [] for(let i = 0; i &amp;lt; a."><meta name="twitter:c
 
 
                 </div>
-                <h2 class="widget-title section-title">Table of contents</h2>
+                <h2 class="widget-title section-title">目录</h2>
                 
                 <div class="widget--toc">
                     <nav id="TableOfContents">

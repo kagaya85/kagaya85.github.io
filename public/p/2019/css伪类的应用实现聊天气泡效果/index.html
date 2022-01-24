@@ -1,52 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
- bili 
-主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
-消息气泡的模板定义如下
-&amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
-首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
-之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
-:before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
-:after
-.bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'><title>CSS伪类的应用——实现聊天气泡效果</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉 bili 主要原理是利用c'><title>CSS伪类的应用——实现聊天气泡效果</title>
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 
 <link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='CSS伪类的应用——实现聊天气泡效果'>
-<meta property='og:description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
- bili 
-主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
-消息气泡的模板定义如下
-&amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
-首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
-之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
-:before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
-:after
-.bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同'>
+<meta property='og:description' content='CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉 bili 主要原理是利用c'>
 <meta property='og:url' content='https://kagaya85.github.io/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='CSS' /><meta property='article:tag' content='Frontend' /><meta property='article:published_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-05-17T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/default.jpg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="CSS伪类的应用——实现聊天气泡效果">
-<meta name="twitter:description" content="CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉
- bili 
-主要原理是利用css伪类的:before和:after在圆角div前后插入两个方块，利用圆角叠加遮盖实现气泡的效果
-消息气泡的模板定义如下
-&amp;lt;template&amp;gt; &amp;lt;div class=&amp;#34;message&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;bubble&amp;#34;&amp;gt; &amp;lt;slot&amp;gt;&amp;lt;/slot&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/template&amp;gt; 由于使用了vue，其中的&amp;lt;slot&amp;gt;为之后插入的消息内容
-首先将bubble设置为圆角矩形，因为要适应内部文本大小且要占据一行，因此定义为inline-block，并用div包裹
-.bubble{ display: inline-block; position: relative; padding: 15px; left: 0px; line-height: 1.2; background: #fff; border-radius: 15px; }  inline 
-之后插入先后插入一个:before和:after块，位置定义为absolute（注意.bubble需定义为relative才能做到相对.bubble块偏移）
-:before
-.bubble:before { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; height: 30px; width: 15px; background-color: #fff; border-bottom-left-radius: 40px 60px; }  before 
-:after
-.bubble:after { content: &amp;#39;&amp;#39;; position: absolute; top: -8px; left: -15px; width: 15px; height: 20px; background-color: #f2f2f2; border-bottom-left-radius: 100px 40px; } 这里的background-color和背景色设置为相同"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:description" content="CSS伪类的应用——实现聊天气泡效果 在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉 bili 主要原理是利用c"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
     </head>
     <body class="
     article-page 
@@ -54,7 +32,9 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
         })();
     </script><script>
     (function() {
@@ -78,7 +58,7 @@
 ">
     
         <aside class="sidebar left-sidebar sticky">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -246,6 +226,26 @@
         
 
         
+            <li id="dark-mode-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                <span>暗色模式</span>
+            </li>
+        
     </ol>
 </aside>
 
@@ -299,7 +299,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -491,7 +491,7 @@
     <aside class="related-contents--wrapper">
     
     
-        <h2 class="section-title">Related contents</h2>
+        <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
                 

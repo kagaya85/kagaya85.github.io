@@ -13,15 +13,7 @@
       <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
       
       <guid>https://kagaya85.github.io/p/2021/amazing-go-interface/</guid>
-      <description>从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
-希望能对你有所帮助。
-本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
-Why Interface? 在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：
- In computing, an interface is a shared boundary across which two or more separate components of a computer system exchange information.1
- 接口的作用其实就是为不同层级的模块提供了一个定义好的中间层，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦2。
-我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C++和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。
-C++ Interface 我们先简单复习一下C++，接口在C++中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个抽象类来表示接口：
-class Pat { public: string name; // 纯虚函数，要求派生类必须实现  virtual void bark() = 0; // 虚函数，提供默认实现  virtual string getName() { return name; } }; class Cat : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;喵喵喵&amp;#34; &amp;lt;&amp;lt; endl; } }; class Dog : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;汪汪汪&amp;#34; &amp;lt;&amp;lt; endl; } string getName() { return &amp;#34;this dog&amp;#39;s name is &amp;#34; + this-&amp;gt;name; } }; 我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法</description>
+      <description>从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算</description>
     </item>
     
     <item>
@@ -30,17 +22,7 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
       <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>https://kagaya85.github.io/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
-      <description>简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。
-尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。
-当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用
-函数式语言的发展 Haskell Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来2。
-与命令式编程语言不同，Haskell是一种纯函数式编程语言。虽然它现在仍然局限在学术界和需要大量使用高等数学的行业如金融业，但是这并不意味着数值计算。
-功能编程范式依赖于编程功能 ，其行为为数学函数，允许创建不修改外部数据或具有与外部上下文的可观察的交互功能。可观察的交互是指将数据写入文件或引发异常的事情。在技术上这意味着功能没有 side-effects，这也可能成为一等公民的功能。函数和其他类型一样，也可以作为其他函数的参数。
-FP in Golang Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。
-尽管Go不是专门设计的函数式编程语言，但其语法支持我们使用一些函数式的编程思维。只需要满足两个规则：
- 没有数据赋值：数据对象赋值后不再改变 没有隐藏状态：隐藏在内部的状态在设计的使用就应该被避免。对于函数式编程来说，状态没有消失，而是变得明确而且可见。  当我们在Go中使用了函数式的设计思维，意味着：
- No side-effect：函数和操作不应该在其函数范围外更改任何变量，函数应该将值返回给调用方，并且不影响任何外部状态，程序也更容易被理解，从而无需担心任何的“副作用”。 使用纯函数：函数应该是是幂等的，同样的入参只会得到相同的结果。一个函数的返回值应该只基于输入参数而没有任何的side-effect或依赖任何的全局变量。 Clean Code3：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。  在Golang中，可以通过7种方法来实现函数式的编程4，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。
-// this is a higher-order-function that returns a function func add(x int) func(y int) int { // A function is returned here as closure 	// variable x is obtained from the outer scope of this method and memorized in the closure 	return func(y int) int { return x + y } } func main() { // we are currying the add method to create more variations 	var add10 = add(10) var add20 = add(20) var add30 = add(30) fmt.</description>
+      <description>简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电</description>
     </item>
     
   </channel>
