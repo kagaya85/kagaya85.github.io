@@ -1,43 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
-希望能对你有所帮助。
-本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
-Why Interface? 在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：
- In computing, an interface is a shared boundary across which two or more separate components of a computer system exchange information.1
- 接口的作用其实就是为不同层级的模块提供了一个定义好的中间层，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦2。
-我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C&#43;&#43;和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。
-C&#43;&#43; Interface 我们先简单复习一下C&#43;&#43;，接口在C&#43;&#43;中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个抽象类来表示接口：
-class Pat { public: string name; // 纯虚函数，要求派生类必须实现  virtual void bark() = 0; // 虚函数，提供默认实现  virtual string getName() { return name; } }; class Cat : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;喵喵喵&amp;#34; &amp;lt;&amp;lt; endl; } }; class Dog : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;汪汪汪&amp;#34; &amp;lt;&amp;lt; endl; } string getName() { return &amp;#34;this dog&amp;#39;s name is &amp;#34; &#43; this-&amp;gt;name; } }; 我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法'><title>Amazing Go Interface</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算'><title>Amazing Go Interface</title>
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
 
 <link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='Amazing Go Interface'>
-<meta property='og:description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
-希望能对你有所帮助。
-本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
-Why Interface? 在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：
- In computing, an interface is a shared boundary across which two or more separate components of a computer system exchange information.1
- 接口的作用其实就是为不同层级的模块提供了一个定义好的中间层，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦2。
-我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C&#43;&#43;和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。
-C&#43;&#43; Interface 我们先简单复习一下C&#43;&#43;，接口在C&#43;&#43;中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个抽象类来表示接口：
-class Pat { public: string name; // 纯虚函数，要求派生类必须实现  virtual void bark() = 0; // 虚函数，提供默认实现  virtual string getName() { return name; } }; class Cat : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;喵喵喵&amp;#34; &amp;lt;&amp;lt; endl; } }; class Dog : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;汪汪汪&amp;#34; &amp;lt;&amp;lt; endl; } string getName() { return &amp;#34;this dog&amp;#39;s name is &amp;#34; &#43; this-&amp;gt;name; } }; 我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法'>
+<meta property='og:description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算'>
 <meta property='og:url' content='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Amazing Go Interface">
-<meta name="twitter:description" content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。
-希望能对你有所帮助。
-本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。
-Why Interface? 在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：
- In computing, an interface is a shared boundary across which two or more separate components of a computer system exchange information.1
- 接口的作用其实就是为不同层级的模块提供了一个定义好的中间层，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦2。
-我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C&#43;&#43;和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。
-C&#43;&#43; Interface 我们先简单复习一下C&#43;&#43;，接口在C&#43;&#43;中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个抽象类来表示接口：
-class Pat { public: string name; // 纯虚函数，要求派生类必须实现  virtual void bark() = 0; // 虚函数，提供默认实现  virtual string getName() { return name; } }; class Cat : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;喵喵喵&amp;#34; &amp;lt;&amp;lt; endl; } }; class Dog : public Pat { public: void bark() { cout &amp;lt;&amp;lt; &amp;#34;汪汪汪&amp;#34; &amp;lt;&amp;lt; endl; } string getName() { return &amp;#34;this dog&amp;#39;s name is &amp;#34; &#43; this-&amp;gt;name; } }; 我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:description" content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
     </head>
     <body class="
     article-page has-toc
@@ -45,7 +32,9 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
         })();
     </script><script>
     (function() {
@@ -77,7 +66,7 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 
 
 
-                <span>Back</span>
+                <span>返回</span>
             </a>
         </div>
     
@@ -142,7 +131,7 @@ class Pat { public: string name; // 纯虚函数，要求派生类必须实现  
 
 
                 <time class="article-time--reading">
-                    6 minute read
+                    阅读时长: 14 分钟
                 </time>
             </div>
         
@@ -893,7 +882,7 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
     <aside class="related-contents--wrapper">
     
     
-        <h2 class="section-title">Related contents</h2>
+        <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
                 
@@ -1176,7 +1165,7 @@ func <span class="o">(</span>_m *Pat<span class="o">)</span> GetName<span class=
 
 
                 </div>
-                <h2 class="widget-title section-title">Table of contents</h2>
+                <h2 class="widget-title section-title">目录</h2>
                 
                 <div class="widget--toc">
                     <nav id="TableOfContents">

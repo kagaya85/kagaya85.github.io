@@ -14,6 +14,17 @@
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="About">
 <meta name="twitter:description" content="Hi there, Welcome to my personal homepage"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
     </head>
     <body class="
     article-page has-toc
@@ -21,7 +32,9 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
         })();
     </script><script>
     (function() {
@@ -53,7 +66,7 @@
 
 
 
-                <span>Back</span>
+                <span>返回</span>
             </a>
         </div>
     
@@ -102,7 +115,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    阅读时长: 1 分钟
                 </time>
             </div>
         
@@ -191,7 +204,7 @@
 
 
         <span>
-            Last updated on Oct 09, 2020 00:00 UTC
+            最后更新于 Oct 09, 2020 00:00 UTC
         </span>
     </section></footer>
 
@@ -388,7 +401,7 @@
 
 
                 </div>
-                <h2 class="widget-title section-title">Table of contents</h2>
+                <h2 class="widget-title section-title">目录</h2>
                 
                 <div class="widget--toc">
                     <nav id="TableOfContents">

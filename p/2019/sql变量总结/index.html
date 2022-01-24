@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
-请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
-   id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出'><title>SQL变量总结</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限'><title>SQL变量总结</title>
 
 <link rel='canonical' href='https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 
 <link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='SQL变量总结'>
-<meta property='og:description' content='SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
-请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
-   id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出'>
+<meta property='og:description' content='SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限'>
 <meta property='og:url' content='https://kagaya85.github.io/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 <meta property='og:site_name' content='かがやの部屋'>
 <meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/default.jpg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="SQL变量总结">
-<meta name="twitter:description" content="SQL变量总结 变量分类  用户变量  以@开始，形式为@变量名 全局变量  set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量   会话变量  用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效     局部变量  declare专门用于声明 作用范围在begin和end语句块之间    定义方法  &amp;ldquo;=&amp;quot;,如 set @a =3,@a:=5 &amp;ldquo;:=&amp;quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&amp;rdquo;:=&amp;ldquo;的形式设置变量 未定义的变量初始化是null  示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。
-请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。
-   id visit_date people     1 2017-01-01 10   2 2017-01-02 109   3 2017-01-03 150   4 2017-01-04 99   5 2017-01-05 145   6 2017-01-06 1455   7 2017-01-07 199   8 2017-01-08 188    对于上面实例数据，应当输出"><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:description" content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限"><meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content='https://kagaya85.github.io/default.jpg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
     </head>
     <body class="
     article-page has-toc
@@ -27,7 +32,9 @@
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
-            localStorage.setItem(colorSchemeKey, "dark");
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
         })();
     </script><script>
     (function() {
@@ -59,7 +66,7 @@
 
 
 
-                <span>Back</span>
+                <span>返回</span>
             </a>
         </div>
     
@@ -112,7 +119,7 @@
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -328,7 +335,7 @@
     <aside class="related-contents--wrapper">
     
     
-        <h2 class="section-title">Related contents</h2>
+        <h2 class="section-title">相关文章</h2>
         <div class="related-contents">
             <div class="flex article-list--tile">
                 
@@ -600,7 +607,7 @@
 
 
                 </div>
-                <h2 class="widget-title section-title">Table of contents</h2>
+                <h2 class="widget-title section-title">目录</h2>
                 
                 <div class="widget--toc">
                     <nav id="TableOfContents">
