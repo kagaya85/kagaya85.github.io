@@ -28,9 +28,25 @@ draft: true
 
 主机用的是白嫖的Intel NUC11PAHi7 猎豹峡谷，40w的TDP，硬盘从海鲜市场捡了两块4T的希捷酷狼，硬盘盒同样也是从海鲜市场捡的二手世特力双盘位带raid的硬盘盒，两块硬盘组raid1
 
-### nas系统
+### nas底层系统选择
 
+在选择系统之前首先还是要明确需求，对我来说，需求主要有以下几点：
 
+1. 可以7x24稳定运行
+2. 可以硬件直通方便媒体服务器使用硬件编解码
+3. 可以开虚拟机
+4. 对Docker容器能有较好的支持
+5. 可以方便备份迁移
+
+现在市面上几乎所有系统都可以用来做nas，因为对linux较为熟悉且为了获得原生的docker性能和体验，我在一开始就排除的windows系统，另外Free所以主要的选择在一下
+
+exsi
+
+omv
+
+ubuntu
+
+unraid
 
 ### 硬件直通
 
@@ -353,7 +369,7 @@ WebUI\HostHeaderValidation=false
 
 直接访问网页是最方便的方式，但是受限与浏览器的原因，Chromium系的浏览器不能使用hevc的硬解，win10下的Edge应该可以通过额外的插件来实现hevc硬解，因此，想要通过客户端硬解来节省可怜的小水管带宽的话，可以使用Jellyfin的客户端：[jellyfin/jellyfin-media-player: Jellyfin Desktop Client based on Plex Media Player (github.com)](https://github.com/jellyfin/jellyfin-media-player)，或者用safari等浏览器
 
-最好提前用tmm等工具搜刮一下相关的介绍/图片补充元数据，然后统一重命名（为了不妨碍做种，我选择先复制一份到Jellyfin的目录，再改名）：
+最好提前用tmm等工具搜刮一下相关的介绍/图片补充元数据，然后统一重命名（为了不妨碍做种，我选择用`cp -al`硬连接到Jellyfin的目录，再改名，这样也不会占用额外的空间）：
 
 ![ScreenShot_2022-01-27_at_17.55.35@2x](ScreenShot_2022-01-27_at_17.55.35@2x.png)
 
