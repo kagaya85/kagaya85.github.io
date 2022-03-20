@@ -4,7 +4,7 @@ description: "你为什么需要一台NAS以及应该如何入门呢?"
 slug: "first-nas"
 date: 2022-01-17T16:35:05+08:00
 tags: ["NAS", "NUC", "Jellyfin", "Linux"]
-categories: ["Techonlogy"]
+categories: ["Technology"]
 image: 59474391_p0.jpeg
 hidden: false
 comments: true

@@ -141,6 +141,7 @@ menu:
           weight: -40
           params:
               icon: brand-github
+              newTab: true
 
         - identifier: bangumi
           name: Bangumi
