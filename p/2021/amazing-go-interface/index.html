@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算'><title>Amazing Go Interface</title>
 
-<link rel='canonical' href='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2021/amazing-go-interface/'>
 
-<link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='Amazing Go Interface'>
+<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='Amazing Go Interface'>
 <meta property='og:description' content='从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算'>
-<meta property='og:url' content='https://kagaya85.github.io/p/2021/amazing-go-interface/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2021/amazing-go-interface/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Amazing Go Interface">
 <meta name="twitter:description" content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://kagaya85.github.io/p/2021/amazing-go-interface/golang.jpeg' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg' />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
 <script>
 var doNotTrack = false;
@@ -27,8 +27,8 @@ if (!doNotTrack) {
 
     </head>
     <body class="
-    article-page has-toc
-">
+    article-page
+    ">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -51,25 +51,222 @@ if (!doNotTrack) {
         }
     })();
 </script>
-<div class="container main-container flex 
-    
-        extended
-    
-">
-    
-        <div id="article-toolbar">
-            <a href="/" class="back-home">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🚀</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">かがやの部屋</a></h1>
+            <h2 class="site-description">明日は晴れるかな〜</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
+  viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/post' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+  <line x1="9" y1="9" x2="10" y2="9" />
+  <line x1="9" y1="13" x2="15" y2="13" />
+  <line x1="9" y1="17" x2="15" y2="17" />
+</svg>
+
+                
+                <span>Post</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="12" cy="7" r="4" />
+    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
 </svg>
 
 
 
-                <span>返回</span>
+                
+                <span>Archives</span>
             </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://twitter.com/kagaya_85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>Twitter</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://github.com/kagaya85' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+                <span>GitHub</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://bangumi.tv/user/kagaya85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <polyline points="16 3 12 7 8 3" />
+</svg>
+                
+                <span>Bangumi</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="10" cy="10" r="7" />
+    <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
         </div>
-    
+    </ol>
+</aside>
 <main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
@@ -97,11 +294,13 @@ if (!doNotTrack) {
     </header>
     
 
-    <h2 class="article-title">
-        <a href="/p/2021/amazing-go-interface/">Amazing Go Interface</a>
-    </h2>
-
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/2021/amazing-go-interface/">Amazing Go Interface</a>
+        </h2>
     
+        
+    </div>
 
     
     <footer class="article-time">
@@ -131,16 +330,20 @@ if (!doNotTrack) {
 
 
                 <time class="article-time--reading">
-                    阅读时长: 14 分钟
+                    阅读时长: 15 分钟
                 </time>
             </div>
         
     </footer>
     
+
+    
 </div>
 </header>
 
     <section class="article-content">
+    
+    
     <p>从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫<strong>Amazing Go</strong>。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。</p>
 <p>希望能对你有所帮助。</p>
 <p>本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。</p>
@@ -153,7 +356,45 @@ if (!doNotTrack) {
 <p>我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C++和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。</p>
 <h3 id="c-interface">C++ Interface</h3>
 <p>我们先简单复习一下C++，接口在C++中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个<strong>抽象类</strong>来表示接口：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Pat</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Pat</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
 </span></span><span class="line"><span class="cl">    <span class="n">string</span> <span class="n">name</span><span class="p">;</span>
@@ -187,8 +428,31 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;this dog&#39;s name is &#34;</span> <span class="o">+</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span>
-</span></span></code></pre></div><p>我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们定义了一个基础类Pat，它包含两个虚函数（其中一个为纯虚函数），我们分别通过Cat类和Dog类来继承Pat类并实现对应的函数，从而通过Pat类的指针调用派生子类的方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Cat</span> <span class="n">c</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Dog</span> <span class="n">d</span><span class="p">;</span>
@@ -205,26 +469,23 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>输出结果：</p>
-<p><figure 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出结果：</p>
+<p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png"
+	width="772"
+	height="260"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="CleanShot_2021-04-04_at_19.16.38@2x"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 296; 
-			flex-basis: 712px"
-	>
-	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png" data-size="772x260">
-		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png"
-			width="772"
-			height="260"
-			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="CleanShot_2021-04-04_at_19.16.38@2x">
-	</a>
+		data-flex-grow="296"
+		data-flex-basis="712px"
 	
-	<figcaption>CleanShot_2021-04-04_at_19.16.38@2x</figcaption>
-	
-</figure></p>
+></p>
 <p>这里本质上就是实现了一个接口<code>Pat</code>，对于使用者来说，不需要去关心<code>Pat</code>到底是<code>Dog</code>还是<code>Cat</code>，只需要知道它有两个方法，<code>bark</code>和<code>getName</code>，其中<code>bark</code>对于派生类来说必须有自己的实现方式，而<code>getName</code>提供了默认的实现，即便<code>Cat</code>类没有定义这个方法，但仍然可以可以通过基类指针调用并输出。对外只需提供<code>Pat</code>接口，隐藏了内部具体的实现细节。</p>
 <p>C++没有专门的Interface关键字，通过提供虚函数来实现接口特性，一个类只能继承一个虚函数，同时额外区分了提供默认实现和强制子类实现的函数，不含纯虚函数的抽象类是可以被实例化的，这是非常不合理的。除此之外，理论上接口应该<strong>只关注操作方法</strong>，作为接口的基类函数却可以定义自己的公有和私有变量，造成一定的耦合，对于接口的实现来说往往会带来一些麻烦。</p>
 <p>另外，作为动态语言的Python，也是通过抽象类来实现类似接口的功能。</p>
@@ -238,7 +499,87 @@ if (!doNotTrack) {
 </ol>
 <p>Java中完善了C++中抽象类的一些问题（比如可以实例化）并单独提供了Interface关键字来针对接口的抽象，但是在实际使用时，往往优先使用接口而不是抽象类，这可能会给开发人员带来一些困扰。</p>
 <p>抽象类的例子与C++类似，我们还是看一下上面的例子，使用Java interface的实现：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// Pat.java
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// Pat.java
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kn">package</span> <span class="nn">demo</span><span class="o">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Pat</span> <span class="o">{</span>
@@ -314,18 +655,30 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
 </span></span><span class="line"><span class="cl">    <span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></div><p>输出同上，可以看到Java借助interface关键字轻松实现多态，并且interface有着抽象类所没有的严格限制，比如只能声明抽象函数，进一步分离了对象的方法声明和方法实现，实现接口也需要使用<code>implements</code>关键字显式声明，可以同时声明实现多个接口。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出同上，可以看到Java借助interface关键字轻松实现多态，并且interface有着抽象类所没有的严格限制，比如只能声明抽象函数，进一步分离了对象的方法声明和方法实现，实现接口也需要使用<code>implements</code>关键字显式声明，可以同时声明实现多个接口。</p>
 <p>特别的是，Java中的接口仍然选择保留声明变量，但声明变量和实现函数必须是静态的，变量还限制为final，且方法不能通过实现类来重写和调用，即不能提供方法的默认实现。默认实现仍然需要借助抽象类来提供，个人觉得这还是有一些复杂，我们再做抽象时不得不考虑我们应该使用抽象类还是使用接口。</p>
 <h2 id="interface-in-go">Interface in Go</h2>
 <p>Go作为一门年轻的高级语言，自然也吸取了C++和Java中优秀的语法设计，同时以围绕简单直接的设计哲学，Go对于接口的设计也形成了自己独特的风格。</p>
 <p>Go语言的设计哲学之一就是<strong>简单直接，少即是多</strong>，作为一门现代编程语言，他甚至抛弃了OOP中关键的<code>class</code>关键字，转而去拥抱类似C中的<code>struct</code>。但和C这种纯过程式的语言不同，Go依然拥有面向对象的特性，让面向对象的软件设计方法依然在Golang中发光发热。</p>
 <p>另外补充一下，Go由于同时抛弃了public、private、protected等关键字，对于公有和私有方法/变量的处理是通过名称<strong>首字母的大小</strong>写来区分，大写字母开头即为公有方法/变量，小写字母开头则为私有方法/变量。</p>
 <p>说回到接口，在Go中，也与Java一样提供了interface关键字，通过interface来声明一个接口：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Pet</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Pet</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">Bark</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">GetName</span><span class="p">()</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>Go中的接口声明显得十分直观简单，只包含接口名+包含的方法，不允许声明变量，不允许有方法实现，彻底将对象中的方法抽象了出来，没有一点多余的要素，只告诉使用方这个接口包含哪些方法可以使用。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Go中的接口声明显得十分直观简单，只包含接口名+包含的方法，不允许声明变量，不允许有方法实现，彻底将对象中的方法抽象了出来，没有一点多余的要素，只告诉使用方这个接口包含哪些方法可以使用。</p>
 <p>更加令人惊喜的是，Go中的接口实现方法采用了类似<strong>鸭子类型</strong>的实现策略。</p>
 <h3 id="duck-typing">Duck Typing</h3>
 <p>鸭子类型（Duck Typing）<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>是一种动态类型语言的设计风格：</p>
@@ -333,7 +686,36 @@ if (!doNotTrack) {
 <p>If it walks like a duck and it quacks like a duck, then it must be a duck</p>
 </blockquote>
 <p>鸭子类型在Python等<strong>动态类型</strong>的语言中得到了非常广泛的应用，在鸭子类型中，关注点在于<strong>对象的行为</strong>，能作什么，而不是关注对象所属的类型。这样，我们就可以在不继承对象的情况下实现了多态。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Duck</span><span class="p">:</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Duck</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">quack</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="s2">&#34;这鸭子正在嘎嘎叫&#34;</span>
 </span></span><span class="line"><span class="cl">
@@ -358,7 +740,9 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">    <span class="n">in_the_forest</span><span class="p">(</span><span class="n">john</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">game</span><span class="p">()</span>
-</span></span></code></pre></div><p>如上的python代码中，<code>in_the_forest</code>方法的形参并不是一个被继承的父类对象类型，而是假定duck参数包含<code>quack</code>与<code>feathers</code>两个方法，或只要包含着两个方法的对象，就认为是合法的参数，解耦了方法的实现和声明。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上的python代码中，<code>in_the_forest</code>方法的形参并不是一个被继承的父类对象类型，而是假定duck参数包含<code>quack</code>与<code>feathers</code>两个方法，或只要包含着两个方法的对象，就认为是合法的参数，解耦了方法的实现和声明。</p>
 <p>这其实与接口的思想不谋而合，但有区别的是，实现方也不用显示定义了实现了哪些接口，调用方也不关心谁实现了这些方法。这其实也导致了很多批评的声音：</p>
 <ul>
 <li>Duck Typing需要动态类型的支持，使得将可能的错误发生转移到了运行时，并且难以通过静态分析做类型推断，反而增加了程序员的负担。</li>
@@ -367,7 +751,34 @@ if (!doNotTrack) {
 <p>当然这不妨碍仍有很多人喜欢Duck Typing，尤其是众多Gopher。</p>
 <h3 id="whats-different-in-go">What&rsquo;s different in go</h3>
 <p>前面也说了，Golang的接口提供了<strong>类似鸭子类型</strong>的特性，为什么说类似呢，一个最重要的不同就是Golang作为一门静态类型的语言却实现了类似动态语言的特性，我们还是看上面猫和狗的例子：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Cat</span> <span class="kd">struct</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">name</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -390,8 +801,29 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">d</span> <span class="nx">Dog</span><span class="p">)</span> <span class="nf">GetName</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="s">&#34;this dog&#39;s name is &#34;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">name</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>如果没有上文，我相信没有人知道这里的Dog和Cat已经实现了前文定义的Pat接口，这就是Duck Typing的魅力。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果没有上文，我相信没有人知道这里的Dog和Cat已经实现了前文定义的Pat接口，这就是Duck Typing的魅力。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">c</span> <span class="nx">Cat</span>
 </span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">d</span> <span class="nx">Dog</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">c</span><span class="p">.</span><span class="nx">name</span> <span class="p">=</span> <span class="s">&#34;Tom&#34;</span>
@@ -406,48 +838,126 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">	<span class="nx">p</span><span class="p">.</span><span class="nf">Bark</span><span class="p">()</span> <span class="c1">// 汪汪汪
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// this dog&#39;s name is Spike
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><p>由于Go是一门静态类型的语言，意味着可以通过静态类型检查让你你可以放心的使用鸭子类型，而避免了可能的类型错误同时还能享受鸭子类型带来的简洁高效的语法。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于Go是一门静态类型的语言，意味着可以通过静态类型检查让你你可以放心的使用鸭子类型，而避免了可能的类型错误同时还能享受鸭子类型带来的简洁高效的语法。</p>
 <p>有读者可能已经注意到了，我在接口类型变量p赋值时，第一次使用了指针，而第二次原变量，这里涉及到了指针结构体和原结构体所包含方法列表的范围，有兴趣的读者可以思考一下为什么。</p>
 <h3 id="one-more-case">One more case</h3>
 <p>刚才这个例子或许也还不足以体现Go Interface的神奇之处，那么再来看看这个例子。</p>
 <p>Golang诞生至今，最成功的接口定义之一就是<code>io.Writer</code>和<code>io.Reader</code>接口：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Writer</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Writer</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">Write</span><span class="p">(</span><span class="nx">p</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="nx">n</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Reader</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">Read</span><span class="p">(</span><span class="nx">p</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="nx">n</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>两个接口分别完美继承了Unix中一切皆文件的思想，对数据源中的数据操作做了良好的抽象，任何数据源只要实现了这两个接口，就可以统一操作方法，方便对接任何调用方<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>：</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>两个接口分别完美继承了Unix中一切皆文件的思想，对数据源中的数据操作做了良好的抽象，任何数据源只要实现了这两个接口，就可以统一操作方法，方便对接任何调用方<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>：</p>
 <ul>
 <li>
 <p>字符串</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">)</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 <li>
 <p>字节序列</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">))</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 <li>
 <p>文件</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;foo.txt&#34;</span><span class="p">)</span> <span class="c1">// f 满足io.Reader
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;foo.txt&#34;</span><span class="p">)</span> <span class="c1">// f 满足io.Reader
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">f</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 <li>
 <p>tcp socket</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span>  <span class="nx">net</span><span class="p">.</span><span class="nf">DialTCP</span><span class="p">(</span><span class="s">&#34;192.168.0.10&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">raddr</span> <span class="o">*</span><span class="nx">TCPAddr</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">TCPConn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span>  <span class="nx">net</span><span class="p">.</span><span class="nf">DialTCP</span><span class="p">(</span><span class="s">&#34;192.168.0.10&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">raddr</span> <span class="o">*</span><span class="nx">TCPAddr</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">TCPConn</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nx">r</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 <li>
 <p>http request</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">))</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">r</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&#34;hello, go&#34;</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="nx">req</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">http</span><span class="p">.</span><span class="nf">NewRequestWithContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="s">&#34;POST&#34;</span><span class="p">,</span> <span class="nx">url</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 <li>
 <p>读取压缩文件</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;hello.txt.gz&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
@@ -466,39 +976,80 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div></li>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
 </ul>
 <p>Writer和Reader接口的设计十分简洁，同样继续遵循了Golang的设计哲学，Go语言lib中的大部分接口都是如此，只包含极少数的方法，同时遵循SOILD原则中的<strong>Open/Close开闭原则</strong>，即对扩展开放，对修改封闭</p>
 <p>如果我们想设计一个既包含read又包含write，同时还能有一个输出数据源类型的方法，那么我们可以通过接口嵌入的方式来扩展原有接口：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">MyReadWriter</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">MyReadWriter</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
 </span></span><span class="line"><span class="cl">  <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">DataType</span><span class="p">()</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// 这个接口包含了 Read(), Write(), DataType() 三个方法
-</span></span></span></code></pre></div><h3 id="easy-to-test">Easy to test</h3>
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="easy-to-test">Easy to test</h3>
 <p>使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 <code>Mock</code>。</p>
 <p>对于上文的接口Pet，我们使用mockery来生成对应的mock</p>
-<p><figure 
+<p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png"
+	width="1830"
+	height="184"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="CleanShot_2021-04-11_at_17.07.31"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 994; 
-			flex-basis: 2386px"
-	>
-	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png" data-size="1830x184">
-		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png"
-			width="1830"
-			height="184"
-			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="CleanShot_2021-04-11_at_17.07.31">
-	</a>
+		data-flex-grow="994"
+		data-flex-basis="2386px"
 	
-	<figcaption>CleanShot_2021-04-11_at_17.07.31</figcaption>
-	
-</figure></p>
+></p>
 <p>自动生成<code>mocks/Pat.go</code>，内容如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">// Code generated by mockery 2.7.4. DO NOT EDIT.
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">// Code generated by mockery 2.7.4. DO NOT EDIT.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">package mocks
 </span></span><span class="line"><span class="cl">
@@ -527,8 +1078,31 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> r0
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></div><p>我们就可以方便的利用接口的特性进行单元测试，使用mock替换实际实现，构造<strong>与上下文无关</strong>的测试环境</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">pat</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们就可以方便的利用接口的特性进行单元测试，使用mock替换实际实现，构造<strong>与上下文无关</strong>的测试环境</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">pat</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
 </span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
@@ -545,30 +1119,47 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl">	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="nx">myPat</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// 调用Pat.GetName
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><p><figure 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png"
+	width="1336"
+	height="326"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="CleanShot_2021-04-11_at_17.12.28@2x"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 409; 
-			flex-basis: 983px"
-	>
-	<a href="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png" data-size="1336x326">
-		<img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png"
-			width="1336"
-			height="326"
-			srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="CleanShot_2021-04-11_at_17.12.28@2x">
-	</a>
+		data-flex-grow="409"
+		data-flex-basis="983px"
 	
-	<figcaption>CleanShot_2021-04-11_at_17.12.28@2x</figcaption>
-	
-</figure></p>
+></p>
 <p>同理，我们可以模拟sql语句，http请求等，保证单元测试的上下文无关，提高单元测试的覆盖度来保证代码质量。</p>
 <h2 id="behind-the-go-interface">Behind the Go Interface</h2>
 <p>Gopher们常说Go语言写起来像动态类型的语言一样轻松，除了对于变量类型的自动推导，Interface所带来的Duck Typing特性也功不可没，这样类似动态语言的特性究竟是如何实现的呢？</p>
 <p>我们先来看一下常用ToString函数，它可以这么实现：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Stringer</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Stringer</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -584,11 +1175,26 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s">&#34;???&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>如果接受的未知类型能断言为<code>Stringer</code>接口类型，则说明包含<code>String</code>方法直接调用，否则根据具体类型调用具体方法进行转换。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果接受的未知类型能断言为<code>Stringer</code>接口类型，则说明包含<code>String</code>方法直接调用，否则根据具体类型调用具体方法进行转换。</p>
 <p>我们可以看到这里出现了两种interface，一种出现在接口类型定义<code>Stringer</code>，一种作为<code>ToString</code>的形式参数类型，代表不包含任何方法的接口。在Go中，interface其实是一种<strong>结构体</strong>，源码中分别区分了这两种interface：<code>eface</code>与<code>iface</code>，即空接口和包含方法的接口。</p>
 <p>现在我们可以看到，Go中的接口其实就是期望结构体应当包含的方法集合，那么空接口自然就可以接受任意类型的变量，实现了<strong>类似</strong>泛型的功能，我们会在下一节中简单介绍将在go1.18中登场的go泛型中接口的变化，但是要强调的是，<code>interface{}</code><strong>不是任意变量</strong>，而是一种变量类型，尽管它可以由任意变量转换而来。</p>
 <p>回到Go对于接口的实现方法，我们来定义一个Binary类型来实现上面的Stringer接口：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Binary</span> <span class="kt">uint64</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Binary</span> <span class="kt">uint64</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">i</span> <span class="nx">Binary</span><span class="p">)</span> <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Uitob64</span><span class="p">(</span><span class="nx">i</span><span class="p">.</span><span class="nf">Get</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)</span>
@@ -597,129 +1203,144 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">i</span> <span class="nx">Binary</span><span class="p">)</span> <span class="nf">Get</span><span class="p">()</span> <span class="kt">uint64</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">uint64</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>此时我们声明一个变量为Binary类型，在内存中的结构如下（假设为32bits系统），需要占用两个32bits空间</p>
-<p><figure 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此时我们声明一个变量为Binary类型，在内存中的结构如下（假设为32bits系统），需要占用两个32bits空间</p>
+<p><img src="/p/2021/amazing-go-interface/gointer1.png"
+	width="159"
+	height="83"
+	srcset="/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="gointer1"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 191; 
-			flex-basis: 459px"
-	>
-	<a href="/p/2021/amazing-go-interface/gointer1.png" data-size="159x83">
-		<img src="/p/2021/amazing-go-interface/gointer1.png"
-			width="159"
-			height="83"
-			srcset="/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="gointer1">
-	</a>
+		data-flex-grow="191"
+		data-flex-basis="459px"
 	
-	<figcaption>gointer1</figcaption>
-	
-</figure></p>
+></p>
 <p>紧接着我们把它复制给一个Stringer接口类型或者通过强制类型转换把它转换为Stringer，那么在内存中会分配一个interface结构体来保存我们的Binary变量</p>
-<p><figure 
+<p><img src="/p/2021/amazing-go-interface/gointer2.png"
+	width="486"
+	height="238"
+	srcset="/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="gointer2"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 204; 
-			flex-basis: 490px"
-	>
-	<a href="/p/2021/amazing-go-interface/gointer2.png" data-size="486x238">
-		<img src="/p/2021/amazing-go-interface/gointer2.png"
-			width="486"
-			height="238"
-			srcset="/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="gointer2">
-	</a>
+		data-flex-grow="204"
+		data-flex-basis="490px"
 	
-	<figcaption>gointer2</figcaption>
-	
-</figure></p>
+></p>
 <p>可以看到，这个interface结构体主要包含两个指针字段，其中data指针指向的内存存放了具体的数据，而tab指针指向一个itable表，包含了data部分的数据类型和保护的方法指针表。而生成这样一个itab表是可以在编译时就确定的，接口类型可能有$ni$个方法，具体类型可能有$nt$个方法，一般寻找从接口方法到具体方法的映射需要$O(ni\times nt)$的时间复杂度，Go编译器通过对两个方法表进行分类，同时进行搜索可以优化到$O(ni+nt)$的时间复杂度<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>。</p>
 <p>从Russ Cox的<a class="link" href="https://research.swtch.com/interfaces"  target="_blank" rel="noopener"
     >博客</a>中可以看到，Go的设计者还对interface进行了<strong>内存优化</strong></p>
 <ul>
 <li>如果一个interface不包含任何方法，就可以用实际的类型变量存储在itab指针的位置</li>
 </ul>
-<p><figure 
+<p><img src="/p/2021/amazing-go-interface/gointer3.png"
+	width="317"
+	height="170"
+	srcset="/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="gointer3"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 186; 
-			flex-basis: 447px"
-	>
-	<a href="/p/2021/amazing-go-interface/gointer3.png" data-size="317x170">
-		<img src="/p/2021/amazing-go-interface/gointer3.png"
-			width="317"
-			height="170"
-			srcset="/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="gointer3">
-	</a>
+		data-flex-grow="186"
+		data-flex-basis="447px"
 	
-	<figcaption>gointer3</figcaption>
-	
-</figure></p>
+></p>
 <ul>
 <li>而对于占用不大于32bits的变量，则可以直接存放在data部分替换原来的data指针</li>
 </ul>
-<p><figure 
+<p><img src="/p/2021/amazing-go-interface/gointer4.png"
+	width="418"
+	height="238"
+	srcset="/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="gointer4"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 175; 
-			flex-basis: 421px"
-	>
-	<a href="/p/2021/amazing-go-interface/gointer4.png" data-size="418x238">
-		<img src="/p/2021/amazing-go-interface/gointer4.png"
-			width="418"
-			height="238"
-			srcset="/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="gointer4">
-	</a>
+		data-flex-grow="175"
+		data-flex-basis="421px"
 	
-	<figcaption>gointer4</figcaption>
-	
-</figure></p>
+></p>
 <ul>
 <li>又或者同时满足上面两种情况下</li>
 </ul>
-<p><figure 
+<p><img src="/p/2021/amazing-go-interface/gointer5.png"
+	width="299"
+	height="83"
+	srcset="/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="gointer5"
+	
 	
 		class="gallery-image" 
-		style="
-			flex-grow: 360; 
-			flex-basis: 864px"
-	>
-	<a href="/p/2021/amazing-go-interface/gointer5.png" data-size="299x83">
-		<img src="/p/2021/amazing-go-interface/gointer5.png"
-			width="299"
-			height="83"
-			srcset="/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_480x0_resize_box_3.png 480w, /p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_1024x0_resize_box_3.png 1024w"
-			loading="lazy"
-			alt="gointer5">
-	</a>
+		data-flex-grow="360"
+		data-flex-basis="864px"
 	
-	<figcaption>gointer5</figcaption>
-	
-</figure></p>
+></p>
 <p>然而在实际的Golang interface实现中，只对不包含任何方法的interface做了优化，即eface</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">eface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">data</span>  <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>完整的interface:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完整的interface:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">iface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">tab</span>  <span class="o">*</span><span class="nx">itab</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">data</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>itab:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// src/runtime/runtime2.go
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>itab:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// src/runtime/runtime2.go
 </span></span></span><span class="line"><span class="cl"><span class="c1">// layout of Itab known to compilers
 </span></span></span><span class="line"><span class="cl"><span class="c1">// allocated in non-garbage-collected memory
 </span></span></span><span class="line"><span class="cl"><span class="c1">// Needs to be in sync with
@@ -731,10 +1352,28 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_</span>     <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">byte</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">fun</span>   <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="kt">uintptr</span> <span class="c1">// variable sized. fun[0]==0 means _type does not implement inter.
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><h2 id="generic-type">Generic Type</h2>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="generic-type">Generic Type</h2>
 <p>在2022年初到来的Go 1.18中，会带来期待已久的范型功能，在目前的泛型提案中，interface增加了新的特性。</p>
 <p>Type list:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">MyC2</span> <span class="kd">interface</span> <span class="p">{</span>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">MyC2</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">type</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int32</span><span class="p">,</span> <span class="kt">int64</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -746,8 +1385,40 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">t2</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">F2</span><span class="p">(</span><span class="nx">t2</span><span class="p">)</span> <span class="c1">// string
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><p>拥有 type list 的 interface 仅能用于做为类型参数的约束，而不能像普通 interface 类型那样使用</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>拥有 type list 的 interface 仅能用于做为类型参数的约束，而不能像普通 interface 类型那样使用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
 </span></span><span class="line"><span class="cl">    <span class="s">&#34;fmt&#34;</span>
@@ -773,8 +1444,24 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">    <span class="nx">t3</span> <span class="o">:=</span> <span class="nf">MyT3</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="nf">F3</span><span class="p">(</span><span class="nx">t3</span><span class="p">)</span> <span class="c1">// main.MyT3
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></div><p>不过目前社区有了新提案 type set来统一interface的语法，不知道当1.18泛型正式开放后会是哪种形式:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 当前的type list
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>不过目前社区有了新提案 type set来统一interface的语法，不知道当1.18泛型正式开放后会是哪种形式:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 当前的type list
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">type</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int8</span><span class="p">,</span> <span class="kt">int16</span><span class="p">,</span> <span class="kt">int32</span><span class="p">,</span> <span class="kt">int64</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -784,7 +1471,9 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="err">~</span><span class="kt">int</span> <span class="p">|</span> <span class="err">~</span><span class="kt">int8</span> <span class="p">|</span> <span class="err">~</span><span class="kt">int16</span> <span class="p">|</span> <span class="err">~</span><span class="kt">int32</span> <span class="p">|</span> <span class="err">~</span><span class="kt">int64</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>目前来说go的interface可以很好的替代一部分泛型的功能，但是并不能完全替代泛型，因此引入泛型后两者必然有一些功能的重叠部分，而且会给go简洁的语法引入一定的复杂性，破坏原有的go语言美感。不过目前还都不能盖棺定论，go团队也需要在社区收集充足的意见决定如何把泛型带入go语言中，让gopher们在享受泛型带来的便利同时，避免引入过多的复杂性，期待1.18中的泛型能把go带入一个新的阶段。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>目前来说go的interface可以很好的替代一部分泛型的功能，但是并不能完全替代泛型，因此引入泛型后两者必然有一些功能的重叠部分，而且会给go简洁的语法引入一定的复杂性，破坏原有的go语言美感。不过目前还都不能盖棺定论，go团队也需要在社区收集充足的意见决定如何把泛型带入go语言中，让gopher们在享受泛型带来的便利同时，避免引入过多的复杂性，期待1.18中的泛型能把go带入一个新的阶段。</p>
 <h2 id="conclusion">Conclusion</h2>
 <ul>
 <li>C++只能通过虚函数来实现类似接口的功能</li>
@@ -857,11 +1546,11 @@ if (!doNotTrack) {
                 href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
             ><script 
                 src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script 
                 src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
@@ -879,14 +1568,14 @@ if (!doNotTrack) {
 
     
 
-    <aside class="related-contents--wrapper">
     
-    
-        <h2 class="section-title">相关文章</h2>
-        <div class="related-contents">
-            <div class="flex article-list--tile">
+
+<aside class="related-contents--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-contents">
+        <div class="flex article-list--tile">
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/">
         
@@ -908,8 +1597,8 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
         
@@ -931,8 +1620,8 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
         
@@ -954,8 +1643,8 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/">
         
@@ -977,8 +1666,8 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/">
         
@@ -1000,10 +1689,9 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
-                
-            </div>
+            
         </div>
-    
+    </div>
 </aside>
 
      
@@ -1066,7 +1754,7 @@ if (!doNotTrack) {
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1135,11 +1823,11 @@ if (!doNotTrack) {
 
 </div><script 
                 src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script 
                 src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><link 
                 rel="stylesheet" 
@@ -1150,11 +1838,13 @@ if (!doNotTrack) {
             >
 
             </main>
-    
-        <aside class="sidebar right-sidebar sticky">
-            <section class="widget archives">
-                <div class="widget-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <line x1="5" y1="9" x2="19" y2="9" />
   <line x1="5" y1="15" x2="19" y2="15" />
@@ -1164,11 +1854,11 @@ if (!doNotTrack) {
 
 
 
-                </div>
-                <h2 class="widget-title section-title">目录</h2>
-                
-                <div class="widget--toc">
-                    <nav id="TableOfContents">
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
   <ul>
     <li><a href="#why-interface">Why Interface?</a>
       <ul>
@@ -1190,15 +1880,18 @@ if (!doNotTrack) {
     <li><a href="#reference">Reference</a></li>
   </ul>
 </nav>
-                </div>
-            </section>
-        </aside>
-    
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                defer="false"
+                
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
 <script>

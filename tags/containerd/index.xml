@@ -1,20 +1,441 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Containerd on かがやの部屋</title>
-    <link>https://kagaya85.github.io/tags/containerd/</link>
-    <description>Recent content in Containerd on かがやの部屋</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/tags/containerd/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
-      <link>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
-      <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
-      
-      <guid>https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
-      <description>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Dock</description>
-    </item>
-    
-  </channel>
+    <channel>
+        <title>Containerd on かがやの部屋</title>
+        <link>https://blog.kagaya.fun/tags/containerd/</link>
+        <description>Recent content in Containerd on かがやの部屋</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh-cn</language>
+        <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/containerd/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
+        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
+        <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
+        
+        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png" alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" /&gt;&lt;h1 id=&#34;使用kubernetes-v1200-与-containerd-配置k8s集群&#34;&gt;使用Kubernetes V1.20.0 与 Containerd 配置K8s集群&lt;/h1&gt;
+&lt;h2 id=&#34;写在前面&#34;&gt;写在前面&lt;/h2&gt;
+&lt;p&gt;Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）&lt;/p&gt;
+&lt;p&gt;本文所需shell脚本都在这个&lt;a class=&#34;link&#34; href=&#34;https://github.com/kagaya85/K8sTakeOff&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;repo&lt;/a&gt;，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。&lt;/p&gt;
+&lt;h2 id=&#34;配置基本环境&#34;&gt;配置基本环境&lt;/h2&gt;
+&lt;p&gt;这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png&#34;
+	width=&#34;1658&#34;
+	height=&#34;788&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;CleanShot_2020-12-18_at_21.54.34@2x&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;210&#34;
+		data-flex-basis=&#34;504px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;当然这是我部署好后的截图，主机的名称也改为了ip+nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了&lt;code&gt;04_pull_master_images.sh&lt;/code&gt;与&lt;code&gt;04_pull_worker_images.sh&lt;/code&gt;，可以自动实现将主机名替换为ip+nodeType，当然，这都是后话了。&lt;/p&gt;
+&lt;p&gt;本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）&lt;/p&gt;
+&lt;p&gt;对于每一台机器，只需要一次执行00～02对应脚本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# cd进入脚本对应目录&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 00_install_tools.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 01_config_env.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 02_install_kube.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改&lt;code&gt;~/.zshrc&lt;/code&gt;文件，如果不使用zsh，请对应修改为&lt;code&gt;~/.bashrc&lt;/code&gt;或&lt;code&gt;~./bash_profile&lt;/code&gt;），这里可以根据自己的需要做修改。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;01设置了一些基本环境配置，关闭firewalld和swap，设置了iptable转发等，特别是对时间进行同步，并修改为CST时区，保证各个主机上时间的一致性对集群的配置也至关重要。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;安装containerd&#34;&gt;安装Containerd&lt;/h2&gt;
+&lt;p&gt;接下来，我们为每一台主机安装Containerd替换之前的Docker。&lt;/p&gt;
+&lt;p&gt;一键安装：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 03_install_containerd.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。&lt;/p&gt;
+&lt;p&gt;我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和&lt;code&gt;libseccomp&lt;/code&gt; 、&lt;code&gt;libseccomp-devel&lt;/code&gt;两个链接库，可以参考&lt;a class=&#34;link&#34; href=&#34;https://github.com/containerd/containerd/blob/master/BUILDING.md#build-runc&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;这里&lt;/a&gt;。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到&lt;code&gt;$PATH&lt;/code&gt;对应的目录中即可。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# install runc&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;git clone https://github.com/opencontainers/runc
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;cd&lt;/span&gt; runc &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  make &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  make install
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这样就安装好了runc工具&lt;/p&gt;
+&lt;p&gt;安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CONTAINERD_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1.4.3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wget https://github.com/containerd/containerd/releases/download/v&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$CONTAINERD_VERSION&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;/containerd-&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$CONTAINERD_VERSION&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;-linux-amd64.tar.gz
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;tar -xvf containerd-&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$CONTAINERD_VERSION&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;-linux-amd64.tar.gz -C /usr/local/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置&lt;/p&gt;
+&lt;p&gt;一般来说，containerd提供了生成默认配置的方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 需提前创建对应目录 &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# sudo mkdir -p /etc/containerd/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;containerd config default &amp;gt;/etc/containerd/config.toml
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;但是这样会有&lt;strong&gt;一些问题&lt;/strong&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;之后在使用crictl工具连接containerd工具时会报错：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;unknown service runtime.v1alpha2.ImageService &amp;amp;Unimplemented desc = unknown service api.v1.CRIPluginService
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;可参考这个&lt;a class=&#34;link&#34; href=&#34;https://github.com/kubernetes-sigs/cri-tools/issues/436#issuecomment-464290289&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;issue&lt;/a&gt;，对应的解决方法就是修改以下配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;io.containerd.grpc.v1.cri&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;containerd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;snapshotter&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;overlayfs&amp;#34;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;native&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;default_runtime_name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;runc&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;no_pivot&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;后面在使用&lt;code&gt;kubeadm init&lt;/code&gt;初始化集群时，在启动apiserver等pod时，会报错：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        Unfortunately, an error has occurred:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                timed out waiting for the condition
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        This error is likely caused by:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - The kubelet is not running
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - The kubelet is unhealthy due to a misconfiguration of the node in some way (required cgroups disabled)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        If you are on a systemd-powered system, you can try to troubleshoot the error with the following commands:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - &amp;#39;systemctl status kubelet&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - &amp;#39;journalctl -xeu kubelet&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        Additionally, a control plane component may have crashed or exited when started by the container runtime.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        To troubleshoot, list all containers using your preferred container runtimes CLI.
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        Here is one example how you may list all Kubernetes containers running in cri-o/containerd using crictl:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - &amp;#39;crictl --runtime-endpoint /run/containerd/containerd.sock ps -a | grep kube | grep -v pause&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                Once you have found the failing container, you can inspect its logs with:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;                - &amp;#39;crictl --runtime-endpoint /run/containerd/containerd.sock logs CONTAINERID&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;couldn&amp;#39;t initialize a Kubernetes cluster
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;使用&lt;code&gt;systemctl status kubelet&lt;/code&gt;查看kubelet情况，可以看到kubelet有在运行但是日志里一直打印&lt;code&gt;node &amp;quot;localhost.localdomain&amp;quot; not found&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;● kubelet.service - kubelet: The Kubernetes Node Agent
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  Drop-In: /usr/lib/systemd/system/kubelet.service.d
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           └─10-kubeadm.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Active: active (running) since Thu 2020-12-17 20:48:18 CST; 6min ago
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     Docs: https://kubernetes.io/docs/
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Main PID: 10688 (kubelet)
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Tasks: 18
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Memory: 37.6M
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   CGroup: /system.slice/kubelet.service
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           └─10688 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf ...
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里的日志不够详细，于是我又使用&lt;code&gt;journalctl -xeu kubelet&lt;/code&gt;查看更详细的日志，日志数量比较多，很容易漏掉关键的错误，比如说下面这条报错是我在重试了多次后才在日志中发现的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;CreatePodSandbox for pod &amp;#34;kube-scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce25476016scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce254760161b1d3b)&amp;#34; failed: rpc error: code = Unknown desc = failed to get sandboxb1d3b)&amp;#34; failed: rpc error: code = Unknown desc = failed to get sandbox image &amp;#34;k8s.gcr.io/pause:3.1&amp;#34;: failed to pull image &amp;#34;k8s.gcr.io/pause:3.1&amp;#34;: failed to pull image &amp;#34;k8s.gcr.io/pause:3.1&amp;#34;: failed to pull and unpack image &amp;#34;k8s.gcr.io/pause:3.1&amp;#34;:
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;可以看到中的关键信息&lt;code&gt;failed to pull image &amp;quot;k8s.gcr.io/pause:3.1&amp;quot;&lt;/code&gt;，也就是说kubelet创建pod时卡在了拉取pause镜像这一步，当时在初始化kubeadm之前，我已经在本地准备好了所有所需要的镜像，并且kubeadm通过指定镜像仓库的参数&lt;code&gt;--image-repository=${IMAGE_REPOSITORY}&lt;/code&gt;已经将kubelet所要拉取镜像的目标仓库切换为阿里云的仓库，但这里还是去从一个不存在的谷歌容器仓库k8s.gcr.io拉取镜像，导致我在这里一度怀疑是kubelet的配置问题。&lt;/p&gt;
+&lt;p&gt;直到我翻到了kubeadm的&lt;a class=&#34;link&#34; href=&#34;https://github.com/kubernetes/kubeadm/issues/2020&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;issue#2020&lt;/a&gt;中提到了kubeadm并不会配置pause image的repository，以及在containerd的&lt;a class=&#34;link&#34; href=&#34;https://github.com/containerd/cri/issues/813&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;issue#813&lt;/a&gt;，提到了&lt;strong&gt;pause镜像的仓库及版本是写在containerd的配置文件中&lt;/strong&gt;，所以，只需要在&lt;code&gt;config.toml&lt;/code&gt;中修改以下配置&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;io.containerd.grpc.v1.cri&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;disable_tcp_service&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;stream_server_address&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;stream_server_port&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;stream_idle_timeout&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;4h0m0s&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;enable_selinux&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;sandbox_image&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;k8s.gcr.io/pause:3.1&amp;#34;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;registry.cn-hangzhou.aliyuncs.com/kagaya/pause:3.2&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;以上问题就解决了:-(&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以，配置脚本中直接生成了修改好的配置文件，使用脚本就不会遇到以上问题了&lt;/p&gt;
+&lt;h2 id=&#34;安装kubernetes并创建集群&#34;&gt;安装Kubernetes并创建集群&lt;/h2&gt;
+&lt;p&gt;以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。&lt;/p&gt;
+&lt;p&gt;这里先使用上一步配置好的crictl工具拉取镜像为创建集群时节省时间&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;准备Master节点镜像&lt;/p&gt;
+&lt;p&gt;执行以下脚本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 04_pull_master_images.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;准备Worker节点镜像&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 04_pull_worker_images.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;以上两步会以ip+nodeType的格式同时修改Master和Worker节点的主机名，原因写在了文章开头&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;初始化Master节点&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 05_init_master.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这一步会在kubeadm中指定kubernetes的版本，CIDR范围，镜像仓库等，如果顺利的话，你可以看到最后打印的其他节点join集群的方法，类似这样：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;kubeadm join 192.168.0.170:6443 --token r7w69v.3e1nweyk81h5zj6y \
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    --discovery-token-ca-cert-hash sha256:1234a2317d27f0a4c6bcf5f284416a2fb3e8f3bd61aa88bc279a4f6ef18e09a1 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;之后需要手动在&lt;strong&gt;各个Worker节点&lt;/strong&gt;上执行一下这条命令加入Master所在集群，请务必确保各节点时间同步，因为token的合法性会用时间去验证。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;如果需要，你还可以使用&lt;code&gt;05_init_worker_kubectl.sh&lt;/code&gt;来初始化Worker节点上的kubectl命令&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果以上步骤顺利的话，你现在可以在Master节点上使用&lt;code&gt;kubectl get nodes -o wide&lt;/code&gt;看到各个节点的信息，当然Status为NotReady是因为我们还没有执行最后一步，安装calico网络&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png&#34;
+	width=&#34;2844&#34;
+	height=&#34;486&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_1024x0_resize_box_3.png 1024w&#34;
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;CleanShot_2020-12-17_at_22.41.02@2x&#34;
+	
+	
+		class=&#34;gallery-image&#34; 
+		data-flex-grow=&#34;585&#34;
+		data-flex-basis=&#34;1404px&#34;
+	
+&gt;&lt;/p&gt;
+&lt;h2 id=&#34;安装calico网络&#34;&gt;安装Calico网络&lt;/h2&gt;
+&lt;p&gt;这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从&lt;strong&gt;Master节点&lt;/strong&gt;上用kubectl应用yaml文件。&lt;/p&gt;
+&lt;p&gt;一键脚本：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 06_install_calico.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里也选用了较新的Calico v3.17.1&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CALICO_VERSION&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;v3.17.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;crictl pull calico/cni:&lt;span class=&#34;nv&#34;&gt;$CALICO_VERSION&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;crictl pull calico/pod2daemon-flexvol:&lt;span class=&#34;nv&#34;&gt;$CALICO_VERSION&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;crictl pull calico/node:&lt;span class=&#34;nv&#34;&gt;$CALICO_VERSION&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;crictl pull calico/kube-controllers:&lt;span class=&#34;nv&#34;&gt;$CALICO_VERSION&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;默认的yaml文件来自官方的3.17版本，我也在manifests目录下准备了离线版本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;CALICO_YAML&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;https://docs.projectcalico.org/v3.17/manifests/calico.yaml&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# CALICO_YAML=&amp;#34;./manifests/calico.yaml&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。&lt;/p&gt;
+&lt;h2 id=&#34;最后说几句&#34;&gt;最后说几句&lt;/h2&gt;
+&lt;p&gt;以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;bash 07_install_metrics_server.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;当然，文中所提到的问题并不是全部，其他诸如安装metric server时的错误：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;metric-server : TLS handshake error from 20.99.219.64:57467: EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;需要通过修改metric server deployment的启动参数解决&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- &lt;span class=&#34;nt&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;- --&lt;span class=&#34;l&#34;&gt;kubelet-insecure-tls&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;- --&lt;span class=&#34;l&#34;&gt;kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;如果有其他问题，也欢迎在&lt;a class=&#34;link&#34; href=&#34;https://github.com/kagaya85/K8sTakeOff/issues&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;这里&lt;/a&gt;提交issue交流。&lt;/p&gt;
+&lt;p&gt;最后：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kill Docker And Long Live Kubernetes!!!&lt;/strong&gt;&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
 </rss>
