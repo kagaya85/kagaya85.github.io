@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使'><title>使用Docker部署本地Wordpress开发环境</title>
 
-<link rel='canonical' href='https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/'>
 
-<link rel="stylesheet" href="/scss/style.min.775dbd4fd34fda61c5273b4bc3415f7c9666414fb6c40aab164a7ded4397da98.css"><meta property='og:title' content='使用Docker部署本地Wordpress开发环境'>
+<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='使用Docker部署本地Wordpress开发环境'>
 <meta property='og:description' content='使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使'>
-<meta property='og:url' content='https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='article:modified_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='og:image' content='https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Wordpress' /><meta property='article:tag' content='Docker' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='article:modified_time' content='2020-09-23T16:47:28&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="使用Docker部署本地Wordpress开发环境">
 <meta name="twitter:description" content="使用Docker部署本地Wordpress开发环境 为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://kagaya85.github.io/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png' />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
 <script>
 var doNotTrack = false;
@@ -27,8 +27,8 @@ if (!doNotTrack) {
 
     </head>
     <body class="
-    article-page has-toc
-">
+    article-page
+    ">
     <script>
         (function() {
             const colorSchemeKey = 'StackColorScheme';
@@ -51,25 +51,222 @@ if (!doNotTrack) {
         }
     })();
 </script>
-<div class="container main-container flex 
-    
-        extended
-    
-">
-    
-        <div id="article-toolbar">
-            <a href="/" class="back-home">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🚀</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">かがやの部屋</a></h1>
+            <h2 class="site-description">明日は晴れるかな〜</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
+  viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/post' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+  <line x1="9" y1="9" x2="10" y2="9" />
+  <line x1="9" y1="13" x2="15" y2="13" />
+  <line x1="9" y1="17" x2="15" y2="17" />
+</svg>
+
+                
+                <span>Post</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="12" cy="7" r="4" />
+    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
-  <polyline points="15 6 9 12 15 18" />
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
 </svg>
 
 
 
-                <span>返回</span>
+                
+                <span>Archives</span>
             </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://twitter.com/kagaya_85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>Twitter</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://github.com/kagaya85' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+                <span>GitHub</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://bangumi.tv/user/kagaya85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <polyline points="16 3 12 7 8 3" />
+</svg>
+                
+                <span>Bangumi</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="10" cy="10" r="7" />
+    <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
         </div>
-    
+    </ol>
+</aside>
 <main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
@@ -97,11 +294,13 @@ if (!doNotTrack) {
     </header>
     
 
-    <h2 class="article-title">
-        <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">使用Docker部署本地Wordpress开发环境</a>
-    </h2>
-
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">使用Docker部署本地Wordpress开发环境</a>
+        </h2>
     
+        
+    </div>
 
     
     <footer class="article-time">
@@ -137,10 +336,14 @@ if (!doNotTrack) {
         
     </footer>
     
+
+    
 </div>
 </header>
 
     <section class="article-content">
+    
+    
     <h1 id="使用docker部署本地wordpress开发环境">使用Docker部署本地Wordpress开发环境</h1>
 <p>为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。</p>
 <h2 id="背景">背景</h2>
@@ -149,17 +352,36 @@ if (!doNotTrack) {
 <p>MacOS 10.15.6（理论上适用于所有支持Docker的环境）</p>
 <p>Docker Desktop 19.03.12</p>
 <h3 id="镜像准备">镜像准备</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker images
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker images
 </span></span><span class="line"><span class="cl">nginx                     latest              7e4d58f0e5f3        <span class="m">12</span> days ago         133MB
 </span></span><span class="line"><span class="cl">mysql                     5.7.31              ef08065b0a30        <span class="m">13</span> days ago         448MB
 </span></span><span class="line"><span class="cl">daocloud.io/library/php   7.2.24-fpm          48432d192e1a        <span class="m">11</span> months ago       398MB
-</span></span></code></pre></div><p>由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。</p>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。</p>
 <p>可以从<a class="link" href="hub.docker.com" >docker hub</a>上搜索对应版本的镜像</p>
 <h4 id="拉取镜像">拉取镜像</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker pull nginx:latest
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker pull nginx:latest
 </span></span><span class="line"><span class="cl">$ docker pull mysql:5.7.31
 </span></span><span class="line"><span class="cl">$ docker pull daocloud.io/library/php:7.2.24-fpm
-</span></span></code></pre></div><h2 id="构建nginxphp环境">构建Nginx+PHP环境</h2>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="构建nginxphp环境">构建Nginx+PHP环境</h2>
 <h3 id="nginx配置">Nginx配置</h3>
 <p>Nginx的镜像是不能解析php文件的，因此我们需要为nginx配置php-fpm来负责解析处理php代码并返回处理结果。</p>
 <p>为此，我们需要做一下几件事情：</p>
@@ -170,38 +392,97 @@ if (!doNotTrack) {
 </ol>
 <p>首先，为了持久化配置，我在<code>/Users/kagaya/Docker/nginx/conf.d/</code>下新建了<code>default.conf</code>配置文件，挂载到目标文件<code>/etc/nginx/conf.d:ro</code>并指定只读属性</p>
 <p>最后对nginx的配置文件做对应修改即可：</p>
-<pre tabindex="0"><code class="language-conf" data-lang="conf"># default.conf
-server {
-    listen       80;
-    server_name  localhost;
-
-    location / {
-        root   /usr/share/nginx/html;
-        index  index.php index.html index.htm;
-    }
-
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   /usr/share/nginx/html;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass   php:9000;
-        fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  /var/www/html/$fastcgi_script_name;
-        include        fastcgi_params;
-    }
-}
-</code></pre><p>同样，为了方便开发，可以把nginx中的网页目录映射到主机中，这里使用了<code>Users/kagaya/docker/www</code>作为主机中的网站根目录，使用<code>-v</code>将其挂载到nginx中的<code>/usr/share/nginx/html</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># default.conf
+</span></span><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">    listen       80;
+</span></span><span class="line"><span class="cl">    server_name  localhost;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location / {
+</span></span><span class="line"><span class="cl">        root   /usr/share/nginx/html;
+</span></span><span class="line"><span class="cl">        index  index.php index.html index.htm;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    error_page   500 502 503 504  /50x.html;
+</span></span><span class="line"><span class="cl">    location = /50x.html {
+</span></span><span class="line"><span class="cl">        root   /usr/share/nginx/html;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    location ~ \.php$ {
+</span></span><span class="line"><span class="cl">        fastcgi_pass   php:9000;
+</span></span><span class="line"><span class="cl">        fastcgi_index  index.php;
+</span></span><span class="line"><span class="cl">        fastcgi_param  SCRIPT_FILENAME  /var/www/html/$fastcgi_script_name;
+</span></span><span class="line"><span class="cl">        include        fastcgi_params;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样，为了方便开发，可以把nginx中的网页目录映射到主机中，这里使用了<code>Users/kagaya/docker/www</code>作为主机中的网站根目录，使用<code>-v</code>将其挂载到nginx中的<code>/usr/share/nginx/html</code></p>
 <p>使用Docker 挂载主机配置目录到容器，并使用<code>--link</code>参数来连接php容器，docker link采用了修改Hosts文件的方式使得可以通过自定义的名称访问到对应的ip地址，使得容器之间能通过网络互相访问</p>
 <p>最后使用<code>-p 80:80</code>将nginx的80端口开放到主机的80端口，使得主机可以通过localhost访问到nginx</p>
 <h3 id="php配置">PHP配置</h3>
 <p>php配置相对简单，只需要挂载网站根目录到容器即可</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
-</span></span></code></pre></div><h3 id="使用docker-compose一键部署多个服务">使用Docker-compose一键部署多个服务</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="使用docker-compose一键部署多个服务">使用Docker-compose一键部署多个服务</h3>
 <p>由于涉及到了多个容器服务，可以采用Docker-compose工具来方便的同时配置部署多个容器服务</p>
 <p>新建目录，如<code>webdev</code>，目录下新建docker-compose.ym文件，配置如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
@@ -221,29 +502,49 @@ server {
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">php</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
-</span></span></span></code></pre></div><p>在www目录下放一个index.php文件输出phpinfo用于测试，最后在浏览器里访问localhost</p>
-<p><figure 
-	>
-	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.01.24@2x.png" >
-		<img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.01.24@2x.png"
-			
-			
-			
-			loading="lazy"
-			alt="php">
-	</a>
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在www目录下放一个index.php文件输出phpinfo用于测试，最后在浏览器里访问localhost</p>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.01.24@2x.png"
 	
-	<figcaption>php</figcaption>
 	
-</figure></p>
+	
+	loading="lazy"
+	
+		alt="php"
+	
+	
+></p>
 <h2 id="在docker内连接mysql">在Docker内连接Mysql</h2>
 <p>对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现</p>
 <p>同时，我们还可以将mysql的3306端口映射到主机，方便我们用数据库管理软件进行操作</p>
 <p>如果相对数据库中的数据进行持久化，也可以把mysql容器中的<code>/var/lib/mysql</code>目录映射出来</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
-</span></span></code></pre></div><p>在配置好以上服务后，我们可以对wordpress目录下的<code>wp-config.php</code>文件进行配置，如数据库连接，注意：数据库的Host此时为link后的名称，如在运行nginx和php时使用了如<code>--link myslq:db</code>的参数，那么在容器中对于的数据库主机则为<code>db</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在配置好以上服务后，我们可以对wordpress目录下的<code>wp-config.php</code>文件进行配置，如数据库连接，注意：数据库的Host此时为link后的名称，如在运行nginx和php时使用了如<code>--link myslq:db</code>的参数，那么在容器中对于的数据库主机则为<code>db</code></p>
 <p>打开Wordpress调试模式，这样可以及时在浏览器中看到错误信息：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
 </span></span></span><span class="line"><span class="cl"><span class="sd"> * 开发者专用：WordPress调试模式。
 </span></span></span><span class="line"><span class="cl"><span class="sd"> *
 </span></span></span><span class="line"><span class="cl"><span class="sd"> * 将这个值改为true，WordPress将显示所有用于开发的提示。
@@ -254,27 +555,70 @@ server {
 </span></span></span><span class="line"><span class="cl"><span class="sd"> * @link https://codex.wordpress.org/Debugging_in_WordPress
 </span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
 </span></span><span class="line"><span class="cl"><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_DEBUG&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-</span></span></code></pre></div><p>本次配置中使用的PHP版本为<code>7.2.24</code>，在PHP7以后，<code>mysql_connect</code>函数被完全移除了，而wordpress为了兼容会先检测php环境中有没有<code>mysqli</code>模块，否则会使用原来的<code>mysql_connect</code>函数。</p>
-<p><figure 
-	>
-	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/8qhyNM.jpg" >
-		<img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/8qhyNM.jpg"
-			
-			
-			
-			loading="lazy"
-			alt="wordpress mysql_connect">
-	</a>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本次配置中使用的PHP版本为<code>7.2.24</code>，在PHP7以后，<code>mysql_connect</code>函数被完全移除了，而wordpress为了兼容会先检测php环境中有没有<code>mysqli</code>模块，否则会使用原来的<code>mysql_connect</code>函数。</p>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/8qhyNM.jpg"
 	
-	<figcaption>wordpress mysql_connect</figcaption>
 	
-</figure></p>
+	
+	loading="lazy"
+	
+		alt="wordpress mysql_connect"
+	
+	
+></p>
 <p>需要注意的是PHP的镜像中为了最小化镜像体积，是不包含<code>mysqli</code>模块的，当然，官方也很方便的提供了<code>docker-php-ext-install</code>工具来方便我们安装模块，因此需要我们使用Dockerfile文件安装<code>mysqli</code>模块后再次封装新的镜像。</p>
 <p>在<code>webdev</code>下新建Dockerfile文件：</p>
-<pre tabindex="0"><code>FROM daocloud.io/library/php:7.2.24-fpm
-RUN docker-php-ext-install mysqli
-</code></pre><p>最终的docke-compose.yaml文件如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">FROM daocloud.io/library/php:7.2.24-fpm
+</span></span><span class="line"><span class="cl">RUN docker-php-ext-install mysqli
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终的docke-compose.yaml文件如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
@@ -307,38 +651,39 @@ RUN docker-php-ext-install mysqli
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;3306:3306&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> 
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;123456&#34;</span><span class="w">
-</span></span></span></code></pre></div><p>最后，只需要在docker-compose.yaml所在目录运行以下命令</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker-compose up -d
-</span></span></code></pre></div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
-<p><figure 
-	>
-	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg" >
-		<img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg"
-			
-			
-			
-			loading="lazy"
-			alt="docker-compose">
-	</a>
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后，只需要在docker-compose.yaml所在目录运行以下命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker-compose up -d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg"
 	
-	<figcaption>docker-compose</figcaption>
 	
-</figure></p>
+	
+	loading="lazy"
+	
+		alt="docker-compose"
+	
+	
+></p>
 <p>这样，我们就可以直接在本地调试wordpress中的php代码了，并且在vscode中也可以获得代码提示</p>
-<p><figure 
-	>
-	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png" >
-		<img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png"
-			
-			
-			
-			loading="lazy"
-			alt="CleanShot2020-09-24at15.00.35@2x">
-	</a>
+<p><img src="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.00.35@2x.png"
 	
-	<figcaption>CleanShot2020-09-24at15.00.35@2x</figcaption>
 	
-</figure></p>
+	
+	loading="lazy"
+	
+		alt="CleanShot2020-09-24at15.00.35@2x"
+	
+	
+></p>
 
 </section>
 
@@ -377,11 +722,11 @@ RUN docker-php-ext-install mysqli
                 href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
             ><script 
                 src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script 
                 src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
@@ -399,14 +744,14 @@ RUN docker-php-ext-install mysqli
 
     
 
-    <aside class="related-contents--wrapper">
     
-    
-        <h2 class="section-title">相关文章</h2>
-        <div class="related-contents">
-            <div class="flex article-list--tile">
+
+<aside class="related-contents--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-contents">
+        <div class="flex article-list--tile">
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
         
@@ -428,8 +773,8 @@ RUN docker-php-ext-install mysqli
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2021/amazing-go-interface/">
         
@@ -451,8 +796,8 @@ RUN docker-php-ext-install mysqli
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/">
         
@@ -474,8 +819,8 @@ RUN docker-php-ext-install mysqli
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/">
         
@@ -497,8 +842,8 @@ RUN docker-php-ext-install mysqli
         </div>
     </a>
 </article>
+            
                 
-                    
 <article class="has-image">
     <a href="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/">
         
@@ -520,10 +865,9 @@ RUN docker-php-ext-install mysqli
         </div>
     </a>
 </article>
-                
-            </div>
+            
         </div>
-    
+    </div>
 </aside>
 
      
@@ -586,7 +930,7 @@ RUN docker-php-ext-install mysqli
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.6.0">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -655,11 +999,11 @@ RUN docker-php-ext-install mysqli
 
 </div><script 
                 src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><script 
                 src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
-                defer="true"
+                defer
                 >
             </script><link 
                 rel="stylesheet" 
@@ -670,11 +1014,13 @@ RUN docker-php-ext-install mysqli
             >
 
             </main>
-    
-        <aside class="sidebar right-sidebar sticky">
-            <section class="widget archives">
-                <div class="widget-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <line x1="5" y1="9" x2="19" y2="9" />
   <line x1="5" y1="15" x2="19" y2="15" />
@@ -684,11 +1030,11 @@ RUN docker-php-ext-install mysqli
 
 
 
-                </div>
-                <h2 class="widget-title section-title">目录</h2>
-                
-                <div class="widget--toc">
-                    <nav id="TableOfContents">
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
   <ul>
     <li><a href="#背景">背景</a></li>
     <li><a href="#本机环境">本机环境</a>
@@ -706,15 +1052,18 @@ RUN docker-php-ext-install mysqli
     <li><a href="#在docker内连接mysql">在Docker内连接Mysql</a></li>
   </ul>
 </nav>
-                </div>
-            </section>
-        </aside>
-    
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
         </div>
         <script 
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
-                defer="false"
+                
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
 <script>
