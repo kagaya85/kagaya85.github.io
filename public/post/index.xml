@@ -6,7 +6,25 @@
     <description>Recent content in Posts on かがやの部屋</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 30 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://kagaya85.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 08 Feb 2022 15:04:55 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
+      <link>https://kagaya85.github.io/p/2022/microrank/</link>
+      <pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate>
+      
+      <guid>https://kagaya85.github.io/p/2022/microrank/</guid>
+      <description>论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments 论文来源：WWW21 论文链接：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)</description>
+    </item>
+    
+    <item>
+      <title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
+      <link>https://kagaya85.github.io/p/2022/first-nas/</link>
+      <pubDate>Mon, 17 Jan 2022 16:35:05 +0800</pubDate>
+      
+      <guid>https://kagaya85.github.io/p/2022/first-nas/</guid>
+      <description>写在前面 为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视</description>
+    </item>
+    
     <item>
       <title>2021春季看番总结与推荐</title>
       <link>https://kagaya85.github.io/p/2021/bangumi-in-2021-spring/</link>

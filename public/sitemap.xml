@@ -2,6 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://kagaya85.github.io/tags/aiops/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/categories/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/paperreview/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/categories/papers/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/post/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/rootcauselocalization/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/p/2022/microrank/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/</loc>
+    <lastmod>2022-02-08T15:04:55+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/jellyfin/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/linux/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/nas/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/tags/nuc/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/categories/techonlogy/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
+    <loc>https://kagaya85.github.io/p/2022/first-nas/</loc>
+    <lastmod>2022-01-17T16:35:05+08:00</lastmod>
+  </url><url>
     <loc>https://kagaya85.github.io/p/2021/bangumi-in-2021-spring/</loc>
     <lastmod>2021-04-30T00:00:00+00:00</lastmod>
   </url><url>
@@ -11,20 +56,8 @@
     <loc>https://kagaya85.github.io/tags/bangumi/</loc>
     <lastmod>2021-04-30T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://kagaya85.github.io/categories/</loc>
-    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://kagaya85.github.io/post/</loc>
-    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://kagaya85.github.io/tags/summary/</loc>
     <lastmod>2021-04-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://kagaya85.github.io/tags/</loc>
-    <lastmod>2021-04-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://kagaya85.github.io/</loc>
-    <lastmod>2022-01-26T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://kagaya85.github.io/tags/amazing-go/</loc>
     <lastmod>2021-04-12T00:00:00+00:00</lastmod>
@@ -100,9 +133,6 @@
   </url><url>
     <loc>https://kagaya85.github.io/tags/javascript/</loc>
     <lastmod>2019-07-02T21:30:20+08:00</lastmod>
-  </url><url>
-    <loc>https://kagaya85.github.io/tags/linux/</loc>
-    <lastmod>2019-06-25T21:30:20+08:00</lastmod>
   </url><url>
     <loc>https://kagaya85.github.io/tags/unix/</loc>
     <lastmod>2019-06-25T21:30:20+08:00</lastmod>
