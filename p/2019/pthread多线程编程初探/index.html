@@ -145,30 +145,30 @@ if (!doNotTrack) {
 </blockquote>
 <h3 id="liunx的pthread">Liunx的pthread</h3>
 <p><strong>头文件</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
-</span></code></pre></div><p><strong>创建线程</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">pthread_create</span><span class="p">(</span>
-    <span class="n">pthread_t</span> <span class="o">*</span><span class="n">restrict_tidp</span><span class="p">,</span>
-    <span class="k">const</span> <span class="n">pthread_attr_t</span> <span class="o">*</span><span class="n">restrict_attr</span><span class="p">,</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">start_rtn</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span>
-    <span class="kt">void</span> <span class="o">*</span><span class="n">restrict_arg</span>
-    <span class="p">);</span>
-</code></pre></div><p>需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;pthread.h&gt;</span><span class="cp">
+</span></span></span></code></pre></div><p><strong>创建线程</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">pthread_create</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pthread_t</span> <span class="o">*</span><span class="n">restrict_tidp</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">pthread_attr_t</span> <span class="o">*</span><span class="n">restrict_attr</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">start_rtn</span><span class="p">)(</span><span class="kt">void</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="o">*</span><span class="n">restrict_arg</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span></code></pre></div><p>需要四个参数，分别对应：线程信息结构体，线程创建参数，线程入口函数，函数参数），四个参数均按地址传入，创建成功返回0，不成功代表创建失败</p>
 <p>看一段代码</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">// pthread create
-</span><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// pthread create
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>thread_task为函数指针，对应线程要执行的函数入口，可以看到线程的执行是以一个函数为入口的，将可并行的部分放在函数中单独让线程执行，使用起来确实更加方便</p>
 <p><strong>回收线程</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="kt">int</span> <span class="nf">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
-</code></pre></div><p>第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">pthread_join</span><span class="p">(</span><span class="n">pthread_t</span> <span class="kr">thread</span><span class="p">,</span> <span class="kt">void</span> <span class="o">**</span><span class="n">retval</span><span class="p">);</span>
+</span></span></code></pre></div><p>第一个参数为回收的线程号，会阻塞等待，第二个参数对应线程状态结构体，将回收线程的状态复制到对应地址空间，若不关心线程结束状态，可传入NULL</p>
 <p><strong>编译</strong></p>
 <p>由于<code>pthread.h</code>不是标准库函数，之前需要指定<code>-lpthread</code>，但我发现gcc 7.3.0这样会报错找不到定义，只需要编译时指定<code>-pthread</code>参数即可编译成功</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">g++ pthread.cpp -o pthread -pthread
-</code></pre></div><h2 id="遇到的问题及解决方法">遇到的问题及解决方法</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">g++ pthread.cpp -o pthread -pthread
+</span></span></code></pre></div><h2 id="遇到的问题及解决方法">遇到的问题及解决方法</h2>
 <h3 id="id">Id</h3>
 <p>有三个东西，pid，thread_id，tid</p>
 <p>对于一个进程来说：</p>
@@ -184,40 +184,40 @@ if (!doNotTrack) {
 </ul>
 <h3 id="传递参数时地址共享问题">传递参数时地址共享问题</h3>
 <p>由于需要传递多个参数，采用结构体<code>task_para</code>传值</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">task_para</span> <span class="n">paras</span><span class="p">;</span>
-<span class="c1">// pthread create
-</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
-<span class="p">{</span>
-    <span class="n">paras</span><span class="p">.</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">.</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">.</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>传递参数时传递不同地址的结构体</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">task_para</span><span class="o">*</span> <span class="n">paras</span> <span class="o">=</span> <span class="k">new</span> <span class="n">task_para</span><span class="p">[</span><span class="n">thread_num</span><span class="p">];</span>    
-<span class="c1">// pthread create
-</span><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
-<span class="p">{</span>
-    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
-    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>以上就是这次实验中总结的一些知识点，当然thread还有许多用法没有去实践，之后用OpenMP来实现卷积时再打算总结一下各自优劣吧。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">task_para</span> <span class="n">paras</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// pthread create
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">.</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">.</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">.</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">.</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>传递参数时传递不同地址的结构体</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">task_para</span><span class="o">*</span> <span class="n">paras</span> <span class="o">=</span> <span class="k">new</span> <span class="n">task_para</span><span class="p">[</span><span class="n">thread_num</span><span class="p">];</span>    
+</span></span><span class="line"><span class="cl"><span class="c1">// pthread create
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">thread_num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">thread_num</span> <span class="o">=</span> <span class="n">thread_num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end_line</span> <span class="o">=</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">start_line</span> <span class="o">+</span> <span class="n">BmpHeight</span> <span class="o">/</span> <span class="n">thread_num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">thread_id</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">thread_task</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;pthread_create error&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Thread &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">paras</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">my_num</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; start.&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">thread_id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>以上就是这次实验中总结的一些知识点，当然thread还有许多用法没有去实践，之后用OpenMP来实现卷积时再打算总结一下各自优劣吧。</p>
 
 </section>
 
@@ -411,7 +411,7 @@ if (!doNotTrack) {
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     
