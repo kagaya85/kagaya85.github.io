@@ -7,7 +7,7 @@ categories: ["Technology"]
 image: 
 hidden: false
 comments: true
-draft: true
+draft: false
 ---
 
 > 论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments
@@ -43,7 +43,7 @@ $O_{nf}$: 没有覆盖O的测试case中失败的数量
 
 ### System
 
-![ScreenShot_2022-02-12_at_23.49.58@2x](ScreenShot_2022-02-12_at_23.49.58@2x.png)
+![整体流程](ScreenShot_2022-02-12_at_23.49.58@2x.png)
 
 MicroRank主要分为四个部分：Anomaly Detector, Data Preparator, PageRank Scorer 和 Weighted Spectrum Ranker
 
@@ -86,9 +86,9 @@ A =
 $$
 其中$A_{st}$代表了从s出发到t结束的矩阵，矩阵中的值代表转移的概率，即$\frac{1}{相邻节点的数量}$。作者把每一次请求看作图中的一个单独的节点，构造了operation-trace的关系图，如下面图3到图6的变化：
 
-![ScreenShot_2022-02-25_at_10.16.39](ScreenShot_2022-02-25_at_10.16.39.png)
+![请求依赖图](ScreenShot_2022-02-25_at_10.16.39.png)
 
-![ScreenShot_2022-02-25_at_10.17.26](ScreenShot_2022-02-25_at_10.17.26.png)
+![请求与服务依赖图](ScreenShot_2022-02-25_at_10.17.26.png)
 
 基于图6，我们便能得出一个关于向量$[front, recommend, checkout, product, req1, req2, req4]$的异常关系矩阵：
 $$
@@ -140,7 +140,7 @@ $$
 
 之后可以根据下表所示的方法计算对应的值，作者没有解释如何选择，而是通过实验对比各种计算方法的效果
 
-![ScreenShot_2022-03-01_at_16.53.34](ScreenShot_2022-03-01_at_16.53.34.png)
+![不同的四元组计算方法](ScreenShot_2022-03-01_at_16.53.34.png)
 
 
 
@@ -148,11 +148,11 @@ $$
 
 作者通过实验模拟了在线故障定位的流程：
 
-![ScreenShot_2022-03-14_at_11.00.58@2x](ScreenShot_2022-03-14_at_11.00.58@2x.png)
+![在线检测时间轴](ScreenShot_2022-03-14_at_11.00.58@2x.png)
 
 不同计算方法的对比：
 
-![ScreenShot_2022-03-14_at_11.08.41@2x](ScreenShot_2022-03-14_at_11.08.41@2x.png)
+![实验结果对比](ScreenShot_2022-03-14_at_11.08.41@2x.png)
 
 ## Thoughts
 
