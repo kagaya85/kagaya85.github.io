@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Techonlogy on かがやの部屋</title>
+    <link>https://kagaya85.github.io/categories/techonlogy/</link>
+    <description>Recent content in Techonlogy on かがやの部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 17 Jan 2022 16:35:05 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/techonlogy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
+      <link>https://kagaya85.github.io/p/2022/first-nas/</link>
+      <pubDate>Mon, 17 Jan 2022 16:35:05 +0800</pubDate>
+      
+      <guid>https://kagaya85.github.io/p/2022/first-nas/</guid>
+      <description>写在前面 为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视</description>
+    </item>
+    
+  </channel>
+</rss>

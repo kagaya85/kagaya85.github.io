@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Papers on かがやの部屋</title>
+    <link>https://kagaya85.github.io/categories/papers/</link>
+    <description>Recent content in Papers on かがやの部屋</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 08 Feb 2022 15:04:55 +0800</lastBuildDate><atom:link href="https://kagaya85.github.io/categories/papers/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
+      <link>https://kagaya85.github.io/p/2022/microrank/</link>
+      <pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate>
+      
+      <guid>https://kagaya85.github.io/p/2022/microrank/</guid>
+      <description>论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments 论文来源：WWW21 论文链接：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)</description>
+    </item>
+    
+  </channel>
+</rss>
