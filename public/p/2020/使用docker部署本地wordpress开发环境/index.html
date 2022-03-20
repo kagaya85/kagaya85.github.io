@@ -149,17 +149,17 @@ if (!doNotTrack) {
 <p>MacOS 10.15.6（理论上适用于所有支持Docker的环境）</p>
 <p>Docker Desktop 19.03.12</p>
 <h3 id="镜像准备">镜像准备</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker images
-nginx                     latest              7e4d58f0e5f3        <span class="m">12</span> days ago         133MB
-mysql                     5.7.31              ef08065b0a30        <span class="m">13</span> days ago         448MB
-daocloud.io/library/php   7.2.24-fpm          48432d192e1a        <span class="m">11</span> months ago       398MB
-</code></pre></div><p>由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker images
+</span></span><span class="line"><span class="cl">nginx                     latest              7e4d58f0e5f3        <span class="m">12</span> days ago         133MB
+</span></span><span class="line"><span class="cl">mysql                     5.7.31              ef08065b0a30        <span class="m">13</span> days ago         448MB
+</span></span><span class="line"><span class="cl">daocloud.io/library/php   7.2.24-fpm          48432d192e1a        <span class="m">11</span> months ago       398MB
+</span></span></code></pre></div><p>由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。</p>
 <p>可以从<a class="link" href="hub.docker.com" >docker hub</a>上搜索对应版本的镜像</p>
 <h4 id="拉取镜像">拉取镜像</h4>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker pull nginx:latest
-$ docker pull mysql:5.7.31
-$ docker pull daocloud.io/library/php:7.2.24-fpm
-</code></pre></div><h2 id="构建nginxphp环境">构建Nginx+PHP环境</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker pull nginx:latest
+</span></span><span class="line"><span class="cl">$ docker pull mysql:5.7.31
+</span></span><span class="line"><span class="cl">$ docker pull daocloud.io/library/php:7.2.24-fpm
+</span></span></code></pre></div><h2 id="构建nginxphp环境">构建Nginx+PHP环境</h2>
 <h3 id="nginx配置">Nginx配置</h3>
 <p>Nginx的镜像是不能解析php文件的，因此我们需要为nginx配置php-fpm来负责解析处理php代码并返回处理结果。</p>
 <p>为此，我们需要做一下几件事情：</p>
@@ -197,31 +197,31 @@ server {
 <p>最后使用<code>-p 80:80</code>将nginx的80端口开放到主机的80端口，使得主机可以通过localhost访问到nginx</p>
 <h3 id="php配置">PHP配置</h3>
 <p>php配置相对简单，只需要挂载网站根目录到容器即可</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
-</code></pre></div><h3 id="使用docker-compose一键部署多个服务">使用Docker-compose一键部署多个服务</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
+</span></span></code></pre></div><h3 id="使用docker-compose一键部署多个服务">使用Docker-compose一键部署多个服务</h3>
 <p>由于涉及到了多个容器服务，可以采用Docker-compose工具来方便的同时配置部署多个容器服务</p>
 <p>新建目录，如<code>webdev</code>，目录下新建docker-compose.ym文件，配置如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
-</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
-</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
-</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;80:80&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="l">php</span><span class="w">
-</span><span class="w">      </span>- <span class="l">mysql</span><span class="w">
-</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/nginx/conf.d:/etc/nginx/conf.d:ro&#34;</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/usr/share/nginx/html&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="s2">&#34;php:php&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">php</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">daocloud.io/library/php:7.2.24-fpm</span><span class="w">
-</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">php</span><span class="w">
-</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
-</span></code></pre></div><p>在www目录下放一个index.php文件输出phpinfo用于测试，最后在浏览器里访问localhost</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;80:80&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">mysql</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/nginx/conf.d:/etc/nginx/conf.d:ro&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/usr/share/nginx/html&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;php:php&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">php</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">daocloud.io/library/php:7.2.24-fpm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>在www目录下放一个index.php文件输出phpinfo用于测试，最后在浏览器里访问localhost</p>
 <p><figure 
 	>
 	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/CleanShot%202020-09-24%20at%2015.01.24@2x.png" >
@@ -240,21 +240,21 @@ server {
 <p>对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现</p>
 <p>同时，我们还可以将mysql的3306端口映射到主机，方便我们用数据库管理软件进行操作</p>
 <p>如果相对数据库中的数据进行持久化，也可以把mysql容器中的<code>/var/lib/mysql</code>目录映射出来</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
-</code></pre></div><p>在配置好以上服务后，我们可以对wordpress目录下的<code>wp-config.php</code>文件进行配置，如数据库连接，注意：数据库的Host此时为link后的名称，如在运行nginx和php时使用了如<code>--link myslq:db</code>的参数，那么在容器中对于的数据库主机则为<code>db</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker run -d --name mysql -p 3306:3306 -e <span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="m">123456</span> mysql:5.7.31
+</span></span></code></pre></div><p>在配置好以上服务后，我们可以对wordpress目录下的<code>wp-config.php</code>文件进行配置，如数据库连接，注意：数据库的Host此时为link后的名称，如在运行nginx和php时使用了如<code>--link myslq:db</code>的参数，那么在容器中对于的数据库主机则为<code>db</code></p>
 <p>打开Wordpress调试模式，这样可以及时在浏览器中看到错误信息：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="sd">/**
-</span><span class="sd"> * 开发者专用：WordPress调试模式。
-</span><span class="sd"> *
-</span><span class="sd"> * 将这个值改为true，WordPress将显示所有用于开发的提示。
-</span><span class="sd"> * 强烈建议插件开发者在开发环境中启用WP_DEBUG。
-</span><span class="sd"> *
-</span><span class="sd"> * 要获取其他能用于调试的信息，请访问Codex。
-</span><span class="sd"> *
-</span><span class="sd"> * @link https://codex.wordpress.org/Debugging_in_WordPress
-</span><span class="sd"> */</span>
-<span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_DEBUG&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
-</code></pre></div><p>本次配置中使用的PHP版本为<code>7.2.24</code>，在PHP7以后，<code>mysql_connect</code>函数被完全移除了，而wordpress为了兼容会先检测php环境中有没有<code>mysqli</code>模块，否则会使用原来的<code>mysql_connect</code>函数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="sd">/**
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 开发者专用：WordPress调试模式。
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 将这个值改为true，WordPress将显示所有用于开发的提示。
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 强烈建议插件开发者在开发环境中启用WP_DEBUG。
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * 要获取其他能用于调试的信息，请访问Codex。
+</span></span></span><span class="line"><span class="cl"><span class="sd"> *
+</span></span></span><span class="line"><span class="cl"><span class="sd"> * @link https://codex.wordpress.org/Debugging_in_WordPress
+</span></span></span><span class="line"><span class="cl"><span class="sd"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;WP_DEBUG&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span></code></pre></div><p>本次配置中使用的PHP版本为<code>7.2.24</code>，在PHP7以后，<code>mysql_connect</code>函数被完全移除了，而wordpress为了兼容会先检测php环境中有没有<code>mysqli</code>模块，否则会使用原来的<code>mysql_connect</code>函数。</p>
 <p><figure 
 	>
 	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/8qhyNM.jpg" >
@@ -274,42 +274,42 @@ server {
 <pre tabindex="0"><code>FROM daocloud.io/library/php:7.2.24-fpm
 RUN docker-php-ext-install mysqli
 </code></pre><p>最终的docke-compose.yaml文件如下：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
-</span><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
-</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
-</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;80:80&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="l">php</span><span class="w">
-</span><span class="w">      </span>- <span class="l">mysql</span><span class="w">
-</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/nginx/conf.d:/etc/nginx/conf.d:ro&#34;</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/usr/share/nginx/html&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span>- <span class="s2">&#34;php:php&#34;</span><span class="w">
-</span><span class="w">        </span>- <span class="s2">&#34;mysql:db&#34;</span><span class="w">
-</span><span class="w">
-</span><span class="w">  </span><span class="nt">php</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="c"># image: daocloud.io/library/php:7.2.24-fpm</span><span class="w">
-</span><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l">.</span><span class="w">
-</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">php</span><span class="w">
-</span><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;mysql:db&#34;</span><span class="w">
-</span><span class="w">
-</span><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">mysql:5.7.31</span><span class="w">
-</span><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">mysql</span><span class="w">
-</span><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
-</span><span class="w">      </span>- <span class="s2">&#34;3306:3306&#34;</span><span class="w">
-</span><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> 
-</span><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;123456&#34;</span><span class="w">
-</span></code></pre></div><p>最后，只需要在docker-compose.yaml所在目录运行以下命令</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell">$ docker-compose up -d
-</code></pre></div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nginx</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;80:80&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">mysql</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/nginx/conf.d:/etc/nginx/conf.d:ro&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/usr/share/nginx/html&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;php:php&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;mysql:db&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">php</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># image: daocloud.io/library/php:7.2.24-fpm</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l">.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">php</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;/Users/kagaya/docker/www:/var/www/html&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">links</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;mysql:db&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">mysql</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">mysql:5.7.31</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">mysql</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;3306:3306&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">MYSQL_ROOT_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;123456&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>最后，只需要在docker-compose.yaml所在目录运行以下命令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ docker-compose up -d
+</span></span></code></pre></div><p>初次运行会自动编译镜像，之后每次运行配置不发生改变就会启用原来的容器，若配置发生改变，也会自动重建对应容器</p>
 <p><figure 
 	>
 	<a href="https://raw.githubusercontent.com/kagaya85/ImageHost/master/uPic/2020/09/qXQEW7.jpg" >
@@ -532,7 +532,7 @@ RUN docker-php-ext-install mysqli
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

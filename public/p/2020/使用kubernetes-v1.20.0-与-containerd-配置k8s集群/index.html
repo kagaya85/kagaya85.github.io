@@ -170,11 +170,11 @@ if (!doNotTrack) {
 <p>当然这是我部署好后的截图，主机的名称也改为了ip+nodeType，方便识别当前主机，当然这也是必须修改的，因为原来的四台主机的主机名都为localhost.localdomain，同名主机在建立集群后不能一起显示，这也是配置时遇到的坑之一，所以我也同样将改名的命令分别写在了<code>04_pull_master_images.sh</code>与<code>04_pull_worker_images.sh</code>，可以自动实现将主机名替换为ip+nodeType，当然，这都是后话了。</p>
 <p>本次主要是在CentOS7下进行配置，要求能连接外网，对于kubernets需要的k8s.gcr.io上的镜像我也已经在阿里云上同步了一份，所以没有挂代理的要求。当然最好还是在root用户下执行，不保证非root用户的执行效果（可增加sudo尝试）</p>
 <p>对于每一台机器，只需要一次执行00～02对应脚本</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># cd进入脚本对应目录</span>
-bash 00_install_tools.sh
-bash 01_config_env.sh
-bash 02_install_kube.sh
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># cd进入脚本对应目录</span>
+</span></span><span class="line"><span class="cl">bash 00_install_tools.sh
+</span></span><span class="line"><span class="cl">bash 01_config_env.sh
+</span></span><span class="line"><span class="cl">bash 02_install_kube.sh
+</span></span></code></pre></div><ul>
 <li>
 <p>00安装了一些必要的工具，如git、vim、unzip、ntpdate等，安装了yum epel并对yum进行了换源。除此之外，还包含一些常用的工具如zsh、neofetch、htop等，同时也会将shell切换为zsh（⚠️注意，后文的脚本都是基于修改<code>~/.zshrc</code>文件，如果不使用zsh，请对应修改为<code>~/.bashrc</code>或<code>~./bash_profile</code>），这里可以根据自己的需要做修改。</p>
 </li>
@@ -188,37 +188,37 @@ bash 02_install_kube.sh
 <h2 id="安装containerd">安装Containerd</h2>
 <p>接下来，我们为每一台主机安装Containerd替换之前的Docker。</p>
 <p>一键安装：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 03_install_containerd.sh
-</code></pre></div><p>Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 03_install_containerd.sh
+</span></span></code></pre></div><p>Containerd的官方quick-start文档会默认你已经安装了runc（Containerd默认的容器运行工具），所以第一步我们还是要安装runc，否则将无法运行容器。</p>
 <p>我们直接选择拉取runc的官方仓库进行编译安装，runc比较小，编译很快，但是需要有go的运行环境和<code>libseccomp</code> 、<code>libseccomp-devel</code>两个链接库，可以参考<a class="link" href="https://github.com/containerd/containerd/blob/master/BUILDING.md#build-runc"  target="_blank" rel="noopener"
     >这里</a>。这些都在脚本中安装好了，如果你不想编译，也可以下载编译好的二进制文件放到<code>$PATH</code>对应的目录中即可。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># install runc</span>
-git clone https://github.com/opencontainers/runc
-<span class="nb">cd</span> runc <span class="o">&amp;&amp;</span>
-  make <span class="o">&amp;&amp;</span>
-  make install
-</code></pre></div><p>这样就安装好了runc工具</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># install runc</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/opencontainers/runc
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> runc <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">  make <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">  make install
+</span></span></code></pre></div><p>这样就安装好了runc工具</p>
 <p>安装Containerd也很简单，直接下载官方编译好的二进制压缩包，解压对应目录，这里我也选择了较新的1.4.3版本，甚至官方仓库的release tag里还是1.3.9版本</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CONTAINERD_VERSION</span><span class="o">=</span>1.4.3
-wget https://github.com/containerd/containerd/releases/download/v<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>/containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz
-tar -xvf containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz -C /usr/local/
-</code></pre></div><p>接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">CONTAINERD_VERSION</span><span class="o">=</span>1.4.3
+</span></span><span class="line"><span class="cl">wget https://github.com/containerd/containerd/releases/download/v<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>/containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz
+</span></span><span class="line"><span class="cl">tar -xvf containerd-<span class="s2">&#34;</span><span class="nv">$CONTAINERD_VERSION</span><span class="s2">&#34;</span>-linux-amd64.tar.gz -C /usr/local/
+</span></span></code></pre></div><p>接下来就是比较关键也是我当时遇到问题最多的地方：containerd配置</p>
 <p>一般来说，containerd提供了生成默认配置的方法</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 需提前创建对应目录 </span>
-<span class="c1"># sudo mkdir -p /etc/containerd/</span>
-containerd config default &gt;/etc/containerd/config.toml
-</code></pre></div><p>但是这样会有<strong>一些问题</strong>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 需提前创建对应目录 </span>
+</span></span><span class="line"><span class="cl"><span class="c1"># sudo mkdir -p /etc/containerd/</span>
+</span></span><span class="line"><span class="cl">containerd config default &gt;/etc/containerd/config.toml
+</span></span></code></pre></div><p>但是这样会有<strong>一些问题</strong>：</p>
 <ul>
 <li>
 <p>之后在使用crictl工具连接containerd工具时会报错：</p>
 <pre tabindex="0"><code>unknown service runtime.v1alpha2.ImageService &amp;Unimplemented desc = unknown service api.v1.CRIPluginService
 </code></pre><p>可参考这个<a class="link" href="https://github.com/kubernetes-sigs/cri-tools/issues/436#issuecomment-464290289"  target="_blank" rel="noopener"
     >issue</a>，对应的解决方法就是修改以下配置</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">.</span><span class="nx">containerd</span><span class="p">]</span>
-	<span class="nx">snapshotter</span> <span class="p">=</span> <span class="s2">&#34;overlayfs&#34;</span> <span class="nx">--</span><span class="err">&gt;</span> <span class="s2">&#34;native&#34;</span>
-	<span class="nx">default_runtime_name</span> <span class="p">=</span> <span class="s2">&#34;runc&#34;</span>
-	<span class="nx">no_pivot</span> <span class="p">=</span> <span class="kc">false</span>
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">.</span><span class="nx">containerd</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">snapshotter</span> <span class="p">=</span> <span class="s2">&#34;overlayfs&#34;</span> <span class="nx">--</span><span class="err">&gt;</span> <span class="s2">&#34;native&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">default_runtime_name</span> <span class="p">=</span> <span class="s2">&#34;runc&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">no_pivot</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span></code></pre></div></li>
 <li>
 <p>后面在使用<code>kubeadm init</code>初始化集群时，在启动apiserver等pod时，会报错：</p>
 <pre tabindex="0"><code>        Unfortunately, an error has occurred:
@@ -229,18 +229,18 @@ containerd config default &gt;/etc/containerd/config.toml
                 - The kubelet is unhealthy due to a misconfiguration of the node in some way (required cgroups disabled)
 
         If you are on a systemd-powered system, you can try to troubleshoot the error with the following commands:
-                - 'systemctl status kubelet'
-                - 'journalctl -xeu kubelet'
+                - &#39;systemctl status kubelet&#39;
+                - &#39;journalctl -xeu kubelet&#39;
 
         Additionally, a control plane component may have crashed or exited when started by the container runtime.
         To troubleshoot, list all containers using your preferred container runtimes CLI.
 
         Here is one example how you may list all Kubernetes containers running in cri-o/containerd using crictl:
-                - 'crictl --runtime-endpoint /run/containerd/containerd.sock ps -a | grep kube | grep -v pause'
+                - &#39;crictl --runtime-endpoint /run/containerd/containerd.sock ps -a | grep kube | grep -v pause&#39;
                 Once you have found the failing container, you can inspect its logs with:
-                - 'crictl --runtime-endpoint /run/containerd/containerd.sock logs CONTAINERID'
+                - &#39;crictl --runtime-endpoint /run/containerd/containerd.sock logs CONTAINERID&#39;
 
-couldn't initialize a Kubernetes cluster
+couldn&#39;t initialize a Kubernetes cluster
 </code></pre><p>使用<code>systemctl status kubelet</code>查看kubelet情况，可以看到kubelet有在运行但是日志里一直打印<code>node &quot;localhost.localdomain&quot; not found</code></p>
 <pre tabindex="0"><code>● kubelet.service - kubelet: The Kubernetes Node Agent
    Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
@@ -254,30 +254,30 @@ couldn't initialize a Kubernetes cluster
    CGroup: /system.slice/kubelet.service
            └─10688 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf ...
 
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
-Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &quot;localhost.localdomain&quot; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
 </code></pre><p>这里的日志不够详细，于是我又使用<code>journalctl -xeu kubelet</code>查看更详细的日志，日志数量比较多，很容易漏掉关键的错误，比如说下面这条报错是我在重试了多次后才在日志中发现的：</p>
-<pre tabindex="0"><code>CreatePodSandbox for pod &quot;kube-scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce25476016scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce254760161b1d3b)&quot; failed: rpc error: code = Unknown desc = failed to get sandboxb1d3b)&quot; failed: rpc error: code = Unknown desc = failed to get sandbox image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;: failed to pull and unpack image &quot;k8s.gcr.io/pause:3.1&quot;:
+<pre tabindex="0"><code>CreatePodSandbox for pod &#34;kube-scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce25476016scheduler-localhost.localdomain_kube-system(a28385ea64639c19ce254760161b1d3b)&#34; failed: rpc error: code = Unknown desc = failed to get sandboxb1d3b)&#34; failed: rpc error: code = Unknown desc = failed to get sandbox image &#34;k8s.gcr.io/pause:3.1&#34;: failed to pull image &#34;k8s.gcr.io/pause:3.1&#34;: failed to pull image &#34;k8s.gcr.io/pause:3.1&#34;: failed to pull and unpack image &#34;k8s.gcr.io/pause:3.1&#34;:
 </code></pre><p>可以看到中的关键信息<code>failed to pull image &quot;k8s.gcr.io/pause:3.1&quot;</code>，也就是说kubelet创建pod时卡在了拉取pause镜像这一步，当时在初始化kubeadm之前，我已经在本地准备好了所有所需要的镜像，并且kubeadm通过指定镜像仓库的参数<code>--image-repository=${IMAGE_REPOSITORY}</code>已经将kubelet所要拉取镜像的目标仓库切换为阿里云的仓库，但这里还是去从一个不存在的谷歌容器仓库k8s.gcr.io拉取镜像，导致我在这里一度怀疑是kubelet的配置问题。</p>
 <p>直到我翻到了kubeadm的<a class="link" href="https://github.com/kubernetes/kubeadm/issues/2020"  target="_blank" rel="noopener"
     >issue#2020</a>中提到了kubeadm并不会配置pause image的repository，以及在containerd的<a class="link" href="https://github.com/containerd/cri/issues/813"  target="_blank" rel="noopener"
     >issue#813</a>，提到了<strong>pause镜像的仓库及版本是写在containerd的配置文件中</strong>，所以，只需要在<code>config.toml</code>中修改以下配置</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">]</span>
-  <span class="nx">disable_tcp_service</span> <span class="p">=</span> <span class="kc">true</span>
-  <span class="nx">stream_server_address</span> <span class="p">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
-  <span class="nx">stream_server_port</span> <span class="p">=</span> <span class="s2">&#34;0&#34;</span>
-  <span class="nx">stream_idle_timeout</span> <span class="p">=</span> <span class="s2">&#34;4h0m0s&#34;</span>
-  <span class="nx">enable_selinux</span> <span class="p">=</span> <span class="kc">false</span>
-  <span class="nx">sandbox_image</span> <span class="p">=</span> <span class="s2">&#34;k8s.gcr.io/pause:3.1&#34;</span> <span class="nx">--</span><span class="err">&gt;</span> <span class="s2">&#34;registry.cn-hangzhou.aliyuncs.com/kagaya/pause:3.2&#34;</span>
-</code></pre></div><p>以上问题就解决了:-(</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-toml" data-lang="toml"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">plugins</span><span class="p">.</span><span class="s2">&#34;io.containerd.grpc.v1.cri&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">disable_tcp_service</span> <span class="p">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">stream_server_address</span> <span class="p">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">stream_server_port</span> <span class="p">=</span> <span class="s2">&#34;0&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">stream_idle_timeout</span> <span class="p">=</span> <span class="s2">&#34;4h0m0s&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">enable_selinux</span> <span class="p">=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">sandbox_image</span> <span class="p">=</span> <span class="s2">&#34;k8s.gcr.io/pause:3.1&#34;</span> <span class="nx">--</span><span class="err">&gt;</span> <span class="s2">&#34;registry.cn-hangzhou.aliyuncs.com/kagaya/pause:3.2&#34;</span>
+</span></span></code></pre></div><p>以上问题就解决了:-(</p>
 </li>
 </ul>
 <p>所以，配置脚本中直接生成了修改好的配置文件，使用脚本就不会遇到以上问题了</p>
@@ -288,19 +288,19 @@ Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10
 <li>
 <p>准备Master节点镜像</p>
 <p>执行以下脚本</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 04_pull_master_images.sh
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 04_pull_master_images.sh
+</span></span></code></pre></div></li>
 <li>
 <p>准备Worker节点镜像</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 04_pull_worker_images.sh
-</code></pre></div></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 04_pull_worker_images.sh
+</span></span></code></pre></div></li>
 <li>
 <p>以上两步会以ip+nodeType的格式同时修改Master和Worker节点的主机名，原因写在了文章开头</p>
 </li>
 <li>
 <p>初始化Master节点</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 05_init_master.sh
-</code></pre></div><p>这一步会在kubeadm中指定kubernetes的版本，CIDR范围，镜像仓库等，如果顺利的话，你可以看到最后打印的其他节点join集群的方法，类似这样：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 05_init_master.sh
+</span></span></code></pre></div><p>这一步会在kubeadm中指定kubernetes的版本，CIDR范围，镜像仓库等，如果顺利的话，你可以看到最后打印的其他节点join集群的方法，类似这样：</p>
 <pre tabindex="0"><code>kubeadm join 192.168.0.170:6443 --token r7w69v.3e1nweyk81h5zj6y \
     --discovery-token-ca-cert-hash sha256:1234a2317d27f0a4c6bcf5f284416a2fb3e8f3bd61aa88bc279a4f6ef18e09a1 
 </code></pre><p>之后需要手动在<strong>各个Worker节点</strong>上执行一下这条命令加入Master所在集群，请务必确保各节点时间同步，因为token的合法性会用时间去验证。</p>
@@ -332,28 +332,28 @@ Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10
 <h2 id="安装calico网络">安装Calico网络</h2>
 <p>这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从<strong>Master节点</strong>上用kubectl应用yaml文件。</p>
 <p>一键脚本：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 06_install_calico.sh
-</code></pre></div><p>这里也选用了较新的Calico v3.17.1</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CALICO_VERSION</span><span class="o">=</span>v3.17.1
-
-crictl pull calico/cni:<span class="nv">$CALICO_VERSION</span>
-crictl pull calico/pod2daemon-flexvol:<span class="nv">$CALICO_VERSION</span>
-crictl pull calico/node:<span class="nv">$CALICO_VERSION</span>
-crictl pull calico/kube-controllers:<span class="nv">$CALICO_VERSION</span>
-</code></pre></div><p>默认的yaml文件来自官方的3.17版本，我也在manifests目录下准备了离线版本</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">CALICO_YAML</span><span class="o">=</span><span class="s2">&#34;https://docs.projectcalico.org/v3.17/manifests/calico.yaml&#34;</span>
-<span class="c1"># CALICO_YAML=&#34;./manifests/calico.yaml&#34;</span>
-</code></pre></div><p>kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 06_install_calico.sh
+</span></span></code></pre></div><p>这里也选用了较新的Calico v3.17.1</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">CALICO_VERSION</span><span class="o">=</span>v3.17.1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">crictl pull calico/cni:<span class="nv">$CALICO_VERSION</span>
+</span></span><span class="line"><span class="cl">crictl pull calico/pod2daemon-flexvol:<span class="nv">$CALICO_VERSION</span>
+</span></span><span class="line"><span class="cl">crictl pull calico/node:<span class="nv">$CALICO_VERSION</span>
+</span></span><span class="line"><span class="cl">crictl pull calico/kube-controllers:<span class="nv">$CALICO_VERSION</span>
+</span></span></code></pre></div><p>默认的yaml文件来自官方的3.17版本，我也在manifests目录下准备了离线版本</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">CALICO_YAML</span><span class="o">=</span><span class="s2">&#34;https://docs.projectcalico.org/v3.17/manifests/calico.yaml&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># CALICO_YAML=&#34;./manifests/calico.yaml&#34;</span>
+</span></span></code></pre></div><p>kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。</p>
 <h2 id="最后说几句">最后说几句</h2>
 <p>以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash 07_install_metrics_server.sh
-</code></pre></div><p>当然，文中所提到的问题并不是全部，其他诸如安装metric server时的错误：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash 07_install_metrics_server.sh
+</span></span></code></pre></div><p>当然，文中所提到的问题并不是全部，其他诸如安装metric server时的错误：</p>
 <pre tabindex="0"><code>metric-server : TLS handshake error from 20.99.219.64:57467: EOF
 </code></pre><p>需要通过修改metric server deployment的启动参数解决</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml">- <span class="nt">args</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- --<span class="l">kubelet-insecure-tls</span><span class="w">
-</span><span class="w">    </span>- --<span class="l">kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span><span class="w">
-</span></code></pre></div><p>如果有其他问题，也欢迎在<a class="link" href="https://github.com/kagaya85/K8sTakeOff/issues"  target="_blank" rel="noopener"
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">args</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- --<span class="l">kubelet-insecure-tls</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- --<span class="l">kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname</span><span class="w">
+</span></span></span></code></pre></div><p>如果有其他问题，也欢迎在<a class="link" href="https://github.com/kagaya85/K8sTakeOff/issues"  target="_blank" rel="noopener"
     >这里</a>提交issue交流。</p>
 <p>最后：</p>
 <p><strong>Kill Docker And Long Live Kubernetes!!!</strong></p>
@@ -550,7 +550,7 @@ crictl pull calico/kube-controllers:<span class="nv">$CALICO_VERSION</span>
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

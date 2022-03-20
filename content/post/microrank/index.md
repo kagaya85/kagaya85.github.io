@@ -1,6 +1,6 @@
 ---
 title: "WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位"
-description: MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments
+description: "MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments"
 date: 2022-02-08T15:04:55+08:00
 tags: ["Paper", "RootCauseLocalization", "AIOps"]
 categories: ["Technology"]
@@ -156,7 +156,7 @@ $$
 
 ## Thoughts
 
-1. MicroRank方法只适用于Latency类型的异常，对于请求失败等结构异常效果不好
+1. MicroRank方法只适用于Latency类型的异常，对于请求失败等结构异常
 2. 作者认为调用关系是稳定的，然而现实情况是可能业务系统中只有部分系统能够维持稳定的调用关系
 3. 文中的节点operation其实既可以是服务也可以是服务实例或者接口，作者在这一块的区别并没有详细阐述
 4. 另外在计算trace latency时也存在一些问题，对于OpenTracing规范的trace数据而言，最顶级的root span已经包含了整条trace的耗时数据，在文中却用了所有span累加的方法计算总耗时。

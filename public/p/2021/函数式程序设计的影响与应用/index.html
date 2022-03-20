@@ -164,52 +164,52 @@ if (!doNotTrack) {
 <li>Clean Code<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。</li>
 </ul>
 <p>在Golang中，可以通过7种方法来实现函数式的编程<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// this is a higher-order-function that returns a function
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kd">func</span><span class="p">(</span><span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-	<span class="c1">// A function is returned here as closure
-</span><span class="c1"></span>	<span class="c1">// variable x is obtained from the outer scope of this method and memorized in the closure
-</span><span class="c1"></span>	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-
-	<span class="c1">// we are currying the add method to create more variations
-</span><span class="c1"></span>	<span class="kd">var</span> <span class="nx">add10</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-	<span class="kd">var</span> <span class="nx">add20</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-	<span class="kd">var</span> <span class="nx">add30</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
-
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add10</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 15
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add20</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 25
-</span><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add30</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 35
-</span><span class="c1"></span><span class="p">}</span>
-</code></pre></div><p>但是对于函数式编程中常用的递归调用来说，由于Go语言的编译器不支持对尾递归的调用优化，只能采用纯递归的方式，导致在递归时需要考虑调用堆栈的大小，因此在编写递归程序的时候我们不得不考虑递归的调用深度，或者改写为迭代方式，防止内存爆栈导致的程序异常。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// this is a higher-order-function that returns a function
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kd">func</span><span class="p">(</span><span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// A function is returned here as closure
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="c1">// variable x is obtained from the outer scope of this method and memorized in the closure
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">y</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// we are currying the add method to create more variations
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kd">var</span> <span class="nx">add10</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">add20</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">add30</span> <span class="p">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add10</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 15
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add20</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 25
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">add30</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span> <span class="c1">// 35
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>但是对于函数式编程中常用的递归调用来说，由于Go语言的编译器不支持对尾递归的调用优化，只能采用纯递归的方式，导致在递归时需要考虑调用堆栈的大小，因此在编写递归程序的时候我们不得不考虑递归的调用深度，或者改写为迭代方式，防止内存爆栈导致的程序异常。</p>
 <p>Golang一般使用了strict/eager的计算方式（除了<code>&amp;&amp;</code>和<code>||</code>运算符），这种方式与函数式所推崇的延迟求值相反，会在调用时立即计算出对应的结果，对于延迟求值来说，我们可以使用一些方法来模拟，像是高阶函数的方式，也可以利用Go语言中的一些特性，如sync包和channel结构来进行模拟。</p>
 <p>一个高阶函数模拟的延迟求值方法，通过传入函数名而不是传入函数的调用，避免在传参时就计算出结果，而是在函数最后return后才计算对应的结果：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;executing add&#34;</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">x</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">multiply</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;executing multiply&#34;</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span>
-<span class="p">}</span>
-
-<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">addOrMultiply</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nx">add</span><span class="p">,</span> <span class="nx">multiply</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">addOrMultiply</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="nx">add</span><span class="p">,</span> <span class="nx">multiply</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="p">}</span>
-
-<span class="c1">// This is now a higher-order-function hence evaluation of the functions are delayed in if-else
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">addOrMultiply</span><span class="p">(</span><span class="nx">add</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">onAdd</span><span class="p">,</span> <span class="nx">onMultiply</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">add</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nf">onAdd</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nf">onMultiply</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div><p>最后，是关于函数式程序设计中的应用透明性：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;executing add&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">x</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">multiply</span><span class="p">(</span><span class="nx">x</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;executing multiply&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">addOrMultiply</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="nx">add</span><span class="p">,</span> <span class="nx">multiply</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">addOrMultiply</span><span class="p">(</span><span class="kc">false</span><span class="p">,</span> <span class="nx">add</span><span class="p">,</span> <span class="nx">multiply</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// This is now a higher-order-function hence evaluation of the functions are delayed in if-else
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="nf">addOrMultiply</span><span class="p">(</span><span class="nx">add</span> <span class="kt">bool</span><span class="p">,</span> <span class="nx">onAdd</span><span class="p">,</span> <span class="nx">onMultiply</span> <span class="kd">func</span><span class="p">(</span><span class="nx">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">t</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">add</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nf">onAdd</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">onMultiply</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>最后，是关于函数式程序设计中的应用透明性：</p>
 <blockquote>
 <p>Functional programs do not have assignment statements, that is, the value of a variable in a functional program never changes once defined. This eliminates any chances of side effects because any variable can be replaced with its actual value at any point of execution. So, functional programs are referentially transparent.</p>
 </blockquote>
@@ -349,87 +349,87 @@ if (!doNotTrack) {
 <p>同时，作者也讨论了Serverless技术带来的影响：Serverless计算与IoT通常不需要节点间的消息传递和协调，往往比起云计算更适合用函数式编程语言来实现。</p>
 <p>Serverless技术中的代表，AWS Lambda，是一个运行代码的完全托管环境，通过将代码部署在lambda函数中，从受支持的AWS服务之一接受事件时触发我们的代码，并将事件作为参数传递。而函数式设计的程序，是将程序定义问函数，AWS Lambda提供了一个方便的抽象赖于其他的AWS服务进行交互，所有的一切都是我们作为参数接受的事件。通过函数组合的方式解决原来函数过于庞大复杂难以维护的问题，各个功能拆分为较小的函数，然后通过组合的方式实现最终的功能。遵循这种方法的优点是我们可以以可重用的方式考虑我们较小的功能。 然后，我们可以像将它们与积木一起玩时那样将它们放在一起。</p>
 <p>比如说，对于一个验证函数<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup>，为了通过验证，我们需要做很多项不同的检查：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">queryParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">queryStringParameters</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
-			<span class="s1">&#39;Error parsing request query params&#39;</span><span class="p">,</span>
-			<span class="p">[</span><span class="s1">&#39;Query params should be empty&#39;</span><span class="p">],</span>
-			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
-		<span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">event</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="kr">const</span> <span class="nx">pathParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">pathParameters</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
-			<span class="s1">&#39;Error parsing request path params&#39;</span><span class="p">,</span>
-			<span class="p">[</span><span class="s1">&#39;Path params should be empty&#39;</span><span class="p">],</span>
-			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
-		<span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nx">event</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="kr">const</span> <span class="nx">asUserPostEvent</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-	<span class="k">try</span> <span class="p">{</span>
-		<span class="kr">const</span> <span class="nx">parsedBody</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">body</span>
-			<span class="o">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
-			<span class="o">:</span> <span class="p">{};</span>
-		<span class="k">return</span> <span class="p">{</span>
-			<span class="p">...</span><span class="nx">event</span><span class="p">,</span>
-			<span class="nx">body</span><span class="o">:</span> <span class="nx">parsedBody</span>
-		<span class="p">};</span>
-	<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
-			<span class="s1">&#39;Error parsing request body&#39;</span><span class="p">,</span>
-			<span class="p">[</span><span class="s1">&#39;Invalid JSON&#39;</span><span class="p">],</span>
-			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
-		<span class="p">);</span>
-	<span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div><p>通过函数组合的方式，我们可以很方便的决定需要做哪些检查项：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">validateCreatePostEvent</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">asUserPostEvent</span><span class="p">,</span> <span class="nx">queryParamsIsNull</span><span class="p">,</span> <span class="nx">pathParamsIsNull</span><span class="p">);</span>
-</code></pre></div><h4 id="分布式系统开发">分布式系统开发</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">queryParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">queryStringParameters</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">			<span class="s1">&#39;Error parsing request query params&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">[</span><span class="s1">&#39;Query params should be empty&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">event</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">pathParamsIsNull</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">pathParameters</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">			<span class="s1">&#39;Error parsing request path params&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">[</span><span class="s1">&#39;Path params should be empty&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">event</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">asUserPostEvent</span> <span class="o">=</span> <span class="p">(</span><span class="nx">event</span><span class="o">:</span> <span class="nx">APIGatewayEvent</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="kr">const</span> <span class="nx">parsedBody</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">body</span>
+</span></span><span class="line"><span class="cl">			<span class="o">?</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="o">:</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="p">...</span><span class="nx">event</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">body</span><span class="o">:</span> <span class="nx">parsedBody</span>
+</span></span><span class="line"><span class="cl">		<span class="p">};</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">throw</span> <span class="k">new</span> <span class="nx">ApplicationError</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">			<span class="s1">&#39;Error parsing request body&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">[</span><span class="s1">&#39;Invalid JSON&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">StatusCodes</span><span class="p">.</span><span class="nx">BAD_REQUEST</span>
+</span></span><span class="line"><span class="cl">		<span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>通过函数组合的方式，我们可以很方便的决定需要做哪些检查项：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">validateCreatePostEvent</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">asUserPostEvent</span><span class="p">,</span> <span class="nx">queryParamsIsNull</span><span class="p">,</span> <span class="nx">pathParamsIsNull</span><span class="p">);</span>
+</span></span></code></pre></div><h4 id="分布式系统开发">分布式系统开发</h4>
 <p>在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>，作者讨论了分布式环境下对于函数式编程语言F#的使用。</p>
 <p>分布式系统的开发本质上非常复杂，部分原因是在客户端和服务器端使用了不同的语言和技术，而且这些技术之间通常没有透明的无缝集成。 因此，开发人员必须将整个系统视为许多互操作的模块，始终牢记这些模块如何协同工作并交换信息。 这也使开发更加复杂，因为我们需要在源代码树中分离服务器端和客户端代码。</p>
 <p>作者强调了F＃非常适合于分布式云计算。 由于函数样式迫使我们以一种由无状态函数组成的方式分解问题，无状态函数仅在给定初始数据的情况下计算结果，因此我们自然可以在集群中的不同节点上并行运行那些独立的函数。 任务的分配仍然是开发人员的责任，但是功能分解过程的整体性质使其变得更加容易。</p>
 <h3 id="fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions</h3>
 <p>在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Server</span> <span class="kd">struct</span> <span class="p">{</span>  
-    <span class="nx">Addr</span> <span class="kt">string</span>  
-    <span class="nx">Port</span> <span class="kt">int</span>  
-    <span class="nx">Protocol</span> <span class="kt">string</span> 
-    <span class="nx">Timeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> 
-    <span class="nx">MaxConns</span> <span class="kt">int</span>
-    <span class="nx">TLS</span> <span class="o">*</span><span class="nx">tls</span><span class="p">.</span><span class="nx">Config</span> 
-<span class="p">}</span>
-</code></pre></div><p>而往往我们不需要配置所有的参数，希望某些配置项使用默认的参数。OOP的语言中我们一般可以使用函数重载的方式解决这一问题。但是在对于先Golang这种不支持函数重载的语言，则需要定义许多构造函数，通过带不同形式参数的方式来应对不同的配置需求，又或者通过一个自定义的配置结构体，将配置项打包为一个数据结构整体传入。这样的方法虽然可以解决问题，但是从程序设计和程序可读性的角度来说，上面的做法既不高效，也不具有很好的可读性。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">Server</span> <span class="kd">struct</span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">    <span class="nx">Addr</span> <span class="kt">string</span>  
+</span></span><span class="line"><span class="cl">    <span class="nx">Port</span> <span class="kt">int</span>  
+</span></span><span class="line"><span class="cl">    <span class="nx">Protocol</span> <span class="kt">string</span> 
+</span></span><span class="line"><span class="cl">    <span class="nx">Timeout</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span> 
+</span></span><span class="line"><span class="cl">    <span class="nx">MaxConns</span> <span class="kt">int</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">TLS</span> <span class="o">*</span><span class="nx">tls</span><span class="p">.</span><span class="nx">Config</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>而往往我们不需要配置所有的参数，希望某些配置项使用默认的参数。OOP的语言中我们一般可以使用函数重载的方式解决这一问题。但是在对于先Golang这种不支持函数重载的语言，则需要定义许多构造函数，通过带不同形式参数的方式来应对不同的配置需求，又或者通过一个自定义的配置结构体，将配置项打包为一个数据结构整体传入。这样的方法虽然可以解决问题，但是从程序设计和程序可读性的角度来说，上面的做法既不高效，也不具有很好的可读性。</p>
 <p>前贝尔实验室成员，UTF-8与Golang的创始人之一Rob Pike曾在2014年的一篇博文《Self-referential functions and the design of options》<sup id="fnref:13"><a href="#fn:13" class="footnote-ref" role="doc-noteref">13</a></sup>中，用函数式编程的的思想巧妙的提出了一种解决程序设计中进行对象参数设置的方法，展现了函数式编程在与面向对象编程中结合的魅力。</p>
 <p>Rob Pike同样遇到了这样的问题，在他与社区的成员进行讨论后，总结并提出了Optional Function（配置函数）的方法，非常巧妙的解决了自定义配置的同时，也让代码有了自解释性，大大提高了代码的可读性。</p>
 <p>什么是Optional Functional，首先我们会定义一种新类型：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Server</span><span class="p">)</span>
-</code></pre></div><p>我们将一个入参为对象指针，无返回值的函数定义为类型<code>option</code>，紧接着，我们可以在对象中定义一个用于设置参数的函数Option</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Option sets the options specified.  
-</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">Option</span><span class="p">(</span><span class="nx">opts</span> <span class="o">...</span><span class="nx">option</span><span class="p">)</span> <span class="p">{</span>  
-    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">opts</span> <span class="p">{</span>  
-    <span class="nf">opt</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>  
-    <span class="p">}</span>  
-<span class="p">}</span>
-</code></pre></div><p>最后，我们可以定义某一个配置项的设置函数，与以往OOP中的set函数不同的是，这个函数接受一个我们想要设置的数值，返回的却是一个Option函数</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Verbosity sets Foo&#39;s verbosity level to v.
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">Verbosity</span><span class="p">(</span><span class="nx">v</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">option</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">s</span><span class="p">.</span><span class="nx">verbosity</span> <span class="p">=</span> <span class="nx">v</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div><p>这样，我们就可以通过类似下面这样的方式来方便的设置我们需要的自定义配置项，在不破坏对象封装的情况下也可以通过函数名让配置方法具有来很好的可读性:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="nx">server</span><span class="p">.</span><span class="nf">Option</span><span class="p">(</span><span class="nf">Verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nf">Overtime</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nf">Addr</span><span class="p">(</span><span class="s">&#34;192.168.10.1&#34;</span><span class="p">),</span> <span class="nf">Port</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
-</code></pre></div><p>当然，还有一些<strong>进阶</strong>的用法，比如将Option的定义修改为</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 返回一个值
-</span><span class="c1"></span><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Foo</span><span class="p">)</span> <span class="kd">interface</span><span class="p">{}</span>
-
-<span class="c1">// 返回option函数
-</span><span class="c1"></span><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Foo</span><span class="p">)</span> <span class="nx">option</span>
-</code></pre></div><p>第一种方式我们可以通过返回的<code>interface{}</code>获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的<code>defer</code>函数，便可以方便的实现对于配置项的临时修改和恢复。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Server</span><span class="p">)</span>
+</span></span></code></pre></div><p>我们将一个入参为对象指针，无返回值的函数定义为类型<code>option</code>，紧接着，我们可以在对象中定义一个用于设置参数的函数Option</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// Option sets the options specified.  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="nf">Option</span><span class="p">(</span><span class="nx">opts</span> <span class="o">...</span><span class="nx">option</span><span class="p">)</span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">opt</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">opts</span> <span class="p">{</span>  
+</span></span><span class="line"><span class="cl">    <span class="nf">opt</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>  
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>最后，我们可以定义某一个配置项的设置函数，与以往OOP中的set函数不同的是，这个函数接受一个我们想要设置的数值，返回的却是一个Option函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// Verbosity sets Foo&#39;s verbosity level to v.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="nf">Verbosity</span><span class="p">(</span><span class="nx">v</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">option</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kd">func</span><span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">Server</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">s</span><span class="p">.</span><span class="nx">verbosity</span> <span class="p">=</span> <span class="nx">v</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这样，我们就可以通过类似下面这样的方式来方便的设置我们需要的自定义配置项，在不破坏对象封装的情况下也可以通过函数名让配置方法具有来很好的可读性:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">server</span><span class="p">.</span><span class="nf">Option</span><span class="p">(</span><span class="nf">Verbosity</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nf">Overtime</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="nf">Addr</span><span class="p">(</span><span class="s">&#34;192.168.10.1&#34;</span><span class="p">),</span> <span class="nf">Port</span><span class="p">(</span><span class="mi">80</span><span class="p">))</span>
+</span></span></code></pre></div><p>当然，还有一些<strong>进阶</strong>的用法，比如将Option的定义修改为</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 返回一个值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Foo</span><span class="p">)</span> <span class="kd">interface</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 返回option函数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">option</span> <span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">Foo</span><span class="p">)</span> <span class="nx">option</span>
+</span></span></code></pre></div><p>第一种方式我们可以通过返回的<code>interface{}</code>获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的<code>defer</code>函数，便可以方便的实现对于配置项的临时修改和恢复。</p>
 <h2 id="pros-and-cons-of-fp">Pros and Cons of FP</h2>
 <p>正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。</p>
 <h3 id="advantages">Advantages</h3>
@@ -734,7 +734,7 @@ if (!doNotTrack) {
     <div class="disqus-container">
     <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     
