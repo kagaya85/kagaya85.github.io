@@ -334,7 +334,7 @@ if (!doNotTrack) {
 
 
                 <time class="article-time--reading">
-                    阅读时长: 5 分钟
+                    阅读时长: 4 分钟
                 </time>
             </div>
         
@@ -440,9 +440,9 @@ $$
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2000</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">100</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nb">cap</span><span class="p">(</span><span class="nb">append</span><span class="p">(</span><span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="nx">i</span><span class="p">),</span> <span class="kc">true</span><span class="p">)))</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2000</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">100</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nb">cap</span><span class="p">(</span><span class="nb">append</span><span class="p">(</span><span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="nx">i</span><span class="p">),</span> <span class="kc">true</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -609,7 +609,8 @@ $$
 <h2 id="the-end">The End</h2>
 <p>这次问题源自于社区成员对于扩容机制中魔数的疑问，而对于整个runtime来说，slice的扩容只是其中最简单的冰山一角，即使如此，我们也看到社区对于细节问题的重视，通过一点一点的优化让golang能够不断进步。对于gopher来说，我们在使用golang的时候往往不会注意其背后的运行原理，因为go已经把一切都做好了，这也是我喜欢golang的原因，在“少即是多”的原则之下，go把许多复杂的运行机制很好的隐藏在runtime的源码之中，从而带给gopher最好的编程体验。而研究runtime的运行机制，便能够发现许多类似这种问题，通过研究社区的解决方法，也不失为一种乐趣。</p>
 <h2 id="references">References</h2>
-<p>封面来自：https://www.pixiv.net/artworks/96944986</p>
+<p>封面来自: <a class="link" href="https://www.pixiv.net/artworks/96944986"  target="_blank" rel="noopener"
+    >https://www.pixiv.net/artworks/96944986</a></p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>

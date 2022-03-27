@@ -79,9 +79,9 @@ $$
 
 ```go
 func main() {
-	for i := 0; i < 2000; i += 100 {
-		fmt.Println(i, cap(append(make([]bool, i), true)))
-	}
+  for i := 0; i < 2000; i += 100 {
+    fmt.Println(i, cap(append(make([]bool, i), true)))
+  }
 }
 ```
 
@@ -163,7 +163,7 @@ $$
 
 ## References
 
+封面来自: [https://www.pixiv.net/artworks/96944986](https://www.pixiv.net/artworks/96944986)
+
 [^github-commit]: [runtime: make slice growth formula a bit smoother · golang/go@2dda92f (github.com)](https://github.com/golang/go/commit/2dda92ff6f9f07eeb110ecbf0fc2d7a0ddd27f9d)
 [^group-discussion]: [slices grow at 25% after 1024 but why 1024? (google.com)](https://groups.google.com/g/golang-nuts/c/UaVlMQ8Nz3o)
-
-封面来自：https://www.pixiv.net/artworks/96944986
