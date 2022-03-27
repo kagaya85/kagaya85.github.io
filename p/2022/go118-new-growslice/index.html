@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='Golang的切片扩容策略以及1.18中带来的优化'><title>Go1.18：新的切片扩容策略</title>
+
+<link rel='canonical' href='https://blog.kagaya.fun/p/2022/go118-new-growslice/'>
+
+<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='Go1.18：新的切片扩容策略'>
+<meta property='og:description' content='Golang的切片扩容策略以及1.18中带来的优化'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2022/go118-new-growslice/'>
+<meta property='og:site_name' content='かがやの部屋'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Runtime' /><meta property='article:published_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='article:modified_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg' />
+<meta name="twitter:site" content="@kagaya_85">
+    <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Go1.18：新的切片扩容策略">
+<meta name="twitter:description" content="Golang的切片扩容策略以及1.18中带来的优化"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg' />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
+}
+</script>
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "dark");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🚀</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">かがやの部屋</a></h1>
+            <h2 class="site-description">明日は晴れるかな〜</h2>
+        </div>
+    </header><ol class="menu" id="main-menu">
+        
+        
+        
+
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="44" height="44"
+  viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+                
+                <span>Home</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/post' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+  <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+  <line x1="9" y1="9" x2="10" y2="9" />
+  <line x1="9" y1="13" x2="15" y2="13" />
+  <line x1="9" y1="17" x2="15" y2="17" />
+</svg>
+
+                
+                <span>Post</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="12" cy="7" r="4" />
+    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+                
+                <span>About</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>Archives</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://twitter.com/kagaya_85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M22 4.01c-1 .49 -1.98 .689 -3 .99c-1.121 -1.265 -2.783 -1.335 -4.38 -.737s-2.643 2.06 -2.62 3.737v1c-3.245 .083 -6.135 -1.395 -8 -4c0 0 -4.182 7.433 4 11c-1.872 1.247 -3.739 2.088 -6 2c3.308 1.803 6.913 2.423 10.034 1.517c3.58 -1.04 6.522 -3.723 7.651 -7.742a13.84 13.84 0 0 0 .497 -3.753c-.002 -.249 1.51 -2.772 1.818 -4.013z" />
+</svg>
+
+
+
+                
+                <span>Twitter</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://github.com/kagaya85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                
+                <span>GitHub</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='https://bangumi.tv/user/kagaya85' target="_blank">
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-device-tv" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <rect x="3" y="7" width="18" height="13" rx="2" />
+    <polyline points="16 3 12 7 8 3" />
+</svg>
+                
+                <span>Bangumi</span>
+            </a>
+        </li>
+        
+        
+
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44"
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <circle cx="10" cy="10" r="7" />
+    <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+                
+                <span>Search</span>
+            </a>
+        </li>
+        
+
+        <div class="menu-bottom-section">
+            
+            
+                <li id="dark-mode-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                    <span>暗色模式</span>
+                </li>
+            
+        </div>
+    </ol>
+</aside>
+<main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/2022/go118-new-growslice/">
+                <img src="/p/2022/go118-new-growslice/96944986_p0_hu6d416da1ddfbb7f98c712123bd095a5e_985951_800x0_resize_q75_box.jpeg"
+                        srcset="/p/2022/go118-new-growslice/96944986_p0_hu6d416da1ddfbb7f98c712123bd095a5e_985951_800x0_resize_q75_box.jpeg 800w, /p/2022/go118-new-growslice/96944986_p0_hu6d416da1ddfbb7f98c712123bd095a5e_985951_1600x0_resize_q75_box.jpeg 1600w"
+                        width="800" 
+                        height="450" 
+                        loading="lazy"
+                        alt="Featured image of post Go1.18：新的切片扩容策略" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/technology/" style="background-color: #66ccff; color: #fff;">
+                Technology
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/2022/go118-new-growslice/">Go1.18：新的切片扩容策略</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            Golang的切片扩容策略以及1.18中带来的优化
+        </h3>
+        
+    </div>
+
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">Mar 27, 2022</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 5 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>随着go 1.18版本的发布，go社区终于迎来了期盼已久的正式泛型语法，然而我在浏览关于1.18的changelog时发现1.18对于slice的扩容策略也做了一些修改，刚好我最近正在看draven大佬的新书也讲到了slice底层的源码的一些运行逻辑，在好奇心的驱使下，想知道社区究竟改动了什么以及为什么作出这些改动，于是翻开1.18的源码，便有了这篇文章。</p>
+<h2 id="growslice-in-go-117">Growslice In Go 1.17</h2>
+<p>首先我们先简单回顾一下go 1.17及以前的切片扩容策略，这部分的主要逻辑在<code>src/runtime/slice.go</code>中的<code>growslice</code>函数（省略部分代码，下同）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">growslice</span><span class="p">(</span><span class="nx">et</span> <span class="o">*</span><span class="nx">_type</span><span class="p">,</span> <span class="nx">old</span> <span class="nx">slice</span><span class="p">,</span> <span class="nx">cap</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">slice</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="nx">newcap</span> <span class="o">:=</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">doublecap</span> <span class="o">:=</span> <span class="nx">newcap</span> <span class="o">+</span> <span class="nx">newcap</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">cap</span> <span class="p">&gt;</span> <span class="nx">doublecap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span> <span class="p">&lt;</span> <span class="mi">1024</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">doublecap</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// and prevent an infinite loop.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="o">+=</span> <span class="nx">newcap</span> <span class="o">/</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// the newcap calculation overflowed.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面代码的扩容策略可以简述为以下三个规则：</p>
+<ol>
+<li>当期望容量 &gt; 两倍的旧容量时，直接使用期望容量作为新切片的容量</li>
+<li>如果旧容量 &lt; 1024（注意这里单位是元素个数）,那么直接翻倍旧容量</li>
+<li>如果旧容量 &gt; 1024，那么会进入一个循环，每次增加25%直到大于期望容量</li>
+</ol>
+<p>可以看到，原来的go对于切片扩容后的容量判断有一个明显的magic number：1024，在1024之前，增长的系数是2，而1024之后则变为1.25。关于为什么会这么设计，社区的相关讨论<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>给出了几点理由：</p>
+<ol>
+<li>如果只选择翻倍的扩容策略，那么对于较大的切片来说，现有的方法可以更好的节省内存。</li>
+<li>如果只选择每次系数为1.25的扩容策略，那么对于较小的切片来说扩容会很低效。</li>
+<li>之所以选择一个小于2的系数，在扩容时被释放的内存块会在下一次扩容时更容易被重新利用。</li>
+</ol>
+<p>关于3的原理也很简单，对于一个2为公比的等比数列，那么其前（n-1）项和必然小于第n项：
+$$
+\sum(2^0,2^1,2^2,&hellip;,2^{(n-1)}) = 2^{n-1}-1 &lt; 2^n
+$$
+也就是说，如果按2为系数进行扩容，那么<strong>每一次扩容所需要的空间都大于之前释放的所有空间之和</strong>，那么也就谈不上重新利用了。</p>
+<p>可以看到当前方法也是作出了一些权衡，希望同时兼顾扩容效率和内存利用率，而以1024为分界点多半也是写代码人的个人喜好。</p>
+<h2 id="whats-the-problem">What&rsquo;s the problem？</h2>
+<p>上面的扩容策略一直使用了许多年，但它仍然存在一个问题：那就是扩容策略并<strong>不是一个单调函数</strong>。</p>
+<p>对于扩容策略不是单调函数，我们用下面的代码来做验证：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="mi">2000</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">100</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nb">cap</span><span class="p">(</span><span class="nb">append</span><span class="p">(</span><span class="nb">make</span><span class="p">([]</span><span class="kt">bool</span><span class="p">,</span> <span class="nx">i</span><span class="p">),</span> <span class="kc">true</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这段代码通过申请一个长度为<code>i</code>的切片，然后对其append一个元素来触发扩容。每次实验新增加100个元素，同时打印扩容前后的大小（单位byte）：</p>
+<p><img src="/p/2022/go118-new-growslice/image-20220327154806590.png"
+	width="724"
+	height="436"
+	srcset="/p/2022/go118-new-growslice/image-20220327154806590_hue30888b3507c5aba13bd9241afede616_41312_480x0_resize_box_3.png 480w, /p/2022/go118-new-growslice/image-20220327154806590_hue30888b3507c5aba13bd9241afede616_41312_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="go1.17中扩容前后对比"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="398px"
+	
+></p>
+<p>其中蓝色的线代表扩容前的每次容量大小变化，橙色线代表对应扩容后的大小变化，横坐标为实验序号，纵坐标为容量大小。</p>
+<p>可以看到在第11次与第12次扩容后，扩容后的容量反而出现了下降，由于存在内存对齐，所以最后的容量会向上取一个合理的数值。</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th></th>
+<th>扩容前容量</th>
+<th>扩容后容量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>第11次</strong></td>
+<td>1000</td>
+<td>2048</td>
+</tr>
+<tr>
+<td><strong>第12次</strong></td>
+<td>1100</td>
+<td>1408</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="growslice-in-go-118">Growslice In Go 1.18</h2>
+<p>接下来我们回到刚刚发布的go 1.18版本中，在1.18中，优化了切片扩容的策略<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>，让底层数组大小的增长更加平滑：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">growslice</span><span class="p">(</span><span class="nx">et</span> <span class="o">*</span><span class="nx">_type</span><span class="p">,</span> <span class="nx">old</span> <span class="nx">slice</span><span class="p">,</span> <span class="nx">cap</span> <span class="kt">int</span><span class="p">)</span> <span class="nx">slice</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="nx">newcap</span> <span class="o">:=</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">doublecap</span> <span class="o">:=</span> <span class="nx">newcap</span> <span class="o">+</span> <span class="nx">newcap</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nx">cap</span> <span class="p">&gt;</span> <span class="nx">doublecap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">const</span> <span class="nx">threshold</span> <span class="p">=</span> <span class="mi">256</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span> <span class="p">&lt;</span> <span class="nx">threshold</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">doublecap</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// and prevent an infinite loop.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Transition from growing 2x for small slices
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// to growing 1.25x for large slices. This formula
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// gives a smooth-ish transition between the two.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">newcap</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">newcap</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="nx">threshold</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// the newcap calculation overflowed.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>重点关注第6行以后的代码，修改原来的1024为一个值为256的<code>threshold</code>，大于阈值后的新容量的计算也由原来的
+$$
+newcap = oldcap + \frac{oldcap}{4} \space\space\space\space\space \text{if $oldcap \geq 1024$}
+$$
+变为了
+$$
+newcap = oldcap + \frac{oldcap + 3 \times threshold}{4} \space\space\space\space\space \text{if $oladcap \geq threshold$}
+$$
+通过减小阈值并固定增加一个常数，使得优化后的扩容的系数在阈值前后不再会出现从2到1.25的突变，该commit作者给出了几种原始容量下对应的“扩容系数”：</p>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th>原始容量</th>
+<th>扩容系数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>256</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>512</td>
+<td>1.63</td>
+</tr>
+<tr>
+<td>1024</td>
+<td>1.44</td>
+</tr>
+<tr>
+<td>2048</td>
+<td>1.35</td>
+</tr>
+<tr>
+<td>4096</td>
+<td>1.30</td>
+</tr>
+</tbody>
+</table></div>
+<p>我们重新验证一下前一节中的代码，可以看到1.18中优化后的扩容策略可以保证是一个单调函数</p>
+<p><img src="/p/2022/go118-new-growslice/image-20220327155204270.png"
+	width="724"
+	height="436"
+	srcset="/p/2022/go118-new-growslice/image-20220327155204270_hue30888b3507c5aba13bd9241afede616_39111_480x0_resize_box_3.png 480w, /p/2022/go118-new-growslice/image-20220327155204270_hue30888b3507c5aba13bd9241afede616_39111_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="go1.18中扩容前后对比"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="166"
+		data-flex-basis="398px"
+	
+></p>
+<h2 id="the-end">The End</h2>
+<p>这次问题源自于社区成员对于扩容机制中魔数的疑问，而对于整个runtime来说，slice的扩容只是其中最简单的冰山一角，即使如此，我们也看到社区对于细节问题的重视，通过一点一点的优化让golang能够不断进步。对于gopher来说，我们在使用golang的时候往往不会注意其背后的运行原理，因为go已经把一切都做好了，这也是我喜欢golang的原因，在“少即是多”的原则之下，go把许多复杂的运行机制很好的隐藏在runtime的源码之中，从而带给gopher最好的编程体验。而研究runtime的运行机制，便能够发现许多类似这种问题，通过研究社区的解决方法，也不失为一种乐趣。</p>
+<h2 id="references">References</h2>
+<p>封面来自：https://www.pixiv.net/artworks/96944986</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a class="link" href="https://groups.google.com/g/golang-nuts/c/UaVlMQ8Nz3o"  target="_blank" rel="noopener"
+    >slices grow at 25% after 1024 but why 1024? (google.com)</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a class="link" href="https://github.com/golang/go/commit/2dda92ff6f9f07eeb110ecbf0fc2d7a0ddd27f9d"  target="_blank" rel="noopener"
+    >runtime: make slice growth formula a bit smoother · golang/go@2dda92f (github.com)</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/golang/">Golang</a>
+        
+            <a href="/tags/runtime/">Runtime</a>
+        
+    </section>
+
+
+    
+    <section class="article-copyright">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <path d="M14.5 9a3.5 4 0 1 0 0 6" />
+</svg>
+
+
+
+        <span>Licensed under CC BY-NC-SA 4.0</span>
+    </section>
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.querySelector(`.article-content`), {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+<aside class="related-contents--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-contents">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/2021/amazing-go-interface/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post Amazing Go Interface"
+                        
+                        data-hash="md5-pFaeNO48gYlRMQii977cQg==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">Amazing Go Interface</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 函数式程序设计的影响与应用"
+                        
+                        data-hash="md5-YHCkMOQs8uldcgu1Yc44sA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">函数式程序设计的影响与应用</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/2022/first-nas/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu2315d63bffc53ea5fa23e960b91d356d_855728_250x150_fill_q75_box_smart1.jpeg" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心"
+                        data-key="first-nas" 
+                        data-hash="md5-MqVgzT9RZJJ5DCAjXmsVxw==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群"
+                        
+                        data-hash="md5-uMYyvzJxx7Ic3QDhGtAc&#43;Q==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</h2>
+        </div>
+    </a>
+</article>
+            
+                
+<article class="has-image">
+    <a href="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+        
+        
+            <div class="article-image">
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
+                        width="250" 
+                        height="150" 
+                        loading="lazy"
+                        alt="Featured image of post 使用Docker部署本地Wordpress开发环境"
+                        
+                        data-hash="md5-VUpTd3P7cW/YZCUoSeJuPA==">
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">使用Docker部署本地Wordpress开发环境</h2>
+        </div>
+    </a>
+</article>
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <div class="disqus-container">
+    <div id="disqus_thread"></div>
+<script type="application/javascript">
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "kagayablog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+<style>
+    .disqus-container {
+        background-color: var(--card-background);
+        border-radius: var(--card-border-radius);
+        box-shadow: var(--shadow-l1);
+        padding: var(--card-padding);
+    }
+</style>
+
+<script>
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (DISQUS) {
+            DISQUS.reset({
+                reload: true
+            });
+        }
+    })
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2019 - 
+        
+        2022 かがやの部屋
+    </section>
+    
+    <section class="powerby">
+        
+            Let's code the fantastic world!!! <br/>
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+            >
+
+            </main>
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#growslice-in-go-117">Growslice In Go 1.17</a></li>
+    <li><a href="#whats-the-problem">What&rsquo;s the problem？</a></li>
+    <li><a href="#growslice-in-go-118">Growslice In Go 1.18</a></li>
+    <li><a href="#the-end">The End</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
