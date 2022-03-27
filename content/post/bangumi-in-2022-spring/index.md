@@ -5,10 +5,10 @@ slug: bangumi-in-2022-Spring
 date: 2022-03-26T17:40:10+08:00
 image: 
 tags:
-  - Bangumi
-  - Summary
+    - Bangumi
+    - Summary
 categories:
-  - Anime
+    - Anime
 hidden: false
 comments: true
 draft: true
