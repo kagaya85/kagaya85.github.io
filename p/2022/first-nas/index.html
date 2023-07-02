@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='你为什么需要一台NAS以及应该如何入门呢?'><title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='你为什么需要一台NAS以及应该如何入门呢?'>
+<title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
 
 <link rel='canonical' href='https://blog.kagaya.fun/p/2022/first-nas/'>
 
-<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心'>
+<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心'>
 <meta property='og:description' content='你为什么需要一台NAS以及应该如何入门呢?'>
 <meta property='og:url' content='https://blog.kagaya.fun/p/2022/first-nas/'>
 <meta property='og:site_name' content='かがやの部屋'>
@@ -267,7 +268,68 @@ if (!doNotTrack) {
         </div>
     </ol>
 </aside>
-<main class="main full-width">
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#写在前面">写在前面</a></li>
+    <li><a href="#方案探索">方案探索</a>
+      <ul>
+        <li><a href="#硬件">硬件</a></li>
+        <li><a href="#nas底层系统选择">nas底层系统选择</a></li>
+        <li><a href="#硬件直通">硬件直通</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装过程">安装过程</a>
+      <ul>
+        <li><a href="#配置ups">配置UPS</a></li>
+        <li><a href="#配置邮件提醒">配置邮件提醒</a></li>
+        <li><a href="#磁盘分区-fdiskparted和gdisk">磁盘分区 fdisk，parted和gdisk</a></li>
+        <li><a href="#自动挂载">自动挂载</a></li>
+        <li><a href="#配置nuc11显卡驱动">配置nuc11显卡驱动</a></li>
+        <li><a href="#wol配置">WOL配置</a></li>
+        <li><a href="#exfat-in-ubuntu">exfat in ubuntu</a></li>
+        <li><a href="#snap-docker">snap docker</a></li>
+        <li><a href="#jellyfin-硬解">Jellyfin 硬解</a></li>
+        <li><a href="#qbittorrent">qBittorrent</a></li>
+        <li><a href="#私有云盘">私有云盘</a></li>
+      </ul>
+    </li>
+    <li><a href="#最终效果">最终效果</a>
+      <ul>
+        <li><a href="#docker-compose配置参考">docker compose配置参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
@@ -307,6 +369,9 @@ if (!doNotTrack) {
     </div>
 
     
+    
+    
+    
     <footer class="article-time">
         
             <div>
@@ -343,6 +408,7 @@ if (!doNotTrack) {
 
     
 </div>
+
 </header>
 
     <section class="article-content">
@@ -1302,13 +1368,13 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
                 defer
                 >
             </script><script>
@@ -1329,9 +1395,9 @@ if (!doNotTrack) {
 
     
 
-<aside class="related-contents--wrapper">
+<aside class="related-content--wrapper">
     <h2 class="section-title">相关文章</h2>
-    <div class="related-contents">
+    <div class="related-content">
         <div class="flex article-list--tile">
             
                 
@@ -1356,6 +1422,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1379,6 +1446,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1402,6 +1470,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1425,6 +1494,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1448,6 +1518,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
         </div>
     </div>
@@ -1490,7 +1561,7 @@ if (!doNotTrack) {
 
 <script>
     window.addEventListener('onColorSchemeChange', (e) => {
-        if (DISQUS) {
+        if (typeof DISQUS == 'object') {
             DISQUS.reset({
                 reload: true
             });
@@ -1506,14 +1577,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2022 かがやの部屋
+        2023 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1590,76 +1661,16 @@ if (!doNotTrack) {
                 >
             </script><link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
             ><link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
             >
 
             </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#写在前面">写在前面</a></li>
-    <li><a href="#方案探索">方案探索</a>
-      <ul>
-        <li><a href="#硬件">硬件</a></li>
-        <li><a href="#nas底层系统选择">nas底层系统选择</a></li>
-        <li><a href="#硬件直通">硬件直通</a></li>
-      </ul>
-    </li>
-    <li><a href="#安装过程">安装过程</a>
-      <ul>
-        <li><a href="#配置ups">配置UPS</a></li>
-        <li><a href="#配置邮件提醒">配置邮件提醒</a></li>
-        <li><a href="#磁盘分区-fdiskparted和gdisk">磁盘分区 fdisk，parted和gdisk</a></li>
-        <li><a href="#自动挂载">自动挂载</a></li>
-        <li><a href="#配置nuc11显卡驱动">配置nuc11显卡驱动</a></li>
-        <li><a href="#wol配置">WOL配置</a></li>
-        <li><a href="#exfat-in-ubuntu">exfat in ubuntu</a></li>
-        <li><a href="#snap-docker">snap docker</a></li>
-        <li><a href="#jellyfin-硬解">Jellyfin 硬解</a></li>
-        <li><a href="#qbittorrent">qBittorrent</a></li>
-        <li><a href="#私有云盘">私有云盘</a></li>
-      </ul>
-    </li>
-    <li><a href="#最终效果">最终效果</a>
-      <ul>
-        <li><a href="#docker-compose配置参考">docker compose配置参考</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
         </div>
         <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
