@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电'><title>函数式程序设计的影响与应用</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电'>
+<title>函数式程序设计的影响与应用</title>
 
 <link rel='canonical' href='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 
-<link rel="stylesheet" href="/scss/style.min.450926226e724574a6b936335ea06111f8aeb253d932c86cb2cc807341cd2889.css"><meta property='og:title' content='函数式程序设计的影响与应用'>
+<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='函数式程序设计的影响与应用'>
 <meta property='og:description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电'>
 <meta property='og:url' content='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 <meta property='og:site_name' content='かがやの部屋'>
@@ -267,7 +268,63 @@ if (!doNotTrack) {
         </div>
     </ol>
 </aside>
-<main class="main full-width">
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#简介">简介</a></li>
+    <li><a href="#函数式语言的发展">函数式语言的发展</a>
+      <ul>
+        <li><a href="#haskell">Haskell</a></li>
+        <li><a href="#fp-in-golang">FP in Golang</a></li>
+      </ul>
+    </li>
+    <li><a href="#函数式语言的应用">函数式语言的应用</a>
+      <ul>
+        <li><a href="#fp-in-compiler">FP in Compiler</a></li>
+        <li><a href="#fp-in-parallel-programming">FP in Parallel Programming</a></li>
+        <li><a href="#fp-in-cloud">FP in Cloud</a></li>
+        <li><a href="#fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions</a></li>
+      </ul>
+    </li>
+    <li><a href="#pros-and-cons-of-fp">Pros and Cons of FP</a>
+      <ul>
+        <li><a href="#advantages">Advantages</a></li>
+        <li><a href="#disadvantages">Disadvantages</a></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考文献">参考文献</a></li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
@@ -302,6 +359,9 @@ if (!doNotTrack) {
         
     </div>
 
+    
+    
+    
     
     <footer class="article-time">
         
@@ -339,6 +399,7 @@ if (!doNotTrack) {
 
     
 </div>
+
 </header>
 
     <section class="article-content">
@@ -472,7 +533,7 @@ if (!doNotTrack) {
 </blockquote>
 <p>Go语言中实现引用透明的方法是通过避免引用传递或指针传递的使用。虽然在Go语言中都是通过值传递的方式来传递参数，但是像切片或者Map这样的数据结构是通过指针的方式来进行传递。因此我们在使用函数式的程序设计思路来构造我们的程序时，应当注意引用透明性，避免在函数的计算结果受外部的状态影响或者影响外部的状态。</p>
 <p>对于Go语言来说，由函数式所带来的引用透明性可以带来很多显而易见的好处，比如我们可以缓存每一次函数调用的结果来达到空间换时间的目的，又或者幂等的函数使得函数的计算结构变得可预测。同时函数式天生的模块化设计理念可以让自底向上的程序设计变得更加容易。程序的调试也变得更加简单，由于函数都是各自独立的，他们的计算结果只依赖于各自的输入参数。</p>
-<p>最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，与Go语言的高并发设计理念不谋而合。</p>
+<p>最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生<sup id="fnref1:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，与Go语言的高并发设计理念不谋而合。</p>
 <h2 id="函数式语言的应用">函数式语言的应用</h2>
 <h3 id="fp-in-compiler">FP in Compiler</h3>
 <p>在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。</p>
@@ -495,7 +556,7 @@ if (!doNotTrack) {
 <li>在某些系统中，程序员还需要负责将任务映射到对应处理器上，并确保可以和任何执行该任务的处理器进行通信</li>
 <li>程序员往往不能干涉具体的调度细节，这样导致无法确定处理器下一步会执行哪一个任务，因此程序员还需要保证任务集不会产生死锁等问题</li>
 </ul>
-<p>而与之相对比的函数式编程语言来说，对于解决并行程序设计有着先天的优势<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>：</p>
+<p>而与之相对比的函数式编程语言来说，对于解决并行程序设计有着先天的优势<sup id="fnref1:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>：</p>
 <ul>
 <li>不需要新的语言构造来表达并行性，或者并发任务之间的同步和通信。并发是完全隐式的，如果计算机有空间和容量执行任务，那么就会动态的产生新任务</li>
 <li>无需采用特殊措施来保护并发任务的共享数据</li>
@@ -787,27 +848,27 @@ if (!doNotTrack) {
 <ul>
 <li>函数式程序设计是非常安全的，尤其是在并行和分布式编程中，因为纯函数是天生线程安全的<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
 <li>纯函数容易理解，不需要关注任何可能被改变的隐藏状态。这使得代码更短，从而保证可以容忍的错误数量更少<sup id="fnref:15"><a href="#fn:15" class="footnote-ref" role="doc-noteref">15</a></sup></li>
-<li>函数式编程完成的程序往往更加容易测试，因为它不需要去模拟和考虑任何的Side-effect<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
-<li>同时函数式使得人们更容易区分哪些函数是不纯的，因此在QA阶段可以将大部分测试资源都集中在这里，从而提高程序的可靠性<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
-<li>函数式的方法更容易组合，程序设计者可以轻松的掌握一个函数的输入输出之间的关系，同时也不需要使用锁来决定函数之间的执行顺序<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
+<li>函数式编程完成的程序往往更加容易测试，因为它不需要去模拟和考虑任何的Side-effect<sup id="fnref1:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
+<li>同时函数式使得人们更容易区分哪些函数是不纯的，因此在QA阶段可以将大部分测试资源都集中在这里，从而提高程序的可靠性<sup id="fnref2:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
+<li>函数式的方法更容易组合，程序设计者可以轻松的掌握一个函数的输入输出之间的关系，同时也不需要使用锁来决定函数之间的执行顺序<sup id="fnref3:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
 <li>函数式程序设计有着强大的抽象能力，他可以利用引用透明性（Referential transparency）来对概念进行抽象化，从而隐藏其中的复杂性。比如函数式中往往会模糊一个纯数值和函数调用结果之间的界限，程序设计者只需要知道该值是什么，而不用太关注其中的细节<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup></li>
-<li>另外，函数式的程序设计方法往往可以加快程序的开发速度。我们可以运用函数式的思维将一个大的问题分解为更小的可组合的操作，然后通过组合的方式串行执行每个操作，从而使问题的解决变得更加容易。<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup></li>
-<li>正如前一节提到的Functional Options在Golang中的应用，函数式的方法可以很好的提升代码的可读性。函数式设计出来的方法往往可以拥有自解释性（self-documented），方法的功能和行为等内容都定义在了输入参数或函数名当中，不需要额外的注释就可以让阅读者很好的理解代码的功能和预测代码运行的结果<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
-<li>函数式程序设计中对于纯函数的使用，使得方法的计算结果变得可缓存。因为纯函数的输出只取决于函数的输入参数，那么我们便可以预先计算并缓存一些计算结果，这样在之后遇到相同的输入参数时，我们就可以直接使用缓存的结果，从而提高程序的执行效率<sup id="fnref:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
+<li>另外，函数式的程序设计方法往往可以加快程序的开发速度。我们可以运用函数式的思维将一个大的问题分解为更小的可组合的操作，然后通过组合的方式串行执行每个操作，从而使问题的解决变得更加容易。<sup id="fnref1:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup></li>
+<li>正如前一节提到的Functional Options在Golang中的应用，函数式的方法可以很好的提升代码的可读性。函数式设计出来的方法往往可以拥有自解释性（self-documented），方法的功能和行为等内容都定义在了输入参数或函数名当中，不需要额外的注释就可以让阅读者很好的理解代码的功能和预测代码运行的结果<sup id="fnref1:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
+<li>函数式程序设计中对于纯函数的使用，使得方法的计算结果变得可缓存。因为纯函数的输出只取决于函数的输入参数，那么我们便可以预先计算并缓存一些计算结果，这样在之后遇到相同的输入参数时，我们就可以直接使用缓存的结果，从而提高程序的执行效率<sup id="fnref2:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
 </ul>
 <h3 id="disadvantages">Disadvantages</h3>
 <p>函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：</p>
 <p>首先是资源占用和运行效率方面：</p>
 <ul>
-<li>函数式设计的程序往往会比命令式的程序在执行效率上更慢，大多数FP使用特殊的不可变数据结构。如FP通过调用set函数设置一个新值，返回一个设置来新值的新数据结构而不是在原来的数据结构上进行修改<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
-<li>同时，使用柯里化将多个参数的函数表示为返回函数的方式会导致额外的函数调用开销<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
-<li>如果没有编译器的优化，那么递归调用可能会十分的占用资源<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>，部分的编译器对于尾递归的调用方式都用称为TCO（Tail Call Optimization)的尾调用优化，通过这种优化方式，可以极大程度的减少递归调用中的堆栈内存占用。但同时也会破坏原来的程序方法的调用链，引入新的复杂性。因此像Golang这样的语言中，尽管社区对于尾调用的优化有着很高的呼声，但设计者对编译器仍没有增加尾调用的优化，因此在使用函数式思维进行程序设计时，需要考虑的递归调用的堆栈占用问题。</li>
+<li>函数式设计的程序往往会比命令式的程序在执行效率上更慢，大多数FP使用特殊的不可变数据结构。如FP通过调用set函数设置一个新值，返回一个设置来新值的新数据结构而不是在原来的数据结构上进行修改<sup id="fnref4:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
+<li>同时，使用柯里化将多个参数的函数表示为返回函数的方式会导致额外的函数调用开销<sup id="fnref5:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
+<li>如果没有编译器的优化，那么递归调用可能会十分的占用资源<sup id="fnref2:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>，部分的编译器对于尾递归的调用方式都用称为TCO（Tail Call Optimization)的尾调用优化，通过这种优化方式，可以极大程度的减少递归调用中的堆栈内存占用。但同时也会破坏原来的程序方法的调用链，引入新的复杂性。因此像Golang这样的语言中，尽管社区对于尾调用的优化有着很高的呼声，但设计者对编译器仍没有增加尾调用的优化，因此在使用函数式思维进行程序设计时，需要考虑的递归调用的堆栈占用问题。</li>
 <li>究其本质而言，函数式的语言倾向于比命令性语言生成大量的短期垃圾。 尽管他们的垃圾收集器倾向于针对此使用情况进行优化，但仍然使预测和控制性能更加困难<sup id="fnref:17"><a href="#fn:17" class="footnote-ref" role="doc-noteref">17</a></sup>。</li>
 </ul>
 <p>其次是应用场景方面：</p>
 <ul>
-<li>在一些特殊函数方法中往往不能使用函数式的思维，如IO方法并不能纯函数化，因为IO依赖于一些外部的状态和side-effect，不符合纯函数的要求<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>。</li>
-<li>在某些应用场景中计算机无法按函数式的方式运行，如一些有状态和命令式的操作，他们本质上就是一个巨大的状态机，FP在这里无法起作用<sup id="fnref:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>。</li>
+<li>在一些特殊函数方法中往往不能使用函数式的思维，如IO方法并不能纯函数化，因为IO依赖于一些外部的状态和side-effect，不符合纯函数的要求<sup id="fnref3:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>。</li>
+<li>在某些应用场景中计算机无法按函数式的方式运行，如一些有状态和命令式的操作，他们本质上就是一个巨大的状态机，FP在这里无法起作用<sup id="fnref4:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>。</li>
 <li>同理，其他一些有状态的对象，在OOP中可以很好的处理应对，但是对于FP来说，就是十分棘手的困难。</li>
 </ul>
 <h2 id="总结">总结</h2>
@@ -816,77 +877,77 @@ if (!doNotTrack) {
 <p>事实也证明FP与OOP是正交的，它们可以很好的结合起来，针对不同问题各取所长。OOP强调对象状态的改变，混合了声明与状态的概念，而FP有着天生适合并发的优势，以及自解释等提高代码质量的优点。</p>
 <p>细细品味函数式编程，就会觉得FP天生就有一种独特的魅力，我们可以好好利用函数式编程的思维来实现某些符合函数式特性场景的具体需求。所以，在今后的学习工作中，也应当做到具体问题具体分析，运用好函数式程序设计这个巧妙的工具来解决我们遇到的各种问题，提高自身的程序设计能力和代码软件的质量。</p>
 <h2 id="参考文献">参考文献</h2>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B&amp;oldid=63346400"  target="_blank" rel="noopener"
     >佚名. 函数式编程[Z/OL](2020–12–21).</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=Haskell&amp;oldid=63307186"  target="_blank" rel="noopener"
     >佚名. Haskell[Z/OL](2020–12–19).</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><a class="link" href="https://medium.com/@geisonfgfg/functional-go-bc116f4c96a4"  target="_blank" rel="noopener"
-    >GEISON. Functional Go[EB/OL](2020–04–05).</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >GEISON. Functional Go[EB/OL](2020–04–05).</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:4" role="doc-endnote">
+<li id="fn:4">
 <p><a class="link" href="https://deepu.tech/functional-programming-in-go/"  target="_blank" rel="noopener"
     >DEEPU. 7 Easy Functional Programming Techniques in Go[EB/OL](2019–08– 14).</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:5" role="doc-endnote">
+<li id="fn:5">
 <p><a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E9%9D%99%E6%80%81%E5%8D%95%E8%B5%8B%E5%80%BC%E5%BD%A2%E5%BC%8F&amp;oldid=61858310"  target="_blank" rel="noopener"
     >佚名. 静态单赋值形式[Z/OL](2020–09–21).</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:6" role="doc-endnote">
+<li id="fn:6">
 <p><a class="link" href="https://dl.acm.org/doi/10.1145/278283.278285"  target="_blank" rel="noopener"
     >APPEL A W. SSA Is Functional Programming[J/OL]. ACM SIGPLAN Notices, 1998, 33(4): 17–20.</a> DOI:10.1145/278283.278285.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:7" role="doc-endnote">
+<li id="fn:7">
 <p><a class="link" href="https://doi.org/10.1093/comjnl/32.2.175"  target="_blank" rel="noopener"
-    >PEYTON JONES S L. Parallel Implementations of Functional Programming Languages[J/OL]. The Computer Journal, 1989, 32(2): 175–186.</a> DOI:10.1093/comjnl/32.2.175.&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >PEYTON JONES S L. Parallel Implementations of Functional Programming Languages[J/OL]. The Computer Journal, 1989, 32(2): 175–186.</a> DOI:10.1093/comjnl/32.2.175.&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:8" role="doc-endnote">
+<li id="fn:8">
 <p><a class="link" href="https://matthew-argreaves.medium.com/the-case-for-functional-programming-and-serverless-architecture-e6c805495f68"  target="_blank" rel="noopener"
     >HARGREAVES M. The Case for Functional Programming and Serverless Architecture[EB/OL](2018–06–06).</a>&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:9" role="doc-endnote">
+<li id="fn:9">
 <p><a class="link" href="https://pattern-match.com/blog/functional-programming-in-serverless-world/"  target="_blank" rel="noopener"
     >GAWROŃSKI W. Functional Programming in Serverless World | Pattern Match[EB/OL](2018–10–18).</a>&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:10" role="doc-endnote">
+<li id="fn:10">
 <p>FRITSCH J. Functional programming languages in computing clouds : practical and theoretical explorations[C].&#160;<a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:11" role="doc-endnote">
+<li id="fn:11">
 <p><a class="link" href="https://blog.container-solutions.com/using-functional-programming-when-building-cloud-native-applications-with-aws-lambda"  target="_blank" rel="noopener"
-    >MOCCHETTI R. Using Functional Programming When Building Cloud Native Applications with AWS Lambda[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >MOCCHETTI R. Using Functional Programming When Building Cloud Native Applications with AWS Lambda[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref2:11" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:12" role="doc-endnote">
+<li id="fn:12">
 <p>SOSHNIKOV D. Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#[J]. 2015.&#160;<a href="#fnref:12" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:13" role="doc-endnote">
+<li id="fn:13">
 <p><a class="link" href="https://commandcenter.blogspot.com/2014/01/self-referential-functions-and-design.htm"  target="_blank" rel="noopener"
     >PIKE R. command center: Self-referential functions and the design of options[EB/OL](2014–01–24).</a>&#160;<a href="#fnref:13" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:14" role="doc-endnote">
+<li id="fn:14">
 <p><a class="link" href="https://dzone.com/articles/functional-programming-is-not-what-you-probably-th"  target="_blank" rel="noopener"
-    >佚名. Functional Programming Is Not What You (Probably) Think - DZone Java[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. Functional Programming Is Not What You (Probably) Think - DZone Java[EB/OL]([日期不详]).</a>&#160;<a href="#fnref:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref2:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref3:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref4:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref5:14" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:15" role="doc-endnote">
+<li id="fn:15">
 <p><a class="link" href="https://syndicode.com/blog/pros-and-cons-of-functional-programming/"  target="_blank" rel="noopener"
     >佚名. Find Out Pros and Cons of Functional Programming[EB/OL](2018–06– 07).</a>&#160;<a href="#fnref:15" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:16" role="doc-endnote">
+<li id="fn:16">
 <p><a class="link" href="https://spin.atomicobject.com/2019/08/29/functional-prog-pros-cons/"  target="_blank" rel="noopener"
-    >佚名. 5 Drawbacks of Functional Programming – Plus 4 Reasons to Use It[EB/OL](2019–08–29).</a>&#160;<a href="#fnref:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+    >佚名. 5 Drawbacks of Functional Programming – Plus 4 Reasons to Use It[EB/OL](2019–08–29).</a>&#160;<a href="#fnref:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref1:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref2:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref3:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a>&#160;<a href="#fnref4:16" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:17" role="doc-endnote">
+<li id="fn:17">
 <p><a class="link" href="https://www.quora.com/What-are-some-limitations-disadvantages-of-functional-programming-Where-does-it-break-down-when-you-want-to-get-things-done/answer/Tikhon-Jelvis"  target="_blank" rel="noopener"
     >佚名. Tikhon Jelvis’s answer to What are some limitations/disadvantages of functional programming? Where does it break down when you want to get things done? - Quora[EB/OL](2014).</a>&#160;<a href="#fnref:17" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 </section>
 
@@ -926,13 +987,13 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.css"integrity="sha384-RZU/ijkSsFbcmivfdRBQDtwuwVqK7GMOw6IMvKyeWL2K5UAlyp6WonmB8m7Jd0Hn"crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/katex.min.js"integrity="sha384-pK1WpvzWVBQiP0/GjnvRxV4mOb0oxFuyRxJlk6vVw146n3egcN5C925NCP7a7BY8"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.13.13/dist/contrib/auto-render.min.js"integrity="sha384-vZTG03m&#43;2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl"crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
                 defer
                 >
             </script><script>
@@ -953,9 +1014,9 @@ if (!doNotTrack) {
 
     
 
-<aside class="related-contents--wrapper">
+<aside class="related-content--wrapper">
     <h2 class="section-title">相关文章</h2>
-    <div class="related-contents">
+    <div class="related-content">
         <div class="flex article-list--tile">
             
                 
@@ -980,6 +1041,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1003,6 +1065,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1026,6 +1089,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1049,6 +1113,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
                 
 <article class="has-image">
@@ -1072,6 +1137,7 @@ if (!doNotTrack) {
         </div>
     </a>
 </article>
+
             
         </div>
     </div>
@@ -1114,7 +1180,7 @@ if (!doNotTrack) {
 
 <script>
     window.addEventListener('onColorSchemeChange', (e) => {
-        if (DISQUS) {
+        if (typeof DISQUS == 'object') {
             DISQUS.reset({
                 reload: true
             });
@@ -1130,14 +1196,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2022 かがやの部屋
+        2023 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
         Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.11.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1214,71 +1280,16 @@ if (!doNotTrack) {
                 >
             </script><link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.css"integrity="sha256-c0uckgykQ9v5k&#43;IqViZOZKc47Jn7KQil4/MP3ySA3F8="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
             ><link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.css"integrity="sha256-SBLU4vv6CA6lHsZ1XyTdhyjJxCjPif/TRkjnsyGAGnE="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
             >
 
             </main>
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">目录</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#简介">简介</a></li>
-    <li><a href="#函数式语言的发展">函数式语言的发展</a>
-      <ul>
-        <li><a href="#haskell">Haskell</a></li>
-        <li><a href="#fp-in-golang">FP in Golang</a></li>
-      </ul>
-    </li>
-    <li><a href="#函数式语言的应用">函数式语言的应用</a>
-      <ul>
-        <li><a href="#fp-in-compiler">FP in Compiler</a></li>
-        <li><a href="#fp-in-parallel-programming">FP in Parallel Programming</a></li>
-        <li><a href="#fp-in-cloud">FP in Cloud</a></li>
-        <li><a href="#fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions</a></li>
-      </ul>
-    </li>
-    <li><a href="#pros-and-cons-of-fp">Pros and Cons of FP</a>
-      <ul>
-        <li><a href="#advantages">Advantages</a></li>
-        <li><a href="#disadvantages">Disadvantages</a></li>
-      </ul>
-    </li>
-    <li><a href="#总结">总结</a></li>
-    <li><a href="#参考文献">参考文献</a></li>
-  </ul>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
-
         </div>
         <script 
-                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.5/dist/vibrant.min.js"integrity="sha256-5NovOZc4iwiAWTYIFiIM7DxKUXKWvpVEuMEPLzcm5/g="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
             </script><script type="text/javascript" src="/ts/main.js" defer></script>
