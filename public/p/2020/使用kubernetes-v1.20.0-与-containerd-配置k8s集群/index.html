@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Dock'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）\n">
 <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
 
-<link rel='canonical' href='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
+<link rel='canonical' href='http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群'>
-<meta property='og:description' content='使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Dock'>
-<meta property='og:url' content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群">
+<meta property='og:description' content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）\n">
+<meta property='og:url' content='http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Kubernetes' /><meta property='article:tag' content='Containerd' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='article:modified_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Kubernetes' /><meta property='article:tag' content='Containerd' /><meta property='article:tag' content='Config' /><meta property='article:published_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='article:modified_time' content='2020-12-17T23:31:25&#43;08:00'/><meta property='og:image' content='http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群">
-<meta name="twitter:description" content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Dock"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png' />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
-}
-</script>
-
+<meta name="twitter:description" content="使用Kubernetes V1.20.0 与 Containerd 配置K8s集群 写在前面 Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png' />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V8T3W98XW5');
+        }
+      </script>
     </head>
     <body class="
     article-page
@@ -69,7 +72,7 @@ if (!doNotTrack) {
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                        <img src="/img/avatar_hu670781931259558488.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -89,7 +92,6 @@ if (!doNotTrack) {
         
         
         
-
         <li >
             <a href='/' >
                 
@@ -108,7 +110,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/post' >
                 
@@ -129,7 +130,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/about/' >
                 
@@ -147,7 +147,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/archives/' >
                 
@@ -168,7 +167,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://twitter.com/kagaya_85' target="_blank">
                 
@@ -187,7 +185,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://github.com/kagaya85' target="_blank">
                 
@@ -206,7 +203,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://bangumi.tv/user/kagaya85' target="_blank">
                 
@@ -224,7 +220,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/search/' >
                 
@@ -241,12 +236,12 @@ if (!doNotTrack) {
             </a>
         </li>
         
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -254,7 +249,7 @@ if (!doNotTrack) {
 
 
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -262,10 +257,11 @@ if (!doNotTrack) {
 
 
 
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
     </ol>
 </aside>
 
@@ -312,8 +308,8 @@ if (!doNotTrack) {
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_huc297a0f1028b89bda40fcadefea13798_151152_800x0_resize_box_3.png"
-                        srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_huc297a0f1028b89bda40fcadefea13798_151152_800x0_resize_box_3.png 800w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_huc297a0f1028b89bda40fcadefea13798_151152_1600x0_resize_box_3.png 1600w"
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_hu6877431145188560129.png"
+                        srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_hu6877431145188560129.png 800w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s_hu4353502400118570008.png 1600w"
                         width="800" 
                         height="450" 
                         loading="lazy"
@@ -388,17 +384,17 @@ if (!doNotTrack) {
     <section class="article-content">
     
     
-    <h1 id="使用kubernetes-v1200-与-containerd-配置k8s集群">使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</h1>
-<h2 id="写在前面">写在前面</h2>
-<p>Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）</p>
+    <h1 id="使用kubernetes-v1200-与-containerd-配置k8s集群">使用Kubernetes V1.20.0 与 Containerd 配置K8s集群
+</h1><h2 id="写在前面">写在前面
+</h2><p>Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）</p>
 <p>本文所需shell脚本都在这个<a class="link" href="https://github.com/kagaya85/K8sTakeOff"  target="_blank" rel="noopener"
     >repo</a>，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。</p>
-<h2 id="配置基本环境">配置基本环境</h2>
-<p>这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：</p>
+<h2 id="配置基本环境">配置基本环境
+</h2><p>这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：</p>
 <p><img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png"
 	width="1658"
 	height="788"
-	srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_480x0_resize_box_3.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu4245624608594174268.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu914337127192016713.png 1024w"
 	loading="lazy"
 	
 		alt="CleanShot_2020-12-18_at_21.54.34@2x"
@@ -437,8 +433,8 @@ if (!doNotTrack) {
 <p>02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套</p>
 </li>
 </ul>
-<h2 id="安装containerd">安装Containerd</h2>
-<p>接下来，我们为每一台主机安装Containerd替换之前的Docker。</p>
+<h2 id="安装containerd">安装Containerd
+</h2><p>接下来，我们为每一台主机安装Containerd替换之前的Docker。</p>
 <p>一键安装：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -599,28 +595,28 @@ if (!doNotTrack) {
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">● kubelet.service - kubelet: The Kubernetes Node Agent
-</span></span><span class="line"><span class="cl">   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
-</span></span><span class="line"><span class="cl">  Drop-In: /usr/lib/systemd/system/kubelet.service.d
-</span></span><span class="line"><span class="cl">           └─10-kubeadm.conf
-</span></span><span class="line"><span class="cl">   Active: active (running) since Thu 2020-12-17 20:48:18 CST; 6min ago
-</span></span><span class="line"><span class="cl">     Docs: https://kubernetes.io/docs/
-</span></span><span class="line"><span class="cl"> Main PID: 10688 (kubelet)
-</span></span><span class="line"><span class="cl">    Tasks: 18
-</span></span><span class="line"><span class="cl">   Memory: 37.6M
-</span></span><span class="line"><span class="cl">   CGroup: /system.slice/kubelet.service
-</span></span><span class="line"><span class="cl">           └─10688 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf ...
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="err">●</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">service</span> <span class="o">-</span> <span class="n">kubelet</span><span class="p">:</span> <span class="n">The</span> <span class="n">Kubernetes</span> <span class="ne">Node</span> <span class="n">Agent</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Loaded</span><span class="p">:</span> <span class="n">loaded</span> <span class="p">(</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">kubelet</span><span class="o">.</span><span class="n">service</span><span class="p">;</span> <span class="n">enabled</span><span class="p">;</span> <span class="n">vendor</span> <span class="n">preset</span><span class="p">:</span> <span class="n">disabled</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Drop</span><span class="o">-</span><span class="n">In</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">systemd</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">kubelet</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">d</span>
+</span></span><span class="line"><span class="cl">           <span class="err">└─</span><span class="mi">10</span><span class="o">-</span><span class="n">kubeadm</span><span class="o">.</span><span class="n">conf</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Active</span><span class="p">:</span> <span class="n">active</span> <span class="p">(</span><span class="n">running</span><span class="p">)</span> <span class="n">since</span> <span class="n">Thu</span> <span class="mi">2020</span><span class="o">-</span><span class="mi">12</span><span class="o">-</span><span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">48</span><span class="p">:</span><span class="mi">18</span> <span class="n">CST</span><span class="p">;</span> <span class="mi">6</span><span class="nb">min</span> <span class="n">ago</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Docs</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">kubernetes</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">docs</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"> <span class="n">Main</span> <span class="n">PID</span><span class="p">:</span> <span class="mi">10688</span> <span class="p">(</span><span class="n">kubelet</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Tasks</span><span class="p">:</span> <span class="mi">18</span>
+</span></span><span class="line"><span class="cl">   <span class="n">Memory</span><span class="p">:</span> <span class="mf">37.6</span><span class="n">M</span>
+</span></span><span class="line"><span class="cl">   <span class="n">CGroup</span><span class="p">:</span> <span class="o">/</span><span class="n">system</span><span class="o">.</span><span class="n">slice</span><span class="o">/</span><span class="n">kubelet</span><span class="o">.</span><span class="n">service</span>
+</span></span><span class="line"><span class="cl">           <span class="err">└─</span><span class="mi">10688</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">kubelet</span> <span class="o">--</span><span class="n">bootstrap</span><span class="o">-</span><span class="n">kubeconfig</span><span class="o">=/</span><span class="n">etc</span><span class="o">/</span><span class="n">kubernetes</span><span class="o">/</span><span class="n">bootstrap</span><span class="o">-</span><span class="n">kubelet</span><span class="o">.</span><span class="n">conf</span> <span class="o">--</span><span class="n">kubeconfig</span><span class="o">=/</span><span class="n">etc</span><span class="o">/</span><span class="n">kubernetes</span><span class="o">/</span><span class="n">kubelet</span><span class="o">.</span><span class="n">conf</span> <span class="o">...</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
-</span></span><span class="line"><span class="cl">Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &#34;localhost.localdomain&#34; not found
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.161585</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.261944</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.362297</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.462629</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.562916</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.663161</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.763546</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.863925</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">35</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">35.964162</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
+</span></span><span class="line"><span class="cl"><span class="n">Dec</span> <span class="mi">17</span> <span class="mi">20</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mi">36</span> <span class="n">localhost</span><span class="o">.</span><span class="n">localdomain</span> <span class="n">kubelet</span><span class="p">[</span><span class="mi">10688</span><span class="p">]:</span> <span class="n">E1217</span> <span class="mi">07</span><span class="p">:</span><span class="mi">54</span><span class="p">:</span><span class="mf">36.064368</span>   <span class="mi">10688</span> <span class="n">kubelet</span><span class="o">.</span><span class="n">go</span><span class="p">:</span><span class="mi">2240</span><span class="p">]</span> <span class="n">node</span> <span class="s2">&#34;localhost.localdomain&#34;</span> <span class="ow">not</span> <span class="n">found</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里的日志不够详细，于是我又使用<code>journalctl -xeu kubelet</code>查看更详细的日志，日志数量比较多，很容易漏掉关键的错误，比如说下面这条报错是我在重试了多次后才在日志中发现的：</p>
@@ -660,8 +656,8 @@ if (!doNotTrack) {
 </li>
 </ul>
 <p>所以，配置脚本中直接生成了修改好的配置文件，使用脚本就不会遇到以上问题了</p>
-<h2 id="安装kubernetes并创建集群">安装Kubernetes并创建集群</h2>
-<p>以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。</p>
+<h2 id="安装kubernetes并创建集群">安装Kubernetes并创建集群
+</h2><p>以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。</p>
 <p>这里先使用上一步配置好的crictl工具拉取镜像为创建集群时节省时间</p>
 <ul>
 <li>
@@ -721,7 +717,7 @@ if (!doNotTrack) {
 <p><img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png"
 	width="2844"
 	height="486"
-	srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_480x0_resize_box_3.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu16542388964501495367.png 480w, /p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu3128725688106299816.png 1024w"
 	loading="lazy"
 	
 		alt="CleanShot_2020-12-17_at_22.41.02@2x"
@@ -732,8 +728,8 @@ if (!doNotTrack) {
 		data-flex-basis="1404px"
 	
 ></p>
-<h2 id="安装calico网络">安装Calico网络</h2>
-<p>这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从<strong>Master节点</strong>上用kubectl应用yaml文件。</p>
+<h2 id="安装calico网络">安装Calico网络
+</h2><p>这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从<strong>Master节点</strong>上用kubectl应用yaml文件。</p>
 <p>一键脚本：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -774,8 +770,8 @@ if (!doNotTrack) {
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。</p>
-<h2 id="最后说几句">最后说几句</h2>
-<p>以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息</p>
+<h2 id="最后说几句">最后说几句
+</h2><p>以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -845,24 +841,25 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
                 defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.querySelector(`.article-content`), {
+        renderMathInElement(document.body, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
                 { left: "\\(", right: "\\)", display: false },
                 { left: "\\[", right: "\\]", display: true }
-            ]
+            ],
+            ignoredClasses: ["gist"]
         });})
 </script>
     
@@ -883,7 +880,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu8637115685238192666.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -907,7 +904,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6d416da1ddfbb7f98c712123bd095a5e_985951_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -931,7 +928,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu2315d63bffc53ea5fa23e960b91d356d_855728_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -955,7 +952,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -979,7 +976,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1006,7 +1003,7 @@ if (!doNotTrack) {
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -1054,14 +1051,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2023 かがやの部屋
+        2025 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1150,7 +1147,7 @@ if (!doNotTrack) {
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

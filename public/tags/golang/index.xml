@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Golang on かがやの部屋</title>
-        <link>https://blog.kagaya.fun/tags/golang/</link>
+        <link>http://localhost:1313/tags/golang/</link>
         <description>Recent content in Golang on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/golang/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/golang/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Go1.18：新的切片扩容策略</title>
-        <link>https://blog.kagaya.fun/p/2022/go118-new-growslice/</link>
+        <link>http://localhost:1313/p/2022/go118-new-growslice/</link>
         <pubDate>Sun, 27 Mar 2022 14:04:09 +0800</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2022/go118-new-growslice/</guid>
-        <description>&lt;img src="https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg" alt="Featured image of post Go1.18：新的切片扩容策略" /&gt;&lt;p&gt;随着go 1.18版本的发布，go社区终于迎来了期盼已久的正式泛型语法，然而我在浏览关于1.18的changelog时发现1.18对于slice的扩容策略也做了一些修改，刚好我最近正在看draven大佬的新书也讲到了slice底层的源码的一些运行逻辑，在好奇心的驱使下，想知道社区究竟改动了什么以及为什么作出这些改动，于是翻开1.18的源码，便有了这篇文章。&lt;/p&gt;
-&lt;h2 id=&#34;growslice-in-go-117&#34;&gt;Growslice In Go 1.17&lt;/h2&gt;
-&lt;p&gt;首先我们先简单回顾一下go 1.17及以前的切片扩容策略，这部分的主要逻辑在&lt;code&gt;src/runtime/slice.go&lt;/code&gt;中的&lt;code&gt;growslice&lt;/code&gt;函数（省略部分代码，下同）：&lt;/p&gt;
+        <guid>http://localhost:1313/p/2022/go118-new-growslice/</guid>
+        <description>&lt;img src="http://localhost:1313/p/2022/go118-new-growslice/96944986_p0.jpeg" alt="Featured image of post Go1.18：新的切片扩容策略" /&gt;&lt;p&gt;随着go 1.18版本的发布，go社区终于迎来了期盼已久的正式泛型语法，然而我在浏览关于1.18的changelog时发现1.18对于slice的扩容策略也做了一些修改，刚好我最近正在看draven大佬的新书也讲到了slice底层的源码的一些运行逻辑，在好奇心的驱使下，想知道社区究竟改动了什么以及为什么作出这些改动，于是翻开1.18的源码，便有了这篇文章。&lt;/p&gt;
+&lt;h2 id=&#34;growslice-in-go-117&#34;&gt;Growslice In Go 1.17
+&lt;/h2&gt;&lt;p&gt;首先我们先简单回顾一下go 1.17及以前的切片扩容策略，这部分的主要逻辑在&lt;code&gt;src/runtime/slice.go&lt;/code&gt;中的&lt;code&gt;growslice&lt;/code&gt;函数（省略部分代码，下同）：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -91,8 +91,8 @@ $$
 $$
 也就是说，如果按2为系数进行扩容，那么&lt;strong&gt;每一次扩容所需要的空间都大于之前释放的所有空间之和&lt;/strong&gt;，那么也就谈不上重新利用了。&lt;/p&gt;
 &lt;p&gt;可以看到当前方法也是作出了一些权衡，希望同时兼顾扩容效率和内存利用率，而以1024为分界点多半也是写代码人的个人喜好。&lt;/p&gt;
-&lt;h2 id=&#34;whats-the-problem&#34;&gt;What&amp;rsquo;s the problem？&lt;/h2&gt;
-&lt;p&gt;上面的扩容策略一直使用了许多年，但它仍然存在一个问题：那就是扩容策略并&lt;strong&gt;不是一个单调函数&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;whats-the-problem&#34;&gt;What&amp;rsquo;s the problem？
+&lt;/h2&gt;&lt;p&gt;上面的扩容策略一直使用了许多年，但它仍然存在一个问题：那就是扩容策略并&lt;strong&gt;不是一个单调函数&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;对于扩容策略不是单调函数，我们用下面的代码来做验证：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -111,10 +111,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这段代码通过申请一个长度为&lt;code&gt;i&lt;/code&gt;的切片，然后对其append一个元素来触发扩容。每次实验新增加100个元素，同时打印扩容前后的大小（单位byte）：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590.png&#34;
 	width=&#34;724&#34;
 	height=&#34;436&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590_hue30888b3507c5aba13bd9241afede616_41312_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590_hue30888b3507c5aba13bd9241afede616_41312_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590_hu2393930188740210394.png 480w, http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590_hu3104722771686443509.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;go1.17中扩容前后对比&#34;
@@ -128,28 +128,28 @@ $$
 &lt;p&gt;其中蓝色的线代表扩容前的每次容量大小变化，橙色线代表对应扩容后的大小变化，横坐标为实验序号，纵坐标为容量大小。&lt;/p&gt;
 &lt;p&gt;可以看到在第11次与第12次扩容后，扩容后的容量反而出现了下降，由于存在内存对齐，所以最后的容量会向上取一个合理的数值。&lt;/p&gt;
 &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;扩容前容量&lt;/th&gt;
-&lt;th&gt;扩容后容量&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;第11次&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;1000&lt;/td&gt;
-&lt;td&gt;2048&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;第12次&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;1100&lt;/td&gt;
-&lt;td&gt;1408&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;&lt;/th&gt;
+          &lt;th&gt;扩容前容量&lt;/th&gt;
+          &lt;th&gt;扩容后容量&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;第11次&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;1000&lt;/td&gt;
+          &lt;td&gt;2048&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;strong&gt;第12次&lt;/strong&gt;&lt;/td&gt;
+          &lt;td&gt;1100&lt;/td&gt;
+          &lt;td&gt;1408&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id=&#34;growslice-in-go-118&#34;&gt;Growslice In Go 1.18&lt;/h2&gt;
-&lt;p&gt;接下来我们回到刚刚发布的go 1.18版本中，在1.18中，优化了切片扩容的策略&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，让底层数组大小的增长更加平滑：&lt;/p&gt;
+&lt;h2 id=&#34;growslice-in-go-118&#34;&gt;Growslice In Go 1.18
+&lt;/h2&gt;&lt;p&gt;接下来我们回到刚刚发布的go 1.18版本中，在1.18中，优化了切片扩容的策略&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，让底层数组大小的增长更加平滑：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -226,40 +226,40 @@ newcap = oldcap + \frac{oldcap + 3 \times threshold}{4} \space\space\space\space
 $$
 通过减小阈值并固定增加一个常数，使得优化后的扩容的系数在阈值前后不再会出现从2到1.25的突变，该commit作者给出了几种原始容量下对应的“扩容系数”：&lt;/p&gt;
 &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;原始容量&lt;/th&gt;
-&lt;th&gt;扩容系数&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;256&lt;/td&gt;
-&lt;td&gt;2.0&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;512&lt;/td&gt;
-&lt;td&gt;1.63&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;1024&lt;/td&gt;
-&lt;td&gt;1.44&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2048&lt;/td&gt;
-&lt;td&gt;1.35&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;4096&lt;/td&gt;
-&lt;td&gt;1.30&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;原始容量&lt;/th&gt;
+          &lt;th&gt;扩容系数&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;256&lt;/td&gt;
+          &lt;td&gt;2.0&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;512&lt;/td&gt;
+          &lt;td&gt;1.63&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1024&lt;/td&gt;
+          &lt;td&gt;1.44&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;2048&lt;/td&gt;
+          &lt;td&gt;1.35&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;4096&lt;/td&gt;
+          &lt;td&gt;1.30&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;我们重新验证一下前一节中的代码，可以看到1.18中优化后的扩容策略可以保证是一个单调函数&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270.png&#34;
 	width=&#34;724&#34;
 	height=&#34;436&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270_hue30888b3507c5aba13bd9241afede616_39111_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270_hue30888b3507c5aba13bd9241afede616_39111_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270_hu16818658599224512656.png 480w, http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270_hu12661256115390059701.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;go1.18中扩容前后对比&#34;
@@ -270,10 +270,10 @@ $$
 		data-flex-basis=&#34;398px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;the-end&#34;&gt;The End&lt;/h2&gt;
-&lt;p&gt;这次问题源自于社区成员对于扩容机制中魔数的疑问，而对于整个runtime来说，slice的扩容只是其中最简单的冰山一角，即使如此，我们也看到社区对于细节问题的重视，通过一点一点的优化让golang能够不断进步。对于gopher来说，我们在使用golang的时候往往不会注意其背后的运行原理，因为go已经把一切都做好了，这也是我喜欢golang的原因，在“少即是多”的原则之下，go把许多复杂的运行机制很好的隐藏在runtime的源码之中，从而带给gopher最好的编程体验。而研究runtime的运行机制，便能够发现许多类似这种问题，通过研究社区的解决方法，也不失为一种乐趣。&lt;/p&gt;
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-&lt;p&gt;封面来自: &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/96944986&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;h2 id=&#34;the-end&#34;&gt;The End
+&lt;/h2&gt;&lt;p&gt;这次问题源自于社区成员对于扩容机制中魔数的疑问，而对于整个runtime来说，slice的扩容只是其中最简单的冰山一角，即使如此，我们也看到社区对于细节问题的重视，通过一点一点的优化让golang能够不断进步。对于gopher来说，我们在使用golang的时候往往不会注意其背后的运行原理，因为go已经把一切都做好了，这也是我喜欢golang的原因，在“少即是多”的原则之下，go把许多复杂的运行机制很好的隐藏在runtime的源码之中，从而带给gopher最好的编程体验。而研究runtime的运行机制，便能够发现许多类似这种问题，通过研究社区的解决方法，也不失为一种乐趣。&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References
+&lt;/h2&gt;&lt;p&gt;封面来自: &lt;a class=&#34;link&#34; href=&#34;https://www.pixiv.net/artworks/96944986&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://www.pixiv.net/artworks/96944986&lt;/a&gt;&lt;/p&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
@@ -292,22 +292,22 @@ $$
         </item>
         <item>
         <title>Amazing Go Interface</title>
-        <link>https://blog.kagaya.fun/p/2021/amazing-go-interface/</link>
+        <link>http://localhost:1313/p/2021/amazing-go-interface/</link>
         <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2021/amazing-go-interface/</guid>
-        <description>&lt;img src="https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg" alt="Featured image of post Amazing Go Interface" /&gt;&lt;p&gt;从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫&lt;strong&gt;Amazing Go&lt;/strong&gt;。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。&lt;/p&gt;
+        <guid>http://localhost:1313/p/2021/amazing-go-interface/</guid>
+        <description>&lt;img src="http://localhost:1313/p/2021/amazing-go-interface/golang.jpeg" alt="Featured image of post Amazing Go Interface" /&gt;&lt;p&gt;从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫&lt;strong&gt;Amazing Go&lt;/strong&gt;。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。&lt;/p&gt;
 &lt;p&gt;希望能对你有所帮助。&lt;/p&gt;
 &lt;p&gt;本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。&lt;/p&gt;
-&lt;h2 id=&#34;why-interface&#34;&gt;Why Interface?&lt;/h2&gt;
-&lt;p&gt;在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：&lt;/p&gt;
+&lt;h2 id=&#34;why-interface&#34;&gt;Why Interface?
+&lt;/h2&gt;&lt;p&gt;在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;In computing, an &lt;strong&gt;interface&lt;/strong&gt; is a shared boundary across which two or more separate components of a computer system exchange information.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;接口&lt;/strong&gt;的作用其实就是为不同层级的模块提供了一个定义好的&lt;strong&gt;中间层&lt;/strong&gt;，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C++和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。&lt;/p&gt;
-&lt;h3 id=&#34;c-interface&#34;&gt;C++ Interface&lt;/h3&gt;
-&lt;p&gt;我们先简单复习一下C++，接口在C++中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个&lt;strong&gt;抽象类&lt;/strong&gt;来表示接口：&lt;/p&gt;
+&lt;h3 id=&#34;c-interface&#34;&gt;C++ Interface
+&lt;/h3&gt;&lt;p&gt;我们先简单复习一下C++，接口在C++中尽管没有专门的关键字，但是一般使用虚函数或纯虚函数来声明一个&lt;strong&gt;抽象类&lt;/strong&gt;来表示接口：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -424,10 +424,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png&#34;
 	width=&#34;772&#34;
 	height=&#34;260&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hued78826357dc97a50104d0af5430f09a_31586_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu4131997697939419370.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu5117609755696736936.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-04_at_19.16.38@2x&#34;
@@ -441,8 +441,8 @@ $$
 &lt;p&gt;这里本质上就是实现了一个接口&lt;code&gt;Pat&lt;/code&gt;，对于使用者来说，不需要去关心&lt;code&gt;Pat&lt;/code&gt;到底是&lt;code&gt;Dog&lt;/code&gt;还是&lt;code&gt;Cat&lt;/code&gt;，只需要知道它有两个方法，&lt;code&gt;bark&lt;/code&gt;和&lt;code&gt;getName&lt;/code&gt;，其中&lt;code&gt;bark&lt;/code&gt;对于派生类来说必须有自己的实现方式，而&lt;code&gt;getName&lt;/code&gt;提供了默认的实现，即便&lt;code&gt;Cat&lt;/code&gt;类没有定义这个方法，但仍然可以可以通过基类指针调用并输出。对外只需提供&lt;code&gt;Pat&lt;/code&gt;接口，隐藏了内部具体的实现细节。&lt;/p&gt;
 &lt;p&gt;C++没有专门的Interface关键字，通过提供虚函数来实现接口特性，一个类只能继承一个虚函数，同时额外区分了提供默认实现和强制子类实现的函数，不含纯虚函数的抽象类是可以被实例化的，这是非常不合理的。除此之外，理论上接口应该&lt;strong&gt;只关注操作方法&lt;/strong&gt;，作为接口的基类函数却可以定义自己的公有和私有变量，造成一定的耦合，对于接口的实现来说往往会带来一些麻烦。&lt;/p&gt;
 &lt;p&gt;另外，作为动态语言的Python，也是通过抽象类来实现类似接口的功能。&lt;/p&gt;
-&lt;h3 id=&#34;java-interface&#34;&gt;Java Interface&lt;/h3&gt;
-&lt;p&gt;Java继承了C++的抽象类定义的同时，还专门提供了interface关键字，都是用来对对象方法提供抽象的接口。&lt;/p&gt;
+&lt;h3 id=&#34;java-interface&#34;&gt;Java Interface
+&lt;/h3&gt;&lt;p&gt;Java继承了C++的抽象类定义的同时，还专门提供了interface关键字，都是用来对对象方法提供抽象的接口。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;抽象类中的方法可以有方法体，就是能实现方法的具体功能，但是接口中的方法不行。&lt;/li&gt;
 &lt;li&gt;抽象类中的成员变量可以是各种类型的，而接口中的成员变量只能是 &lt;strong&gt;public static final&lt;/strong&gt; 类型的。&lt;/li&gt;
@@ -531,88 +531,88 @@ $$
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;76
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Pat.java
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// 接口中可以声明变量，默认为 public static final
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;pat&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// 默认为 public abstract
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;c1&#34;&gt;// 接口中可以实现静态函数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getPatName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Cat.java
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Cat&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Dog.java
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Dog&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;this dog&amp;#39;s name is &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// demo.java
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;java.lang.*&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;demo&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;Cat&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;Dog&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Spike&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;);&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;());&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Pat.java&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 接口中可以声明变量，默认为 public static final&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;pat&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 默认为 public abstract&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// 接口中可以实现静态函数&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;getPatName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Cat.java&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// Dog.java&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;implements&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;this dog&amp;#39;s name is &amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;// demo.java&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nn&#34;&gt;java.lang.*&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;demo&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;static&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;void&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;args&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Cat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Dog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;Spike&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;());&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;        &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;System&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;out&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;());&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;输出同上，可以看到Java借助interface关键字轻松实现多态，并且interface有着抽象类所没有的严格限制，比如只能声明抽象函数，进一步分离了对象的方法声明和方法实现，实现接口也需要使用&lt;code&gt;implements&lt;/code&gt;关键字显式声明，可以同时声明实现多个接口。&lt;/p&gt;
 &lt;p&gt;特别的是，Java中的接口仍然选择保留声明变量，但声明变量和实现函数必须是静态的，变量还限制为final，且方法不能通过实现类来重写和调用，即不能提供方法的默认实现。默认实现仍然需要借助抽象类来提供，个人觉得这还是有一些复杂，我们再做抽象时不得不考虑我们应该使用抽象类还是使用接口。&lt;/p&gt;
-&lt;h2 id=&#34;interface-in-go&#34;&gt;Interface in Go&lt;/h2&gt;
-&lt;p&gt;Go作为一门年轻的高级语言，自然也吸取了C++和Java中优秀的语法设计，同时以围绕简单直接的设计哲学，Go对于接口的设计也形成了自己独特的风格。&lt;/p&gt;
+&lt;h2 id=&#34;interface-in-go&#34;&gt;Interface in Go
+&lt;/h2&gt;&lt;p&gt;Go作为一门年轻的高级语言，自然也吸取了C++和Java中优秀的语法设计，同时以围绕简单直接的设计哲学，Go对于接口的设计也形成了自己独特的风格。&lt;/p&gt;
 &lt;p&gt;Go语言的设计哲学之一就是&lt;strong&gt;简单直接，少即是多&lt;/strong&gt;，作为一门现代编程语言，他甚至抛弃了OOP中关键的&lt;code&gt;class&lt;/code&gt;关键字，转而去拥抱类似C中的&lt;code&gt;struct&lt;/code&gt;。但和C这种纯过程式的语言不同，Go依然拥有面向对象的特性，让面向对象的软件设计方法依然在Golang中发光发热。&lt;/p&gt;
 &lt;p&gt;另外补充一下，Go由于同时抛弃了public、private、protected等关键字，对于公有和私有方法/变量的处理是通过名称&lt;strong&gt;首字母的大小&lt;/strong&gt;写来区分，大写字母开头即为公有方法/变量，小写字母开头则为私有方法/变量。&lt;/p&gt;
 &lt;p&gt;说回到接口，在Go中，也与Java一样提供了interface关键字，通过interface来声明一个接口：&lt;/p&gt;
@@ -632,8 +632,8 @@ $$
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Go中的接口声明显得十分直观简单，只包含接口名+包含的方法，不允许声明变量，不允许有方法实现，彻底将对象中的方法抽象了出来，没有一点多余的要素，只告诉使用方这个接口包含哪些方法可以使用。&lt;/p&gt;
 &lt;p&gt;更加令人惊喜的是，Go中的接口实现方法采用了类似&lt;strong&gt;鸭子类型&lt;/strong&gt;的实现策略。&lt;/p&gt;
-&lt;h3 id=&#34;duck-typing&#34;&gt;Duck Typing&lt;/h3&gt;
-&lt;p&gt;鸭子类型（Duck Typing）&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;是一种动态类型语言的设计风格：&lt;/p&gt;
+&lt;h3 id=&#34;duck-typing&#34;&gt;Duck Typing
+&lt;/h3&gt;&lt;p&gt;鸭子类型（Duck Typing）&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;是一种动态类型语言的设计风格：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;If it walks like a duck and it quacks like a duck, then it must be a duck&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -701,8 +701,8 @@ $$
 &lt;li&gt;“如果它走起来像鸭子并且叫起来像鸭子”，它也可以是一只正在模仿鸭子的龙。尽管它们可以模仿鸭子，但也许你不总是想让龙进入池塘。&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;当然这不妨碍仍有很多人喜欢Duck Typing，尤其是众多Gopher。&lt;/p&gt;
-&lt;h3 id=&#34;whats-different-in-go&#34;&gt;What&amp;rsquo;s different in go&lt;/h3&gt;
-&lt;p&gt;前面也说了，Golang的接口提供了&lt;strong&gt;类似鸭子类型&lt;/strong&gt;的特性，为什么说类似呢，一个最重要的不同就是Golang作为一门静态类型的语言却实现了类似动态语言的特性，我们还是看上面猫和狗的例子：&lt;/p&gt;
+&lt;h3 id=&#34;whats-different-in-go&#34;&gt;What&amp;rsquo;s different in go
+&lt;/h3&gt;&lt;p&gt;前面也说了，Golang的接口提供了&lt;strong&gt;类似鸭子类型&lt;/strong&gt;的特性，为什么说类似呢，一个最重要的不同就是Golang作为一门静态类型的语言却实现了类似动态语言的特性，我们还是看上面猫和狗的例子：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
@@ -794,8 +794,8 @@ $$
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;由于Go是一门静态类型的语言，意味着可以通过静态类型检查让你你可以放心的使用鸭子类型，而避免了可能的类型错误同时还能享受鸭子类型带来的简洁高效的语法。&lt;/p&gt;
 &lt;p&gt;有读者可能已经注意到了，我在接口类型变量p赋值时，第一次使用了指针，而第二次原变量，这里涉及到了指针结构体和原结构体所包含方法列表的范围，有兴趣的读者可以思考一下为什么。&lt;/p&gt;
-&lt;h3 id=&#34;one-more-case&#34;&gt;One more case&lt;/h3&gt;
-&lt;p&gt;刚才这个例子或许也还不足以体现Go Interface的神奇之处，那么再来看看这个例子。&lt;/p&gt;
+&lt;h3 id=&#34;one-more-case&#34;&gt;One more case
+&lt;/h3&gt;&lt;p&gt;刚才这个例子或许也还不足以体现Go Interface的神奇之处，那么再来看看这个例子。&lt;/p&gt;
 &lt;p&gt;Golang诞生至今，最成功的接口定义之一就是&lt;code&gt;io.Writer&lt;/code&gt;和&lt;code&gt;io.Reader&lt;/code&gt;接口：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -950,13 +950,13 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 这个接口包含了 Read(), Write(), DataType() 三个方法
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;easy-to-test&#34;&gt;Easy to test&lt;/h3&gt;
-&lt;p&gt;使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 &lt;code&gt;Mock&lt;/code&gt;。&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;easy-to-test&#34;&gt;Easy to test
+&lt;/h3&gt;&lt;p&gt;使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 &lt;code&gt;Mock&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;对于上文的接口Pet，我们使用mockery来生成对应的mock&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png&#34;
 	width=&#34;1830&#34;
 	height=&#34;184&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu46a9e9788e4ab1909834149ec38322aa_94863_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu1556418704324950835.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu16365847392673437516.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-11_at_17.07.31&#34;
@@ -1073,10 +1073,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png&#34;
 	width=&#34;1336&#34;
 	height=&#34;326&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu449be974bcdb4039eca4653eb318fbd1_68098_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6591652098177965681.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6643112678696136226.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-11_at_17.12.28@2x&#34;
@@ -1088,8 +1088,8 @@ $$
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;同理，我们可以模拟sql语句，http请求等，保证单元测试的上下文无关，提高单元测试的覆盖度来保证代码质量。&lt;/p&gt;
-&lt;h2 id=&#34;behind-the-go-interface&#34;&gt;Behind the Go Interface&lt;/h2&gt;
-&lt;p&gt;Gopher们常说Go语言写起来像动态类型的语言一样轻松，除了对于变量类型的自动推导，Interface所带来的Duck Typing特性也功不可没，这样类似动态语言的特性究竟是如何实现的呢？&lt;/p&gt;
+&lt;h2 id=&#34;behind-the-go-interface&#34;&gt;Behind the Go Interface
+&lt;/h2&gt;&lt;p&gt;Gopher们常说Go语言写起来像动态类型的语言一样轻松，除了对于变量类型的自动推导，Interface所带来的Duck Typing特性也功不可没，这样类似动态语言的特性究竟是如何实现的呢？&lt;/p&gt;
 &lt;p&gt;我们先来看一下常用ToString函数，它可以这么实现：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1158,10 +1158,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;此时我们声明一个变量为Binary类型，在内存中的结构如下（假设为32bits系统），需要占用两个32bits空间&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer1.png&#34;
 	width=&#34;159&#34;
 	height=&#34;83&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1_hu7ba701826fa2a9e58ebad548610c8e18_1516_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer1_hu671820870761876410.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer1_hu16336029155658501355.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer1&#34;
@@ -1173,10 +1173,10 @@ $$
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;紧接着我们把它复制给一个Stringer接口类型或者通过强制类型转换把它转换为Stringer，那么在内存中会分配一个interface结构体来保存我们的Binary变量&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer2.png&#34;
 	width=&#34;486&#34;
 	height=&#34;238&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2_hu9e2e4417d307830be45ce4f85a9dcbb0_10238_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer2_hu11882903150325669475.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer2_hu15874367863518674544.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer2&#34;
@@ -1193,10 +1193,10 @@ $$
 &lt;ul&gt;
 &lt;li&gt;如果一个interface不包含任何方法，就可以用实际的类型变量存储在itab指针的位置&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer3.png&#34;
 	width=&#34;317&#34;
 	height=&#34;170&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3_hu2e93a3bd1ef5bc23821fbe90c0847e23_5351_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer3_hu10650001449220074261.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer3_hu18158471826396362538.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer3&#34;
@@ -1210,10 +1210,10 @@ $$
 &lt;ul&gt;
 &lt;li&gt;而对于占用不大于32bits的变量，则可以直接存放在data部分替换原来的data指针&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer4.png&#34;
 	width=&#34;418&#34;
 	height=&#34;238&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4_hu5b125dcc2d728fb584278303b705c20c_9300_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer4_hu10707638083075873035.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer4_hu6125221285406795370.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer4&#34;
@@ -1227,10 +1227,10 @@ $$
 &lt;ul&gt;
 &lt;li&gt;又或者同时满足上面两种情况下&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer5.png&#34;
 	width=&#34;299&#34;
 	height=&#34;83&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5_hu907b30d2fe2954b467d2c8b94f5160c4_4132_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer5_hu3358795277071618919.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer5_hu2336829562826341647.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer5&#34;
@@ -1306,8 +1306,8 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;generic-type&#34;&gt;Generic Type&lt;/h2&gt;
-&lt;p&gt;在2022年初到来的Go 1.18中，会带来期待已久的范型功能，在目前的泛型提案中，interface增加了新的特性。&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;generic-type&#34;&gt;Generic Type
+&lt;/h2&gt;&lt;p&gt;在2022年初到来的Go 1.18中，会带来期待已久的范型功能，在目前的泛型提案中，interface增加了新的特性。&lt;/p&gt;
 &lt;p&gt;Type list:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -1421,13 +1421,13 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// type set理念下的新语法
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SignedInteger&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int8&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int16&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int32&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int64&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int8&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int16&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int32&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int64&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;目前来说go的interface可以很好的替代一部分泛型的功能，但是并不能完全替代泛型，因此引入泛型后两者必然有一些功能的重叠部分，而且会给go简洁的语法引入一定的复杂性，破坏原有的go语言美感。不过目前还都不能盖棺定论，go团队也需要在社区收集充足的意见决定如何把泛型带入go语言中，让gopher们在享受泛型带来的便利同时，避免引入过多的复杂性，期待1.18中的泛型能把go带入一个新的阶段。&lt;/p&gt;
-&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
-&lt;ul&gt;
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion
+&lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;C++只能通过虚函数来实现类似接口的功能&lt;/li&gt;
 &lt;li&gt;Java既可以使用虚函数，也有专门的interface关键字，使用时需要进行区分&lt;/li&gt;
 &lt;li&gt;Go中的interface可以实现类似动态语言鸭子类型的特性&lt;/li&gt;
@@ -1436,8 +1436,8 @@ $$
 &lt;/ul&gt;
 &lt;p&gt;其他关于Go中类型转换，断言，动态派发的具体汇编实现可以参看draveness的这篇&lt;a class=&#34;link&#34; href=&#34;https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-interface/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;博客&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference
+&lt;/h2&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
@@ -1466,21 +1466,21 @@ $$
         </item>
         <item>
         <title>函数式程序设计的影响与应用</title>
-        <link>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
+        <link>http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
         <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
-        <description>&lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png" alt="Featured image of post 函数式程序设计的影响与应用" /&gt;&lt;h2 id=&#34;简介&#34;&gt;简介&lt;/h2&gt;
-&lt;p&gt;函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。&lt;/p&gt;
+        <guid>http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
+        <description>&lt;img src="http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png" alt="Featured image of post 函数式程序设计的影响与应用" /&gt;&lt;h2 id=&#34;简介&#34;&gt;简介
+&lt;/h2&gt;&lt;p&gt;函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。&lt;/p&gt;
 &lt;p&gt;尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。&lt;/p&gt;
 &lt;p&gt;当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用&lt;/p&gt;
-&lt;h2 id=&#34;函数式语言的发展&#34;&gt;函数式语言的发展&lt;/h2&gt;
-&lt;h3 id=&#34;haskell&#34;&gt;Haskell&lt;/h3&gt;
-&lt;p&gt;Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;函数式语言的发展&#34;&gt;函数式语言的发展
+&lt;/h2&gt;&lt;h3 id=&#34;haskell&#34;&gt;Haskell
+&lt;/h3&gt;&lt;p&gt;Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;与命令式编程语言不同，Haskell是一种纯函数式编程语言。虽然它现在仍然局限在学术界和需要大量使用高等数学的行业如金融业，但是这并不意味着数值计算。&lt;/p&gt;
 &lt;p&gt;功能编程范式依赖于编程功能 ，其行为为数学函数，允许创建不修改外部数据或具有与外部上下文的可观察的交互功能。可观察的交互是指将数据写入文件或引发异常的事情。在技术上这意味着功能没有 side-effects，这也可能成为一等公民的功能。函数和其他类型一样，也可以作为其他函数的参数。&lt;/p&gt;
-&lt;h3 id=&#34;fp-in-golang&#34;&gt;FP in Golang&lt;/h3&gt;
-&lt;p&gt;Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。&lt;/p&gt;
+&lt;h3 id=&#34;fp-in-golang&#34;&gt;FP in Golang
+&lt;/h3&gt;&lt;p&gt;Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。&lt;/p&gt;
 &lt;p&gt;尽管Go不是专门设计的函数式编程语言，但其语法支持我们使用一些函数式的编程思维。只需要满足两个规则：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;没有数据赋值：数据对象赋值后不再改变&lt;/li&gt;
@@ -1599,15 +1599,15 @@ $$
 &lt;p&gt;Go语言中实现引用透明的方法是通过避免引用传递或指针传递的使用。虽然在Go语言中都是通过值传递的方式来传递参数，但是像切片或者Map这样的数据结构是通过指针的方式来进行传递。因此我们在使用函数式的程序设计思路来构造我们的程序时，应当注意引用透明性，避免在函数的计算结果受外部的状态影响或者影响外部的状态。&lt;/p&gt;
 &lt;p&gt;对于Go语言来说，由函数式所带来的引用透明性可以带来很多显而易见的好处，比如我们可以缓存每一次函数调用的结果来达到空间换时间的目的，又或者幂等的函数使得函数的计算结构变得可预测。同时函数式天生的模块化设计理念可以让自底向上的程序设计变得更加容易。程序的调试也变得更加简单，由于函数都是各自独立的，他们的计算结果只依赖于各自的输入参数。&lt;/p&gt;
 &lt;p&gt;最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生&lt;sup id=&#34;fnref1:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;，与Go语言的高并发设计理念不谋而合。&lt;/p&gt;
-&lt;h2 id=&#34;函数式语言的应用&#34;&gt;函数式语言的应用&lt;/h2&gt;
-&lt;h3 id=&#34;fp-in-compiler&#34;&gt;FP in Compiler&lt;/h3&gt;
-&lt;p&gt;在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。&lt;/p&gt;
+&lt;h2 id=&#34;函数式语言的应用&#34;&gt;函数式语言的应用
+&lt;/h2&gt;&lt;h3 id=&#34;fp-in-compiler&#34;&gt;FP in Compiler
+&lt;/h3&gt;&lt;p&gt;在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。&lt;/p&gt;
 &lt;p&gt;将程式码转换为SSA形式，最简单的方法，就是将每个被赋值的变数，以一个新的变数来取代，而新的变数名称则为一个带着编号的旧变数。SSA通过加一个特别的描述，称之为&lt;em&gt;Φ 函式&lt;/em&gt;，来实现对于变量赋值来源不确定时的表示&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;在《SSA is Functional Programming》&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;这篇文章中，作者提出了一种观点，认为SSA form其实是一种函数式编程，对于一次赋值，左侧是对应函数的形式参数，右侧是对应函数调用的实际参数。通过函数之间的嵌套调用，可以很清楚的表现SSA中的变量的实际作用范围。&lt;/p&gt;
 &lt;p&gt;因此，对于SSA来说，SSA form的一个重要属性是，变量的定义决定了每次的使用（或在C函数中使用的情况下，支配使用节点的前驱节点）。 SSA的解释中通常未声明此属性，但是对SSA进行许多分析和优化是必需的-它是SSA语义的一部分。 在具有嵌套作用域的函数式程序中，此限制已明确且静态地编码到函数嵌套的结构中。 变量范围的概念有助于我们构造中间形式。&lt;/p&gt;
 &lt;p&gt;而对于使用函数式程序设计的成语言来说，使用SSA的过程中，往往会绘制带有方框，任务，条件和控制流边缘的流程图。 这种表示法虽然容易被滥用，但通常更适合于解释思想以及直观地可视化地表现算法和状态转换。 函数式程序员可以借鉴这样一种方法，避免迷失在函数式编程的概念中。&lt;/p&gt;
-&lt;h3 id=&#34;fp-in-parallel-programming&#34;&gt;FP in Parallel Programming&lt;/h3&gt;
-&lt;p&gt;为了提高计算机的运行速度和系统的处理能力，在总体设计和逻辑设计中广泛采用并行操作技术，使各部件并行工作。要求操作系统具有并发性及资源共享，可以采用并行程序设计的方法。&lt;/p&gt;
+&lt;h3 id=&#34;fp-in-parallel-programming&#34;&gt;FP in Parallel Programming
+&lt;/h3&gt;&lt;p&gt;为了提高计算机的运行速度和系统的处理能力，在总体设计和逻辑设计中广泛采用并行操作技术，使各部件并行工作。要求操作系统具有并发性及资源共享，可以采用并行程序设计的方法。&lt;/p&gt;
 &lt;p&gt;对于命令式的语言来说，进行并行程序设计时会遇到许多困难&lt;sup id=&#34;fnref:7&#34;&gt;&lt;a href=&#34;#fn:7&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;程序员必须构思一个符合规范的并行算法&lt;/li&gt;
@@ -1629,10 +1629,10 @@ $$
 &lt;li&gt;程序结果是确定的，也就是说，额外的的因素例如调度策略并不会使得每一次执行的结果不同&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;并行函数式编程是一种处于青春期的技术。它的潜力是巨大的，但是在它获得广泛信誉之前，需要在实际应用中进行实践测试。幸运的是，现在可以实现支持实际应用程序的实现，并且可以预期，在未来几年中，使用函数式编程的使用将大大增加。使函数式程序具有吸引力的原因正是那些对分布式计算系统和运行时资源管理系统的大量需求。但是，随着实现的改进，函数式编程的成本应变得越来越可忽略。随着软件变得越来越复杂，其收益将越来越有价值。&lt;/p&gt;
-&lt;h3 id=&#34;fp-in-cloud&#34;&gt;FP in Cloud&lt;/h3&gt;
-&lt;p&gt;云原生是一种构建和运行应用程序的方法，是一套技术体系和方法论。云原生（CloudNative）是一个组合词，Cloud+Native。Cloud表示应用程序位于云中，而不是传统的数据中心；Native表示应用程序从设计之初即考虑到云的环境，原生为云而设计，在云上以最佳姿势运行，充分利用和发挥云平台的弹性+分布式优势。可以简单的将云原生理解为：&lt;strong&gt;云原生 = 微服务 + DevOps + 持续交付 + 容器化&lt;/strong&gt;&lt;/p&gt;
-&lt;h4 id=&#34;性能场景&#34;&gt;性能场景&lt;/h4&gt;
-&lt;p&gt;云原生技术中最有具有代表性的技术之一，便是无服务Serverless技术。在Serverless中，不仅对基础设施进行了虚拟化，抽象化管理，而且可以按需启动和支付需要的资源（CPU、memory、网络带宽）。这样人们可以只考虑架构解决方案而不用去担心潜在的基础设施配置、供应、伸缩或管理&lt;sup id=&#34;fnref:8&#34;&gt;&lt;a href=&#34;#fn:8&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;fp-in-cloud&#34;&gt;FP in Cloud
+&lt;/h3&gt;&lt;p&gt;云原生是一种构建和运行应用程序的方法，是一套技术体系和方法论。云原生（CloudNative）是一个组合词，Cloud+Native。Cloud表示应用程序位于云中，而不是传统的数据中心；Native表示应用程序从设计之初即考虑到云的环境，原生为云而设计，在云上以最佳姿势运行，充分利用和发挥云平台的弹性+分布式优势。可以简单的将云原生理解为：&lt;strong&gt;云原生 = 微服务 + DevOps + 持续交付 + 容器化&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;性能场景&#34;&gt;性能场景
+&lt;/h4&gt;&lt;p&gt;云原生技术中最有具有代表性的技术之一，便是无服务Serverless技术。在Serverless中，不仅对基础设施进行了虚拟化，抽象化管理，而且可以按需启动和支付需要的资源（CPU、memory、网络带宽）。这样人们可以只考虑架构解决方案而不用去担心潜在的基础设施配置、供应、伸缩或管理&lt;sup id=&#34;fnref:8&#34;&gt;&lt;a href=&#34;#fn:8&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;在《Functional Programming in Serverless World》&lt;sup id=&#34;fnref:9&#34;&gt;&lt;a href=&#34;#fn:9&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;中，作者利用AWS的Lambda Serverless服务对几种函数式语言在Serverless场景中的性能进行了测试，作者主要做了四个方面的测试：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;包大小&lt;/li&gt;
@@ -1641,10 +1641,10 @@ $$
 &lt;li&gt;冷启动时间&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;结果如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu1015944569728219425.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu6533533926159356779.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;包大小对比&#34;
@@ -1654,10 +1654,10 @@ $$
 		data-flex-grow=&#34;100&#34;
 		data-flex-basis=&#34;240px&#34;
 	
-&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png&#34;
+&gt; &lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu536980269799004202.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu16808929019532103047.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;占用内存对比&#34;
@@ -1668,10 +1668,10 @@ $$
 		data-flex-basis=&#34;240px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu113629708269735224.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu18348777042182670285.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;执行效率对比&#34;
@@ -1681,10 +1681,10 @@ $$
 		data-flex-grow=&#34;100&#34;
 		data-flex-basis=&#34;240px&#34;
 	
-&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png&#34;
+&gt; &lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu6016970050138491387.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu12180964666984603155.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;冷启动时间对比&#34;
@@ -1696,8 +1696,8 @@ $$
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;从这些测试中可以看出，不同的函数式语言在无服务器场景下运行情况是又较大的区别的。作者认为，对于Serverless技术不应该盲目的使用，而是更具应用场景再决定是否使用Serverless。同时，作者还建议，对于一个Serverless服务，最可靠安全的函数式语言应该是F#，因为由于各个云服务提供的Serverless服务所支持的语言不同，但对于.NET Core平台的支持都是最充足的。&lt;/p&gt;
-&lt;h4 id=&#34;云原生应用场景&#34;&gt;云原生应用场景&lt;/h4&gt;
-&lt;p&gt;在《Functional Programming Languages in Computing Clouds》&lt;sup id=&#34;fnref:10&#34;&gt;&lt;a href=&#34;#fn:10&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;这篇文章中，作者对于云计算场景下的函数式程序设计语言提出了两个问题：&lt;/p&gt;
+&lt;h4 id=&#34;云原生应用场景&#34;&gt;云原生应用场景
+&lt;/h4&gt;&lt;p&gt;在《Functional Programming Languages in Computing Clouds》&lt;sup id=&#34;fnref:10&#34;&gt;&lt;a href=&#34;#fn:10&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;这篇文章中，作者对于云计算场景下的函数式程序设计语言提出了两个问题：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;云计算构建中有哪些新的范式和问题？&lt;/li&gt;
 &lt;li&gt;函数式编程语言（FPL）是否适合这些范式，它们是否提供新的方法来应对新的问题和挑战？&lt;/li&gt;
@@ -1801,12 +1801,12 @@ $$
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kr&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;validateCreatePostEvent&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;compose&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;asUserPostEvent&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;queryParamsIsNull&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pathParamsIsNull&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h4 id=&#34;分布式系统开发&#34;&gt;分布式系统开发&lt;/h4&gt;
-&lt;p&gt;在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》&lt;sup id=&#34;fnref:12&#34;&gt;&lt;a href=&#34;#fn:12&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;12&lt;/a&gt;&lt;/sup&gt;，作者讨论了分布式环境下对于函数式编程语言F#的使用。&lt;/p&gt;
+&lt;/div&gt;&lt;h4 id=&#34;分布式系统开发&#34;&gt;分布式系统开发
+&lt;/h4&gt;&lt;p&gt;在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》&lt;sup id=&#34;fnref:12&#34;&gt;&lt;a href=&#34;#fn:12&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;12&lt;/a&gt;&lt;/sup&gt;，作者讨论了分布式环境下对于函数式编程语言F#的使用。&lt;/p&gt;
 &lt;p&gt;分布式系统的开发本质上非常复杂，部分原因是在客户端和服务器端使用了不同的语言和技术，而且这些技术之间通常没有透明的无缝集成。 因此，开发人员必须将整个系统视为许多互操作的模块，始终牢记这些模块如何协同工作并交换信息。 这也使开发更加复杂，因为我们需要在源代码树中分离服务器端和客户端代码。&lt;/p&gt;
 &lt;p&gt;作者强调了F＃非常适合于分布式云计算。 由于函数样式迫使我们以一种由无状态函数组成的方式分解问题，无状态函数仅在给定初始数据的情况下计算结果，因此我们自然可以在集群中的不同节点上并行运行那些独立的函数。 任务的分配仍然是开发人员的责任，但是功能分解过程的整体性质使其变得更加容易。&lt;/p&gt;
-&lt;h3 id=&#34;fp-in-programming-design-optional-functions&#34;&gt;FP in Programming Design: Optional Functions&lt;/h3&gt;
-&lt;p&gt;在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样&lt;/p&gt;
+&lt;h3 id=&#34;fp-in-programming-design-optional-functions&#34;&gt;FP in Programming Design: Optional Functions
+&lt;/h3&gt;&lt;p&gt;在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -1906,10 +1906,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;第一种方式我们可以通过返回的&lt;code&gt;interface{}&lt;/code&gt;获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的&lt;code&gt;defer&lt;/code&gt;函数，便可以方便的实现对于配置项的临时修改和恢复。&lt;/p&gt;
-&lt;h2 id=&#34;pros-and-cons-of-fp&#34;&gt;Pros and Cons of FP&lt;/h2&gt;
-&lt;p&gt;正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。&lt;/p&gt;
-&lt;h3 id=&#34;advantages&#34;&gt;Advantages&lt;/h3&gt;
-&lt;p&gt;函数式编程的有点是非常显而易见的，从不同角度来说，函数式程序设计的优越性往往有以下几个方面：&lt;/p&gt;
+&lt;h2 id=&#34;pros-and-cons-of-fp&#34;&gt;Pros and Cons of FP
+&lt;/h2&gt;&lt;p&gt;正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。&lt;/p&gt;
+&lt;h3 id=&#34;advantages&#34;&gt;Advantages
+&lt;/h3&gt;&lt;p&gt;函数式编程的有点是非常显而易见的，从不同角度来说，函数式程序设计的优越性往往有以下几个方面：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;函数式程序设计是非常安全的，尤其是在并行和分布式编程中，因为纯函数是天生线程安全的&lt;sup id=&#34;fnref:14&#34;&gt;&lt;a href=&#34;#fn:14&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;14&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;li&gt;纯函数容易理解，不需要关注任何可能被改变的隐藏状态。这使得代码更短，从而保证可以容忍的错误数量更少&lt;sup id=&#34;fnref:15&#34;&gt;&lt;a href=&#34;#fn:15&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;15&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
@@ -1921,8 +1921,8 @@ $$
 &lt;li&gt;正如前一节提到的Functional Options在Golang中的应用，函数式的方法可以很好的提升代码的可读性。函数式设计出来的方法往往可以拥有自解释性（self-documented），方法的功能和行为等内容都定义在了输入参数或函数名当中，不需要额外的注释就可以让阅读者很好的理解代码的功能和预测代码运行的结果&lt;sup id=&#34;fnref1:11&#34;&gt;&lt;a href=&#34;#fn:11&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;li&gt;函数式程序设计中对于纯函数的使用，使得方法的计算结果变得可缓存。因为纯函数的输出只取决于函数的输入参数，那么我们便可以预先计算并缓存一些计算结果，这样在之后遇到相同的输入参数时，我们就可以直接使用缓存的结果，从而提高程序的执行效率&lt;sup id=&#34;fnref2:11&#34;&gt;&lt;a href=&#34;#fn:11&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;disadvantages&#34;&gt;Disadvantages&lt;/h3&gt;
-&lt;p&gt;函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：&lt;/p&gt;
+&lt;h3 id=&#34;disadvantages&#34;&gt;Disadvantages
+&lt;/h3&gt;&lt;p&gt;函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：&lt;/p&gt;
 &lt;p&gt;首先是资源占用和运行效率方面：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;函数式设计的程序往往会比命令式的程序在执行效率上更慢，大多数FP使用特殊的不可变数据结构。如FP通过调用set函数设置一个新值，返回一个设置来新值的新数据结构而不是在原来的数据结构上进行修改&lt;sup id=&#34;fnref4:14&#34;&gt;&lt;a href=&#34;#fn:14&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;14&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
@@ -1936,13 +1936,13 @@ $$
 &lt;li&gt;在某些应用场景中计算机无法按函数式的方式运行，如一些有状态和命令式的操作，他们本质上就是一个巨大的状态机，FP在这里无法起作用&lt;sup id=&#34;fnref4:16&#34;&gt;&lt;a href=&#34;#fn:16&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;16&lt;/a&gt;&lt;/sup&gt;。&lt;/li&gt;
 &lt;li&gt;同理，其他一些有状态的对象，在OOP中可以很好的处理应对，但是对于FP来说，就是十分棘手的困难。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
-&lt;p&gt;在本文中，我简单介绍了函数式语言的发展，并概述了函数式的设计思维在一些已有场景的应用，同时从正反两个角度分别阐述了函数式程序设计的优越性和局限性。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;在本文中，我简单介绍了函数式语言的发展，并概述了函数式的设计思维在一些已有场景的应用，同时从正反两个角度分别阐述了函数式程序设计的优越性和局限性。&lt;/p&gt;
 &lt;p&gt;综上所述，函数式程序设计经过了很长一段时间的发展，人们已经总结出了许多行而有效的应用方法，但它并不是银色子弹，不能一劳永逸地解决我们程序设计中的所有问题，恰恰相反，函数式程序设计的应用往往会给我们带来新的问题。我们应当从函数式中学到一种我们在面向对象的程序设计中接触不到的程序设计理念，并将其很好的与OOP进行结合。&lt;/p&gt;
 &lt;p&gt;事实也证明FP与OOP是正交的，它们可以很好的结合起来，针对不同问题各取所长。OOP强调对象状态的改变，混合了声明与状态的概念，而FP有着天生适合并发的优势，以及自解释等提高代码质量的优点。&lt;/p&gt;
 &lt;p&gt;细细品味函数式编程，就会觉得FP天生就有一种独特的魅力，我们可以好好利用函数式编程的思维来实现某些符合函数式特性场景的具体需求。所以，在今后的学习工作中，也应当做到具体问题具体分析，运用好函数式程序设计这个巧妙的工具来解决我们遇到的各种问题，提高自身的程序设计能力和代码软件的质量。&lt;/p&gt;
-&lt;h2 id=&#34;参考文献&#34;&gt;参考文献&lt;/h2&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献
+&lt;/h2&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;

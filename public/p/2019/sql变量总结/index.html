@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n">
 <title>SQL变量总结</title>
 
-<link rel='canonical' href='https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
+<link rel='canonical' href='http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='SQL变量总结'>
-<meta property='og:description' content='SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限'>
-<meta property='og:url' content='https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="SQL变量总结">
+<meta property='og:description' content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n">
+<meta property='og:url' content='http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/default.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='og:image' content='http://localhost:1313/default.jpg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="SQL变量总结">
-<meta name="twitter:description" content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.kagaya.fun/default.jpg' />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
-}
-</script>
-
+<meta name="twitter:description" content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/default.jpg' />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V8T3W98XW5');
+        }
+      </script>
     </head>
     <body class="
     article-page
@@ -69,7 +72,7 @@ if (!doNotTrack) {
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                        <img src="/img/avatar_hu670781931259558488.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -89,7 +92,6 @@ if (!doNotTrack) {
         
         
         
-
         <li >
             <a href='/' >
                 
@@ -108,7 +110,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/post' >
                 
@@ -129,7 +130,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/about/' >
                 
@@ -147,7 +147,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/archives/' >
                 
@@ -168,7 +167,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://twitter.com/kagaya_85' target="_blank">
                 
@@ -187,7 +185,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://github.com/kagaya85' target="_blank">
                 
@@ -206,7 +203,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://bangumi.tv/user/kagaya85' target="_blank">
                 
@@ -224,7 +220,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/search/' >
                 
@@ -241,12 +236,12 @@ if (!doNotTrack) {
             </a>
         </li>
         
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -254,7 +249,7 @@ if (!doNotTrack) {
 
 
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -262,10 +257,11 @@ if (!doNotTrack) {
 
 
 
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
     </ol>
 </aside>
 
@@ -377,9 +373,9 @@ if (!doNotTrack) {
     <section class="article-content">
     
     
-    <h1 id="sql变量总结">SQL变量总结</h1>
-<h3 id="变量分类">变量分类</h3>
-<ul>
+    <h1 id="sql变量总结">SQL变量总结
+</h1><h3 id="变量分类">变量分类
+</h3><ul>
 <li>用户变量
 <ul>
 <li>以<code>@</code>开始，形式为<code>@变量名</code></li>
@@ -405,98 +401,98 @@ if (!doNotTrack) {
 </ul>
 </li>
 </ul>
-<h3 id="定义方法">定义方法</h3>
-<ul>
+<h3 id="定义方法">定义方法
+</h3><ul>
 <li>&ldquo;=&quot;,如 set @a =3,@a:=5</li>
 <li>&ldquo;:=&quot;。select常常这样使用</li>
 <li>set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量</li>
 <li>未定义的变量初始化是null</li>
 </ul>
-<h3 id="示例题目">示例题目：</h3>
-<p>X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：<strong>序号</strong> (id)、<strong>日期</strong> (date)、 <strong>人流量</strong> (people)。</p>
+<h3 id="示例题目">示例题目：
+</h3><p>X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：<strong>序号</strong> (id)、<strong>日期</strong> (date)、 <strong>人流量</strong> (people)。</p>
 <p>请编写一个查询语句，找出高峰期时段，要求连续三天及以上，并且每天人流量均不少于100。</p>
 <div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>id</th>
-<th>visit_date</th>
-<th>people</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>2017-01-01</td>
-<td>10</td>
-</tr>
-<tr>
-<td>2</td>
-<td>2017-01-02</td>
-<td>109</td>
-</tr>
-<tr>
-<td>3</td>
-<td>2017-01-03</td>
-<td>150</td>
-</tr>
-<tr>
-<td>4</td>
-<td>2017-01-04</td>
-<td>99</td>
-</tr>
-<tr>
-<td>5</td>
-<td>2017-01-05</td>
-<td>145</td>
-</tr>
-<tr>
-<td>6</td>
-<td>2017-01-06</td>
-<td>1455</td>
-</tr>
-<tr>
-<td>7</td>
-<td>2017-01-07</td>
-<td>199</td>
-</tr>
-<tr>
-<td>8</td>
-<td>2017-01-08</td>
-<td>188</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>id</th>
+          <th>visit_date</th>
+          <th>people</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>2017-01-01</td>
+          <td>10</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>2017-01-02</td>
+          <td>109</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>2017-01-03</td>
+          <td>150</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>2017-01-04</td>
+          <td>99</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>2017-01-05</td>
+          <td>145</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>2017-01-06</td>
+          <td>1455</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>2017-01-07</td>
+          <td>199</td>
+      </tr>
+      <tr>
+          <td>8</td>
+          <td>2017-01-08</td>
+          <td>188</td>
+      </tr>
+  </tbody>
 </table></div>
 <p>对于上面实例数据，应当输出</p>
 <div class="table-wrapper"><table>
-<thead>
-<tr>
-<th>id</th>
-<th>visit_date</th>
-<th>people</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>5</td>
-<td>2017-01-05</td>
-<td>145</td>
-</tr>
-<tr>
-<td>6</td>
-<td>2017-01-06</td>
-<td>1455</td>
-</tr>
-<tr>
-<td>7</td>
-<td>2017-01-07</td>
-<td>199</td>
-</tr>
-<tr>
-<td>8</td>
-<td>2017-01-08</td>
-<td>188</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>id</th>
+          <th>visit_date</th>
+          <th>people</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>5</td>
+          <td>2017-01-05</td>
+          <td>145</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>2017-01-06</td>
+          <td>1455</td>
+      </tr>
+      <tr>
+          <td>7</td>
+          <td>2017-01-07</td>
+          <td>199</td>
+      </tr>
+      <tr>
+          <td>8</td>
+          <td>2017-01-08</td>
+          <td>188</td>
+      </tr>
+  </tbody>
 </table></div>
 <p>利用<strong>会话变量</strong>+<strong>巧用排序</strong>实现，利用两个中间表逐渐接近目标（个人偏向使用这种）</p>
 <div class="highlight"><div class="chroma">
@@ -585,24 +581,25 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
                 defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.querySelector(`.article-content`), {
+        renderMathInElement(document.body, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
                 { left: "\\(", right: "\\)", display: false },
                 { left: "\\[", right: "\\]", display: true }
-            ]
+            ],
+            ignoredClasses: ["gist"]
         });})
 </script>
     
@@ -636,7 +633,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6d416da1ddfbb7f98c712123bd095a5e_985951_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -660,7 +657,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu2315d63bffc53ea5fa23e960b91d356d_855728_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -684,7 +681,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -708,7 +705,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -735,7 +732,7 @@ if (!doNotTrack) {
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -783,14 +780,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2023 かがやの部屋
+        2025 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -879,7 +876,7 @@ if (!doNotTrack) {
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

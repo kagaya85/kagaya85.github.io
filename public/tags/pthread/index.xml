@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>pthread on かがやの部屋</title>
-        <link>https://blog.kagaya.fun/tags/pthread/</link>
-        <description>Recent content in pthread on かがやの部屋</description>
+        <title>Pthread on かがやの部屋</title>
+        <link>http://localhost:1313/tags/pthread/</link>
+        <description>Recent content in Pthread on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sat, 01 Jun 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/pthread/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sat, 01 Jun 2019 21:30:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/pthread/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>pthread多线程编程初探</title>
-        <link>https://blog.kagaya.fun/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
+        <link>http://localhost:1313/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
         <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
-        <description>&lt;h1 id=&#34;pthread多线程编程初探&#34;&gt;pthread多线程编程初探&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;POSIX线程&lt;/strong&gt;（POSIX threads），简称Pthreads，是线程的&lt;strong&gt;POSIX标准&lt;/strong&gt;。该标准定义了创建和操纵线程的一整套API。&lt;/p&gt;
-&lt;h2 id=&#34;实验要求&#34;&gt;实验要求&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;使用pthread实现图像卷积的并行计算&lt;/strong&gt;&lt;/p&gt;
+        <guid>http://localhost:1313/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
+        <description>&lt;h1 id=&#34;pthread多线程编程初探&#34;&gt;pthread多线程编程初探
+&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;POSIX线程&lt;/strong&gt;（POSIX threads），简称Pthreads，是线程的&lt;strong&gt;POSIX标准&lt;/strong&gt;。该标准定义了创建和操纵线程的一整套API。&lt;/p&gt;
+&lt;h2 id=&#34;实验要求&#34;&gt;实验要求
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;使用pthread实现图像卷积的并行计算&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;由于之前使用MPI实现了一遍，相比与MPI，pthread是以共享内存的方式实现并行计算，所有有着系统开销更小，并行损耗更小的优点。但是也限制了pthread只能在一台机器上实现并行，不支持分布式计算。&lt;/p&gt;
-&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
-&lt;h3 id=&#34;进程与线程&#34;&gt;进程与线程&lt;/h3&gt;
-&lt;p&gt;进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。&lt;/p&gt;
+&lt;h2 id=&#34;基本概念&#34;&gt;基本概念
+&lt;/h2&gt;&lt;h3 id=&#34;进程与线程&#34;&gt;进程与线程
+&lt;/h3&gt;&lt;p&gt;进程是一个程序运行的实例，一个进程对应系统运行中的一个任务，独占一部分系统资源。&lt;/p&gt;
 &lt;p&gt;随着人们对于并行计算的需求越来越多，而每次都开多个进程虽然可以实现并行计算，但带来的新的问题——进程间通信。这就需要涉及操作系统提供的进程通信方法（无名管道、有名管道、信号、消息队列、共享内存、Socket、共享文件），无论哪种方式，对于程序原来说需要单独编写通信相关代码还是过于麻烦。因此，懒惰的程序员们便提出了线程的概念。&lt;/p&gt;
 &lt;p&gt;线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。&lt;/p&gt;
 &lt;p&gt;当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&#34;liunx的pthread&#34;&gt;Liunx的pthread&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;头文件&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;liunx的pthread&#34;&gt;Liunx的pthread
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;头文件&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -96,9 +96,9 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;g++ pthread.cpp -o pthread -pthread
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;遇到的问题及解决方法&#34;&gt;遇到的问题及解决方法&lt;/h2&gt;
-&lt;h3 id=&#34;id&#34;&gt;Id&lt;/h3&gt;
-&lt;p&gt;有三个东西，pid，thread_id，tid&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;遇到的问题及解决方法&#34;&gt;遇到的问题及解决方法
+&lt;/h2&gt;&lt;h3 id=&#34;id&#34;&gt;Id
+&lt;/h3&gt;&lt;p&gt;有三个东西，pid，thread_id，tid&lt;/p&gt;
 &lt;p&gt;对于一个进程来说：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;pid就是进程id，和thread_id相等&lt;/li&gt;
@@ -110,8 +110,8 @@
 &lt;li&gt;由于之前提到的，linux对于线程的管理也是按进程的方式，所以线程也有一个pid，称为tid，可以使用系统调用获取。&lt;/li&gt;
 &lt;li&gt;若需要项其他进程的线程发送信息，就需要使用tid来标识对应线程，而不是pid或者thread_id&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;传递参数时地址共享问题&#34;&gt;传递参数时地址共享问题&lt;/h3&gt;
-&lt;p&gt;由于需要传递多个参数，采用结构体&lt;code&gt;task_para&lt;/code&gt;传值&lt;/p&gt;
+&lt;h3 id=&#34;传递参数时地址共享问题&#34;&gt;传递参数时地址共享问题
+&lt;/h3&gt;&lt;p&gt;由于需要传递多个参数，采用结构体&lt;code&gt;task_para&lt;/code&gt;传值&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1

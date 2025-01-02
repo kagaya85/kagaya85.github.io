@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Pages on かがやの部屋</title>
-        <link>https://blog.kagaya.fun/page/</link>
+        <link>http://localhost:1313/page/</link>
         <description>Recent content in Pages on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Mon, 05 Aug 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.kagaya.fun/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 26 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>About</title>
-        <link>https://blog.kagaya.fun/about/</link>
+        <link>http://localhost:1313/about/</link>
         <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>https://blog.kagaya.fun/about/</guid>
+        <guid>http://localhost:1313/about/</guid>
         <description>&lt;p&gt;你好，欢迎来到我的Page，很高兴能在这里遇见你.&lt;/p&gt;
-&lt;h2 id=&#34;简单介绍一下自己&#34;&gt;🙌🏼简单介绍一下自己&lt;/h2&gt;
-&lt;p&gt;本科同济，硕士复旦，现在在星环做云平台（Kubernetes）开发工程师&lt;/p&gt;
+&lt;h2 id=&#34;简单介绍一下自己&#34;&gt;🙌🏼简单介绍一下自己
+&lt;/h2&gt;&lt;p&gt;本科同济，硕士复旦，现在在星环做云平台（Kubernetes）开发工程师&lt;/p&gt;
 &lt;p&gt;按理说应该避免标签化一个人，但为了让你能快速了解我，我还是给自己几个标签：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -26,21 +26,21 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;一直觉得从小到大的一个特点就是目标很明确，我是个有明确目标才能有做事动力的人，一般来说，当一个人认定某件事情，就会给它赋予无限的价值，有时候这就会显得自己十分固执。这本来也是件需要把握分寸的事情，不同人眼里可能也会看到不同的我吧（笑&lt;/p&gt;
 &lt;p&gt;爱折腾，爱钻研，一直相信一句话：“过于先进的技术对于普通人来说就是魔法”，希望自己有一天也能掌握魔法。&lt;/p&gt;
-&lt;h2 id=&#34;最近在看什么&#34;&gt;📚最近在看什么&lt;/h2&gt;
-&lt;h3 id=&#34;读书&#34;&gt;读书&lt;/h3&gt;
-&lt;ul&gt;
+&lt;h2 id=&#34;最近在看什么&#34;&gt;📚最近在看什么
+&lt;/h2&gt;&lt;h3 id=&#34;读书&#34;&gt;读书
+&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;《三体》&lt;/li&gt;
 &lt;li&gt;《闪光的哈撒维》&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;漫画&#34;&gt;漫画&lt;/h3&gt;
-&lt;ul&gt;
+&lt;h3 id=&#34;漫画&#34;&gt;漫画
+&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;《我推的孩子》&lt;/li&gt;
 &lt;li&gt;《电锯人》&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;我在用的装备&#34;&gt;👨🏻‍💻我在用的装备&lt;/h2&gt;
-&lt;h3 id=&#34;大件&#34;&gt;大件&lt;/h3&gt;
-&lt;h4 id=&#34;生产力&#34;&gt;💻生产力&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h2 id=&#34;我在用的装备&#34;&gt;👨🏻‍💻我在用的装备
+&lt;/h2&gt;&lt;h3 id=&#34;大件&#34;&gt;大件
+&lt;/h3&gt;&lt;h4 id=&#34;生产力&#34;&gt;💻生产力
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Macbook Pro 13 2020
 &lt;ul&gt;
 &lt;li&gt;虽然确实很贵，但我认为应该是我买过最值得的电子产品了&lt;/li&gt;
@@ -49,8 +49,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;手机&#34;&gt;📱手机&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;手机&#34;&gt;📱手机
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Nokia Lumia 520&lt;/p&gt;
 &lt;ul&gt;
@@ -75,16 +75,16 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;显示器&#34;&gt;🖥显示器&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;显示器&#34;&gt;🖥显示器
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;AOC U28P2U + Dostyle DM240
 &lt;ul&gt;
 &lt;li&gt;aoc的这款4K质量真的可以，打算之后接ps5，迎接下一世代&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;主机&#34;&gt;🎮主机&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;主机&#34;&gt;🎮主机
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Nintendo Switch + Pro手柄（Xenoblade2限定）&lt;/p&gt;
 &lt;ul&gt;
@@ -105,8 +105,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;相机&#34;&gt;📷相机&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;相机&#34;&gt;📷相机
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Canon EOS R8
 &lt;ul&gt;
 &lt;li&gt;相机是人类目前掌控时间的唯一工具&lt;/li&gt;
@@ -116,9 +116,9 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;其他&#34;&gt;其他&lt;/h3&gt;
-&lt;h4 id=&#34;耳机&#34;&gt;🎧耳机&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h3 id=&#34;其他&#34;&gt;其他
+&lt;/h3&gt;&lt;h4 id=&#34;耳机&#34;&gt;🎧耳机
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Sony WH-1000 XM3
 &lt;ul&gt;
 &lt;li&gt;真实性价比，陪伴我已经至少四年了，依然好用，几乎每天都带着出门&lt;/li&gt;
@@ -144,8 +144,8 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;手表&#34;&gt;⌚️手表&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;手表&#34;&gt;⌚️手表
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;Huawei Watch GT 2
 &lt;ul&gt;
 &lt;li&gt;智能手表在解决续航问题之前我认为的最佳形态&lt;/li&gt;
@@ -153,31 +153,31 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;接下来的目标&#34;&gt;🚀接下来的目标&lt;/h2&gt;
-&lt;h3 id=&#34;短期&#34;&gt;短期&lt;/h3&gt;
-&lt;h4 id=&#34;2022&#34;&gt;2022&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h2 id=&#34;接下来的目标&#34;&gt;🚀接下来的目标
+&lt;/h2&gt;&lt;h3 id=&#34;短期&#34;&gt;短期
+&lt;/h3&gt;&lt;h4 id=&#34;2022&#34;&gt;2022
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;del&gt;希望能去思念很久的企业做喜欢的工作，几年前还需要遥望的目标现在已经近在眼前&amp;ndash;了&lt;/del&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;2023&#34;&gt;2023&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;2023&#34;&gt;2023
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;切实感受到了什么叫时代的一粒灰尘落在普通人身上就是一座山&lt;/li&gt;
 &lt;li&gt;唯有脚踏实地一步一个脚印的前进&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&#34;长期&#34;&gt;长期&lt;/h3&gt;
-&lt;h4 id=&#34;职业&#34;&gt;职业&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h3 id=&#34;长期&#34;&gt;长期
+&lt;/h3&gt;&lt;h4 id=&#34;职业&#34;&gt;职业
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 希望能继续在社区深耕技术&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&#34;生活&#34;&gt;生活&lt;/h4&gt;
-&lt;ul&gt;
+&lt;h4 id=&#34;生活&#34;&gt;生活
+&lt;/h4&gt;&lt;ul&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 去一次魔法未来&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 去一次ASL&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 去一次Comike&lt;/li&gt;
 &lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 有时间继续去11区圣地巡礼&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;sns&#34;&gt;✈️SNS&lt;/h2&gt;
-&lt;p&gt;👏好耶，是新朋友🍻&lt;/p&gt;
+&lt;h2 id=&#34;sns&#34;&gt;✈️SNS
+&lt;/h2&gt;&lt;p&gt;👏好耶，是新朋友🍻&lt;/p&gt;
 &lt;p&gt;🐦&lt;a class=&#34;link&#34; href=&#34;https://twitter.com/kagaya_85&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Twitter&lt;/a&gt; / 🐙&lt;a class=&#34;link&#34; href=&#34;https://github.com/kagaya85&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Github&lt;/a&gt;&lt;/p&gt;
@@ -191,18 +191,18 @@
         </item>
         <item>
         <title>Archives</title>
-        <link>https://blog.kagaya.fun/archives/</link>
-        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <link>http://localhost:1313/archives/</link>
+        <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>https://blog.kagaya.fun/archives/</guid>
+        <guid>http://localhost:1313/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>Search</title>
-        <link>https://blog.kagaya.fun/search/</link>
+        <link>http://localhost:1313/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://blog.kagaya.fun/search/</guid>
+        <guid>http://localhost:1313/search/</guid>
         <description></description>
         </item>
         

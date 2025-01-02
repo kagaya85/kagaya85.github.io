@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='你为什么需要一台NAS以及应该如何入门呢?'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="你为什么需要一台NAS以及应该如何入门呢?">
 <title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
 
-<link rel='canonical' href='https://blog.kagaya.fun/p/2022/first-nas/'>
+<link rel='canonical' href='http://localhost:1313/p/2022/first-nas/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心'>
-<meta property='og:description' content='你为什么需要一台NAS以及应该如何入门呢?'>
-<meta property='og:url' content='https://blog.kagaya.fun/p/2022/first-nas/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心">
+<meta property='og:description' content="你为什么需要一台NAS以及应该如何入门呢?">
+<meta property='og:url' content='http://localhost:1313/p/2022/first-nas/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='NAS' /><meta property='article:tag' content='NUC' /><meta property='article:tag' content='Jellyfin' /><meta property='article:tag' content='Linux' /><meta property='article:published_time' content='2022-01-17T16:35:05&#43;08:00'/><meta property='article:modified_time' content='2022-01-17T16:35:05&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='NAS' /><meta property='article:tag' content='NUC' /><meta property='article:tag' content='Jellyfin' /><meta property='article:tag' content='Linux' /><meta property='article:published_time' content='2022-01-17T16:35:05&#43;08:00'/><meta property='article:modified_time' content='2022-01-17T16:35:05&#43;08:00'/><meta property='og:image' content='http://localhost:1313/p/2022/first-nas/59474391_p0.jpeg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心">
 <meta name="twitter:description" content="你为什么需要一台NAS以及应该如何入门呢?"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg' />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
-}
-</script>
-
+    <meta name="twitter:image" content='http://localhost:1313/p/2022/first-nas/59474391_p0.jpeg' />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V8T3W98XW5');
+        }
+      </script>
     </head>
     <body class="
     article-page
@@ -69,7 +72,7 @@ if (!doNotTrack) {
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                        <img src="/img/avatar_hu670781931259558488.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -89,7 +92,6 @@ if (!doNotTrack) {
         
         
         
-
         <li >
             <a href='/' >
                 
@@ -108,7 +110,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/post' >
                 
@@ -129,7 +130,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/about/' >
                 
@@ -147,7 +147,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/archives/' >
                 
@@ -168,7 +167,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://twitter.com/kagaya_85' target="_blank">
                 
@@ -187,7 +185,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://github.com/kagaya85' target="_blank">
                 
@@ -206,7 +203,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://bangumi.tv/user/kagaya85' target="_blank">
                 
@@ -224,7 +220,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/search/' >
                 
@@ -241,12 +236,12 @@ if (!doNotTrack) {
             </a>
         </li>
         
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -254,7 +249,7 @@ if (!doNotTrack) {
 
 
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -262,10 +257,11 @@ if (!doNotTrack) {
 
 
 
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
     </ol>
 </aside>
 
@@ -334,8 +330,8 @@ if (!doNotTrack) {
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2022/first-nas/">
-                <img src="/p/2022/first-nas/59474391_p0_hu2315d63bffc53ea5fa23e960b91d356d_855728_800x0_resize_q75_box.jpeg"
-                        srcset="/p/2022/first-nas/59474391_p0_hu2315d63bffc53ea5fa23e960b91d356d_855728_800x0_resize_q75_box.jpeg 800w, /p/2022/first-nas/59474391_p0_hu2315d63bffc53ea5fa23e960b91d356d_855728_1600x0_resize_q75_box.jpeg 1600w"
+                <img src="/p/2022/first-nas/59474391_p0_hu1595616488301196043.jpeg"
+                        srcset="/p/2022/first-nas/59474391_p0_hu1595616488301196043.jpeg 800w, /p/2022/first-nas/59474391_p0_hu8338866421304613261.jpeg 1600w"
                         width="800" 
                         height="581" 
                         loading="lazy"
@@ -414,21 +410,21 @@ if (!doNotTrack) {
     <section class="article-content">
     
     
-    <h2 id="写在前面">写在前面</h2>
-<p>为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视的1T ssd接一块败家之眼的m2硬盘盒用来存自己下载的番剧，同时也方便和朋友分享；后来阿b推出了放映室的功能，在网页上就可以很方便的和朋友一同看番看电影。但这样终究是不方便，首先放映室的内容只能先定于阿b已经拥有版权的内容，其次，你的朋友最好还要有大会员。好在我本身就是个爱折腾的人，刚好前段时间给群友搞了一个ts服务器来让群友们吹水聊天以及游戏语音，我就开始想能不能通过自建的服务器也实现一个类似的流媒体平台，随时和朋友分享自己私藏的电影番剧。</p>
+    <h2 id="写在前面">写在前面
+</h2><p>为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视的1T ssd接一块败家之眼的m2硬盘盒用来存自己下载的番剧，同时也方便和朋友分享；后来阿b推出了放映室的功能，在网页上就可以很方便的和朋友一同看番看电影。但这样终究是不方便，首先放映室的内容只能先定于阿b已经拥有版权的内容，其次，你的朋友最好还要有大会员。好在我本身就是个爱折腾的人，刚好前段时间给群友搞了一个ts服务器来让群友们吹水聊天以及游戏语音，我就开始想能不能通过自建的服务器也实现一个类似的流媒体平台，随时和朋友分享自己私藏的电影番剧。</p>
 <p>假如有这样一个场景：某天有朋友（小姐姐）想看个电影但苦于没有资源，又不想去各种牛皮癣广告横飞的小网站，只得求助于你。你虽然早已掌握科学上网快速通过各种途径网罗了种子资源，熟练地运用bt下载器下载到了最新的4K HDR 10bit资源，那么你该怎么和远在网线另一端的她分享呢？当然你可以把bt文件丢过去耐心地教她怎么用FDM来下载，但是，如果此时我们能有一个自己的流媒体服务器，不就可以随时随地的给任何人分享硬盘里的片了吗？</p>
 <p>之前发现小区是有公网ip的，在暴力破解了宽带账号把光猫改成桥接以后，就可以直通外网了，尽管上行带宽并不富裕，但这么好的资源不拿来搭服务器简直浪费，而又“恰好”实验室发电脑是一台最新nuc11，配了11代的酷睿i7-1165G7，平时都用mac的我正愁该如何在毕业前发挥它的剩余价值，这波天时地利就被赶上了，于是就有了下面的折腾。</p>
-<h2 id="方案探索">方案探索</h2>
-<p>基于nas的媒体中心其实已经有不少成熟解决方案，Emby，Plex以及开源的Jellyfin都是最常用的。我们只需要吧nas里存的片共享给流媒体服务器，然后在外网暴露端口就行。这里主要又一些其他考虑：当前的主机需要在毕业后归还的，因此如何能够在保留大部分数据配置的情况下做到快速迁移整个nas系统便是我首先考虑的问题。同时之后肯定会再用一台自己组装的nas代替现在的系统，如何最大化复用硬件也是需要考虑的。因此在选择硬件和系统的时候就会有意留意以上两点。</p>
-<h3 id="硬件">硬件</h3>
-<p>硬件选择比较简单，主要思想通过主机+硬盘盒raid的方式来实现：</p>
+<h2 id="方案探索">方案探索
+</h2><p>基于nas的媒体中心其实已经有不少成熟解决方案，Emby，Plex以及开源的Jellyfin都是最常用的。我们只需要吧nas里存的片共享给流媒体服务器，然后在外网暴露端口就行。这里主要又一些其他考虑：当前的主机需要在毕业后归还的，因此如何能够在保留大部分数据配置的情况下做到快速迁移整个nas系统便是我首先考虑的问题。同时之后肯定会再用一台自己组装的nas代替现在的系统，如何最大化复用硬件也是需要考虑的。因此在选择硬件和系统的时候就会有意留意以上两点。</p>
+<h3 id="硬件">硬件
+</h3><p>硬件选择比较简单，主要思想通过主机+硬盘盒raid的方式来实现：</p>
 <p>主机用的是白嫖的Intel NUC11PAHi7 猎豹峡谷，40w的TDP，硬盘从海鲜市场捡了两块4T的希捷酷狼，硬盘盒同样也是从海鲜市场捡的二手世特力双盘位带raid的硬盘盒，可以两块组硬raid1。同时配了APC的BK650M2 UPS来保证电源的稳定。</p>
 <p>刚拿到世特力的硬盘盒时发现卖家并没有给原装的脚垫，直接放到桌子上会有挺强烈的共振，怕搞坏硬盘临时垫了块纸板，放假回来后买了带一点厚度的减震贴贴到四个角，瞬间稳稳当当，噪音也减弱了不少。4T的酷狼是5400转，本身声音也很小，房间不大我都是直接放到床边，几乎听不到什么声音，室友也表示很安静没有什么影响。</p>
 <p>硬盘盒之后组装新nas后还可以拿来扩展新nas的空间，缺点就是usb不支持硬盘smart信息的查询，尽管它还带有一个esata的接口，不知道是否支持。</p>
 <p><img src="/p/2022/first-nas/IMG_20220219_235223.jpg"
 	width="2736"
 	height="3648"
-	srcset="/p/2022/first-nas/IMG_20220219_235223_hud4ea90bc3d7b356f4e541d2f61d39eaf_2053664_480x0_resize_q75_box.jpg 480w, /p/2022/first-nas/IMG_20220219_235223_hud4ea90bc3d7b356f4e541d2f61d39eaf_2053664_1024x0_resize_q75_box.jpg 1024w"
+	srcset="/p/2022/first-nas/IMG_20220219_235223_hu4430874144846312012.jpg 480w, /p/2022/first-nas/IMG_20220219_235223_hu7130846192623160740.jpg 1024w"
 	loading="lazy"
 	
 		alt="整体摆放到一起还是挺小巧的"
@@ -439,8 +435,8 @@ if (!doNotTrack) {
 		data-flex-basis="180px"
 	
 ></p>
-<h3 id="nas底层系统选择">nas底层系统选择</h3>
-<p>在选择系统之前首先还是要明确需求，对我来说，需求主要有以下几点：</p>
+<h3 id="nas底层系统选择">nas底层系统选择
+</h3><p>在选择系统之前首先还是要明确需求，对我来说，需求主要有以下几点：</p>
 <ol>
 <li>可以7x24稳定运行</li>
 <li>可以硬件直通方便媒体服务器使用硬件编解码</li>
@@ -471,12 +467,12 @@ if (!doNotTrack) {
 <p>当然缺点就是它是一个收费的系统，价格也不便宜，我目前也在试用体验期，等一段时间的使用后可以考虑在聊聊感受。</p>
 </li>
 </ul>
-<h3 id="硬件直通">硬件直通</h3>
-<p>这里的需求主要还是用于硬件解码或者做软路由直通网卡用，前面也已经提到一些，如果不追求最新的硬件，那么exsi系统应该可以很好的满足需求，否则需要考虑原生的linux或者pve系统。另外硬件解码可以直接在docker容器里调用显卡，只需要关注所选用的系统是否有对应显卡的驱动即可。</p>
-<h2 id="安装过程">安装过程</h2>
-<p>这里简单记录一下当时主要的安装配置过程，想看最终效果的可以直接点<a class="link" href="#%e6%9c%80%e7%bb%88%e6%95%88%e6%9e%9c" >这里</a></p>
-<h3 id="配置ups">配置UPS</h3>
-<p>ups几乎是nas必备了，我选用的是APC的BK650M2，具体配置方法可以参考这篇文章：<a class="link" href="https://www.jianshu.com/p/bb3a52916d79"  target="_blank" rel="noopener"
+<h3 id="硬件直通">硬件直通
+</h3><p>这里的需求主要还是用于硬件解码或者做软路由直通网卡用，前面也已经提到一些，如果不追求最新的硬件，那么exsi系统应该可以很好的满足需求，否则需要考虑原生的linux或者pve系统。另外硬件解码可以直接在docker容器里调用显卡，只需要关注所选用的系统是否有对应显卡的驱动即可。</p>
+<h2 id="安装过程">安装过程
+</h2><p>这里简单记录一下当时主要的安装配置过程，想看最终效果的可以直接点<a class="link" href="#%e6%9c%80%e7%bb%88%e6%95%88%e6%9e%9c" >这里</a></p>
+<h3 id="配置ups">配置UPS
+</h3><p>ups几乎是nas必备了，我选用的是APC的BK650M2，具体配置方法可以参考这篇文章：<a class="link" href="https://www.jianshu.com/p/bb3a52916d79"  target="_blank" rel="noopener"
     >使用NUT解决BK650M2-CH失联问题（一） - 简书 (jianshu.com)</a></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -486,8 +482,8 @@ if (!doNotTrack) {
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt install nut
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="配置邮件提醒">配置邮件提醒</h3>
-<div class="highlight"><div class="chroma">
+</div><h3 id="配置邮件提醒">配置邮件提醒
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -495,8 +491,8 @@ if (!doNotTrack) {
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt install mailutils
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="磁盘分区-fdiskparted和gdisk">磁盘分区 fdisk，parted和gdisk</h3>
-<p>fdisk:</p>
+</div><h3 id="磁盘分区-fdiskparted和gdisk">磁盘分区 fdisk，parted和gdisk
+</h3><p>fdisk:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -703,8 +699,8 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">Writing superblocks and filesystem accounting information: done
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="自动挂载">自动挂载</h3>
-<p>自动挂载主要是通过查询对应磁盘的UUID，然后讲挂载命令写入系统的自动挂载文件</p>
+</div><h3 id="自动挂载">自动挂载
+</h3><p>自动挂载主要是通过查询对应磁盘的UUID，然后讲挂载命令写入系统的自动挂载文件</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -719,8 +715,8 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">sudo mount -a <span class="c1"># 挂载所有fstab中的设备</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="配置nuc11显卡驱动">配置nuc11显卡驱动</h3>
-<p>Intel对ubuntu 20.04的支持还是比较好的，可以按官方文档来装驱动，see：<a class="link" href="https://dgpu-docs.intel.com/installation-guides/ubuntu/ubuntu-focal.html"  target="_blank" rel="noopener"
+</div><h3 id="配置nuc11显卡驱动">配置nuc11显卡驱动
+</h3><p>Intel对ubuntu 20.04的支持还是比较好的，可以按官方文档来装驱动，see：<a class="link" href="https://dgpu-docs.intel.com/installation-guides/ubuntu/ubuntu-focal.html"  target="_blank" rel="noopener"
     >GPGPU: Ubuntu 20.04 (focal) (intel.com)</a></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -751,8 +747,8 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">sudo reboot
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="wol配置">WOL配置</h3>
-<p>前提是需要在主板bios里打开WOL设置，具体参考对应主板的bios设置方法</p>
+</div><h3 id="wol配置">WOL配置
+</h3><p>前提是需要在主板bios里打开WOL设置，具体参考对应主板的bios设置方法</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -805,35 +801,35 @@ if (!doNotTrack) {
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ethtool eth0
-</span></span><span class="line"><span class="cl">Settings for eth0:
-</span></span><span class="line"><span class="cl">        Supported ports: [  ]
-</span></span><span class="line"><span class="cl">        Supported link modes:   10baseT/Half 10baseT/Full
-</span></span><span class="line"><span class="cl">                                100baseT/Half 100baseT/Full
-</span></span><span class="line"><span class="cl">                                1000baseT/Full
-</span></span><span class="line"><span class="cl">                                2500baseT/Full
-</span></span><span class="line"><span class="cl">        Supported pause frame use: Symmetric
-</span></span><span class="line"><span class="cl">        Supports auto-negotiation: Yes
-</span></span><span class="line"><span class="cl">        Supported FEC modes: Not reported
-</span></span><span class="line"><span class="cl">        Advertised link modes:  10baseT/Half 10baseT/Full
-</span></span><span class="line"><span class="cl">                                100baseT/Half 100baseT/Full
-</span></span><span class="line"><span class="cl">                                1000baseT/Full
-</span></span><span class="line"><span class="cl">                                2500baseT/Full
-</span></span><span class="line"><span class="cl">        Advertised pause frame use: Symmetric
-</span></span><span class="line"><span class="cl">        Advertised auto-negotiation: Yes
-</span></span><span class="line"><span class="cl">        Advertised FEC modes: Not reported
-</span></span><span class="line"><span class="cl">        Speed: 2500Mb/s
-</span></span><span class="line"><span class="cl">        Duplex: Full
-</span></span><span class="line"><span class="cl">        Auto-negotiation: on
-</span></span><span class="line"><span class="cl">        Port: Twisted Pair
-</span></span><span class="line"><span class="cl">        PHYAD: 0
-</span></span><span class="line"><span class="cl">        Transceiver: internal
-</span></span><span class="line"><span class="cl">        MDI-X: off (auto)
-</span></span><span class="line"><span class="cl">        Supports Wake-on: pumbg
-</span></span><span class="line"><span class="cl">        Wake-on: g
-</span></span><span class="line"><span class="cl">        Current message level: 0x00000007 (7)
-</span></span><span class="line"><span class="cl">                               drv probe link
-</span></span><span class="line"><span class="cl">        Link detected: yes
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">ethtool</span> <span class="n">eth0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Settings</span> <span class="k">for</span> <span class="n">eth0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supported</span> <span class="n">ports</span><span class="p">:</span> <span class="p">[</span>  <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supported</span> <span class="n">link</span> <span class="n">modes</span><span class="p">:</span>   <span class="mi">10</span><span class="n">baseT</span><span class="o">/</span><span class="n">Half</span> <span class="mi">10</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">100</span><span class="n">baseT</span><span class="o">/</span><span class="n">Half</span> <span class="mi">100</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">1000</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">2500</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supported</span> <span class="n">pause</span> <span class="n">frame</span> <span class="n">use</span><span class="p">:</span> <span class="n">Symmetric</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supports</span> <span class="n">auto</span><span class="o">-</span><span class="n">negotiation</span><span class="p">:</span> <span class="n">Yes</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supported</span> <span class="n">FEC</span> <span class="n">modes</span><span class="p">:</span> <span class="n">Not</span> <span class="n">reported</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Advertised</span> <span class="n">link</span> <span class="n">modes</span><span class="p">:</span>  <span class="mi">10</span><span class="n">baseT</span><span class="o">/</span><span class="n">Half</span> <span class="mi">10</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">100</span><span class="n">baseT</span><span class="o">/</span><span class="n">Half</span> <span class="mi">100</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">1000</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">                                <span class="mi">2500</span><span class="n">baseT</span><span class="o">/</span><span class="n">Full</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Advertised</span> <span class="n">pause</span> <span class="n">frame</span> <span class="n">use</span><span class="p">:</span> <span class="n">Symmetric</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Advertised</span> <span class="n">auto</span><span class="o">-</span><span class="n">negotiation</span><span class="p">:</span> <span class="n">Yes</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Advertised</span> <span class="n">FEC</span> <span class="n">modes</span><span class="p">:</span> <span class="n">Not</span> <span class="n">reported</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Speed</span><span class="p">:</span> <span class="mi">2500</span><span class="n">Mb</span><span class="o">/</span><span class="n">s</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Duplex</span><span class="p">:</span> <span class="n">Full</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Auto</span><span class="o">-</span><span class="n">negotiation</span><span class="p">:</span> <span class="n">on</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Port</span><span class="p">:</span> <span class="n">Twisted</span> <span class="n">Pair</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PHYAD</span><span class="p">:</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Transceiver</span><span class="p">:</span> <span class="n">internal</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MDI</span><span class="o">-</span><span class="n">X</span><span class="p">:</span> <span class="n">off</span> <span class="p">(</span><span class="n">auto</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Supports</span> <span class="n">Wake</span><span class="o">-</span><span class="n">on</span><span class="p">:</span> <span class="n">pumbg</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Wake</span><span class="o">-</span><span class="n">on</span><span class="p">:</span> <span class="n">g</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Current</span> <span class="n">message</span> <span class="n">level</span><span class="p">:</span> <span class="mh">0x00000007</span> <span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                               <span class="n">drv</span> <span class="n">probe</span> <span class="n">link</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Link</span> <span class="n">detected</span><span class="p">:</span> <span class="n">yes</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>主要关注这两行:</p>
@@ -851,7 +847,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png"
 	width="328"
 	height="244"
-	srcset="/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu0250fa2662c5104d64e6874bacab8e98_28968_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu0250fa2662c5104d64e6874bacab8e98_28968_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu15001406751426224739.png 480w, /p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu11715052368475697144.png 1024w"
 	loading="lazy"
 	
 		alt="唤醒类型"
@@ -873,8 +869,8 @@ if (!doNotTrack) {
 </div>
 </div><p>其他配置可以参考这篇文章：<a class="link" href="https://necromuralist.github.io/posts/enabling-wake-on-lan/"  target="_blank" rel="noopener"
     >Enabling Wake-On-LAN (In Ubuntu 20.10) | The Cloistered Monkey (necromuralist.github.io)</a></p>
-<h3 id="exfat-in-ubuntu">exfat in ubuntu</h3>
-<p>由于我之前为了在多平台之间通用，移动硬盘被格式化为零exfat格式，linux默认读写exfat的时候偶尔会有问题，安装额外的包来获得更稳定的兼容：</p>
+<h3 id="exfat-in-ubuntu">exfat in ubuntu
+</h3><p>由于我之前为了在多平台之间通用，移动硬盘被格式化为零exfat格式，linux默认读写exfat的时候偶尔会有问题，安装额外的包来获得更稳定的兼容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -883,8 +879,8 @@ if (!doNotTrack) {
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo apt install exfat-utils
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="snap-docker">snap docker</h3>
-<p>配置好docker compose后，启动遇到了下面的问题：</p>
+</div><h3 id="snap-docker">snap docker
+</h3><p>配置好docker compose后，启动遇到了下面的问题：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -928,8 +924,8 @@ if (!doNotTrack) {
 </div><p>查了一下，是snap自带docker的问题，删除ubuntu自带的docker重新安装官方的docker即可</p>
 <p><a class="link" href="https://stackoverflow.com/questions/52526219/docker-mkdir-read-only-file-system"  target="_blank" rel="noopener"
     >ubuntu - Docker - mkdir read-only file system - Stack Overflow</a></p>
-<h3 id="jellyfin-硬解">Jellyfin 硬解</h3>
-<p>实验室给的这个nuc11的这块1165g7自带来一个蓝厂最新的iris Xe核显，96EU，性能应该是同代核显里最强的了，据说能有mx350的水平？不拿来当解码器真是浪费了。</p>
+<h3 id="jellyfin-硬解">Jellyfin 硬解
+</h3><p>实验室给的这个nuc11的这块1165g7自带来一个蓝厂最新的iris Xe核显，96EU，性能应该是同代核显里最强的了，据说能有mx350的水平？不拿来当解码器真是浪费了。</p>
 <p>但问题也就出在这块核显实在太新了，需要新的驱动程序，配置方式也有一些不同，因此考虑显卡直通之前，一定先要调研好软硬件的兼容性。</p>
 <p>Jellyfin的官方文档：<a class="link" href="https://jellyfin.org/docs/general/administration/hardware-acceleration.html#tips-for-intel-gen9-and-gen11-when-using-vaapi-or-qsv-on-linux"  target="_blank" rel="noopener"
     >Hardware Acceleration | Documentation - Jellyfin Project</a>，中有这么一段话：</p>
@@ -945,7 +941,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png"
 	width="1686"
 	height="738"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu827f0cb3808d6f95844be226cc508ea7_136415_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu827f0cb3808d6f95844be226cc508ea7_136415_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu5965231619095395841.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu439903483516730527.png 1024w"
 	loading="lazy"
 	
 		alt="ScreenShot_2022-01-27_at_18.26.01@2x"
@@ -1053,8 +1049,8 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">  VideoEnhance/0   38.52% <span class="p">|</span>███████████████████████████████████████████▌                                                                     <span class="p">|</span>      0%      0%
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="qbittorrent">qBittorrent</h3>
-<p>直接访问页面会提示Unauthorized：<a class="link" href="https://github.com/qbittorrent/qBittorrent/issues/8095#issuecomment-472740702"  target="_blank" rel="noopener"
+</div><h3 id="qbittorrent">qBittorrent
+</h3><p>直接访问页面会提示Unauthorized：<a class="link" href="https://github.com/qbittorrent/qBittorrent/issues/8095#issuecomment-472740702"  target="_blank" rel="noopener"
     >qBittorent UI returns 401 (blank page) when accessed through Kubernetes proxy · Issue #8095 · qbittorrent/qBittorrent (github.com)</a></p>
 <p>需要在配置文件<code>qBittorrent.conf</code>加一行（注意需要通过映射目录做好配置的持久化）</p>
 <div class="highlight"><div class="chroma">
@@ -1066,15 +1062,15 @@ if (!doNotTrack) {
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>重启容器，然后访问页面，使用默认账户admin，密码adminadmin登陆</p>
-<h3 id="私有云盘">私有云盘</h3>
-<p>这里可以选择seafile和nextcloud，或者直接搭一个webdav服务器（可以参考最后的docker-compose配置），不过测试了下性能不太好。</p>
-<h2 id="最终效果">最终效果</h2>
-<p>做好端口映射后公网就可以访问网页：</p>
+<h3 id="私有云盘">私有云盘
+</h3><p>这里可以选择seafile和nextcloud，或者直接搭一个webdav服务器（可以参考最后的docker-compose配置），不过测试了下性能不太好。</p>
+<h2 id="最终效果">最终效果
+</h2><p>做好端口映射后公网就可以访问网页：</p>
 <p>我在这里顺手为域名去加了证书来支持https访问</p>
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png"
 	width="2384"
 	height="1716"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu7e9d91f0ce2182ae390509f0ee984433_2318036_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu7e9d91f0ce2182ae390509f0ee984433_2318036_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu12854972361985046017.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu427268182039220923.png 1024w"
 	loading="lazy"
 	
 		alt="影片介绍页"
@@ -1091,7 +1087,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png"
 	width="3104"
 	height="1974"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu527984ce824a24825f6d49847e024033_5612023_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu527984ce824a24825f6d49847e024033_5612023_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu14468041140517422245.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu5560592860852155322.png 1024w"
 	loading="lazy"
 	
 		alt="海报墙"
@@ -1105,7 +1101,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png"
 	width="3104"
 	height="1974"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu527984ce824a24825f6d49847e024033_2841895_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu527984ce824a24825f6d49847e024033_2841895_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu13307123243525781779.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu1630261185790549126.png 1024w"
 	loading="lazy"
 	
 		alt="少歌天下第一"
@@ -1120,7 +1116,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png"
 	width="3104"
 	height="1974"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu527984ce824a24825f6d49847e024033_4106443_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu527984ce824a24825f6d49847e024033_4106443_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu7817955605556124208.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu3275003501582599586.png 1024w"
 	loading="lazy"
 	
 		alt="演员介绍及相关推荐"
@@ -1134,7 +1130,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png"
 	width="3104"
 	height="1974"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu527984ce824a24825f6d49847e024033_3007836_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu527984ce824a24825f6d49847e024033_3007836_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu5844610476441170220.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu10556457676853282906.png 1024w"
 	loading="lazy"
 	
 		alt="播放页"
@@ -1149,7 +1145,7 @@ if (!doNotTrack) {
 <p><img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png"
 	width="594"
 	height="1252"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu5fca5cbc14f19802525f8200ef6866ea_479021_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu5fca5cbc14f19802525f8200ef6866ea_479021_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu2996361429639595384.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu15660100880693197780.png 1024w"
 	loading="lazy"
 	
 		alt="浏览器转码信息"
@@ -1162,7 +1158,7 @@ if (!doNotTrack) {
 > <img src="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png"
 	width="494"
 	height="712"
-	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu318246765d45e8e0f439ef4e625e1678_96758_480x0_resize_box_3.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu318246765d45e8e0f439ef4e625e1678_96758_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu3902171525824113816.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu6843561046654981819.png 1024w"
 	loading="lazy"
 	
 		alt="客户端直推信息"
@@ -1173,8 +1169,8 @@ if (!doNotTrack) {
 		data-flex-basis="166px"
 	
 ></p>
-<h3 id="docker-compose配置参考">docker compose配置参考</h3>
-<p>最后附一个docker-compose的配置参考：</p>
+<h3 id="docker-compose配置参考">docker compose配置参考
+</h3><p>最后附一个docker-compose的配置参考：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1368,24 +1364,25 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
                 defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.querySelector(`.article-content`), {
+        renderMathInElement(document.body, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
                 { left: "\\(", right: "\\)", display: false },
                 { left: "\\[", right: "\\]", display: true }
-            ]
+            ],
+            ignoredClasses: ["gist"]
         });})
 </script>
     
@@ -1406,7 +1403,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.5584b6cb1e2cc2c5227c87c0d3770dd9_hudbcdd69a41f55724887045d593c3afc0_3384791_250x150_fill_q75_box_smart1.jpg" 
+                <img src="/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.5584b6cb1e2cc2c5227c87c0d3770dd9_hu7259184887007682046.jpg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1430,7 +1427,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6d416da1ddfbb7f98c712123bd095a5e_985951_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1454,7 +1451,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1478,7 +1475,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hufdde9e8b983bf6af308db93c404c60c9_5864242_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1502,7 +1499,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu12794881910683849128.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1529,7 +1526,7 @@ if (!doNotTrack) {
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -1577,14 +1574,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2023 かがやの部屋
+        2025 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1673,7 +1670,7 @@ if (!doNotTrack) {
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

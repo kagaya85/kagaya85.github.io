@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Config on かがやの部屋</title>
-        <link>https://blog.kagaya.fun/tags/config/</link>
+        <link>http://localhost:1313/tags/config/</link>
         <description>Recent content in Config on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/config/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Thu, 17 Dec 2020 23:31:25 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/config/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
-        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
+        <link>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
         <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
-        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png" alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" /&gt;&lt;h1 id=&#34;使用kubernetes-v1200-与-containerd-配置k8s集群&#34;&gt;使用Kubernetes V1.20.0 与 Containerd 配置K8s集群&lt;/h1&gt;
-&lt;h2 id=&#34;写在前面&#34;&gt;写在前面&lt;/h2&gt;
-&lt;p&gt;Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）&lt;/p&gt;
+        <guid>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
+        <description>&lt;img src="http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png" alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" /&gt;&lt;h1 id=&#34;使用kubernetes-v1200-与-containerd-配置k8s集群&#34;&gt;使用Kubernetes V1.20.0 与 Containerd 配置K8s集群
+&lt;/h1&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
+&lt;/h2&gt;&lt;p&gt;Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）&lt;/p&gt;
 &lt;p&gt;本文所需shell脚本都在这个&lt;a class=&#34;link&#34; href=&#34;https://github.com/kagaya85/K8sTakeOff&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;repo&lt;/a&gt;，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。&lt;/p&gt;
-&lt;h2 id=&#34;配置基本环境&#34;&gt;配置基本环境&lt;/h2&gt;
-&lt;p&gt;这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png&#34;
+&lt;h2 id=&#34;配置基本环境&#34;&gt;配置基本环境
+&lt;/h2&gt;&lt;p&gt;这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png&#34;
 	width=&#34;1658&#34;
 	height=&#34;788&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hub2912f4eb02722aaba615695faa6f67b_443680_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu4245624608594174268.png 480w, http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu914337127192016713.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2020-12-18_at_21.54.34@2x&#34;
@@ -61,8 +61,8 @@
 &lt;p&gt;02为yum添加了Kubernetes的repo，安装了1.20.0版本的kubelet、kubeadm、kubectl三件套&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;安装containerd&#34;&gt;安装Containerd&lt;/h2&gt;
-&lt;p&gt;接下来，我们为每一台主机安装Containerd替换之前的Docker。&lt;/p&gt;
+&lt;h2 id=&#34;安装containerd&#34;&gt;安装Containerd
+&lt;/h2&gt;&lt;p&gt;接下来，我们为每一台主机安装Containerd替换之前的Docker。&lt;/p&gt;
 &lt;p&gt;一键安装：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -223,28 +223,28 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;● kubelet.service - kubelet: The Kubernetes Node Agent
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Loaded: loaded (/usr/lib/systemd/system/kubelet.service; enabled; vendor preset: disabled)
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  Drop-In: /usr/lib/systemd/system/kubelet.service.d
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           └─10-kubeadm.conf
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Active: active (running) since Thu 2020-12-17 20:48:18 CST; 6min ago
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     Docs: https://kubernetes.io/docs/
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; Main PID: 10688 (kubelet)
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    Tasks: 18
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   Memory: 37.6M
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   CGroup: /system.slice/kubelet.service
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           └─10688 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf ...
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;●&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;service&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;The&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Kubernetes&lt;/span&gt; &lt;span class=&#34;ne&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Agent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;n&#34;&gt;Loaded&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;loaded&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;systemd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;system&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;service&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;enabled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;vendor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;preset&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;disabled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;n&#34;&gt;Drop&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;In&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;lib&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;systemd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;system&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;service&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;d&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           &lt;span class=&#34;err&#34;&gt;└─&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubeadm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;n&#34;&gt;Active&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;active&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;running&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;since&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Thu&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2020&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;48&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;18&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CST&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;min&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ago&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;     &lt;span class=&#34;n&#34;&gt;Docs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;https&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;//&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubernetes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;docs&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt; &lt;span class=&#34;n&#34;&gt;Main&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PID&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;Tasks&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;18&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;n&#34;&gt;Memory&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;37.6&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;M&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   &lt;span class=&#34;n&#34;&gt;CGroup&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;system&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;slice&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;           &lt;span class=&#34;err&#34;&gt;└─&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bin&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bootstrap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubeconfig&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;etc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubernetes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;bootstrap&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conf&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;--&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubeconfig&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;etc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubernetes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;conf&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.161585   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.261944   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.362297   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.462629   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.562916   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.663161   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.763546   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.863925   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:35 localhost.localdomain kubelet[10688]: E1217 07:54:35.964162   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Dec 17 20:54:36 localhost.localdomain kubelet[10688]: E1217 07:54:36.064368   10688 kubelet.go:2240] node &amp;#34;localhost.localdomain&amp;#34; not found
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.161585&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.261944&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.362297&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.462629&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.562916&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.663161&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.763546&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.863925&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;35&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;35.964162&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;Dec&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;17&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;36&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;localdomain&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;E1217&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;07&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;54&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;36.064368&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;10688&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;kubelet&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;go&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2240&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;node&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;localhost.localdomain&amp;#34;&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;found&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这里的日志不够详细，于是我又使用&lt;code&gt;journalctl -xeu kubelet&lt;/code&gt;查看更详细的日志，日志数量比较多，很容易漏掉关键的错误，比如说下面这条报错是我在重试了多次后才在日志中发现的：&lt;/p&gt;
@@ -284,8 +284,8 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;所以，配置脚本中直接生成了修改好的配置文件，使用脚本就不会遇到以上问题了&lt;/p&gt;
-&lt;h2 id=&#34;安装kubernetes并创建集群&#34;&gt;安装Kubernetes并创建集群&lt;/h2&gt;
-&lt;p&gt;以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。&lt;/p&gt;
+&lt;h2 id=&#34;安装kubernetes并创建集群&#34;&gt;安装Kubernetes并创建集群
+&lt;/h2&gt;&lt;p&gt;以上的操作是需要在每一台主机进行配置，接下来的操作可能会有Master与Worker主机的区别，请注意。&lt;/p&gt;
 &lt;p&gt;这里先使用上一步配置好的crictl工具拉取镜像为创建集群时节省时间&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -342,10 +342,10 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;如果以上步骤顺利的话，你现在可以在Master节点上使用&lt;code&gt;kubectl get nodes -o wide&lt;/code&gt;看到各个节点的信息，当然Status为NotReady是因为我们还没有执行最后一步，安装calico网络&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png&#34;
 	width=&#34;2844&#34;
 	height=&#34;486&#34;
-	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_480x0_resize_box_3.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_huc97783dc9143c0c3afb15a5fd895f228_397182_1024x0_resize_box_3.png 1024w&#34;
+	srcset=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu16542388964501495367.png 480w, http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu3128725688106299816.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2020-12-17_at_22.41.02@2x&#34;
@@ -356,8 +356,8 @@
 		data-flex-basis=&#34;1404px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;安装calico网络&#34;&gt;安装Calico网络&lt;/h2&gt;
-&lt;p&gt;这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从&lt;strong&gt;Master节点&lt;/strong&gt;上用kubectl应用yaml文件。&lt;/p&gt;
+&lt;h2 id=&#34;安装calico网络&#34;&gt;安装Calico网络
+&lt;/h2&gt;&lt;p&gt;这一步就比较简单了，只需要在每个Node上都从Dockerhub上拉取对应的镜像，然后从&lt;strong&gt;Master节点&lt;/strong&gt;上用kubectl应用yaml文件。&lt;/p&gt;
 &lt;p&gt;一键脚本：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -398,8 +398,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;kubernetes会在各个节点上使用DaemonSet的方式运行calico pod，这样各个节点的pod就可以通过虚拟网络进行通信了。&lt;/p&gt;
-&lt;h2 id=&#34;最后说几句&#34;&gt;最后说几句&lt;/h2&gt;
-&lt;p&gt;以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息&lt;/p&gt;
+&lt;h2 id=&#34;最后说几句&#34;&gt;最后说几句
+&lt;/h2&gt;&lt;p&gt;以上就基本完成了K8s集群的搭建，如果需要，还可以安装metrics server以提供各个节点的Cpu与Mem资源信息&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -438,19 +438,19 @@
         </item>
         <item>
         <title>使用Docker部署本地Wordpress开发环境</title>
-        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+        <link>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
         <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
         
-        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
-        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境&lt;/h1&gt;
-&lt;p&gt;为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。&lt;/p&gt;
-&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
-&lt;p&gt;由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。&lt;/p&gt;
-&lt;h2 id=&#34;本机环境&#34;&gt;本机环境&lt;/h2&gt;
-&lt;p&gt;MacOS 10.15.6（理论上适用于所有支持Docker的环境）&lt;/p&gt;
+        <guid>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+        <description>&lt;img src="http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境
+&lt;/h1&gt;&lt;p&gt;为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。&lt;/p&gt;
+&lt;h2 id=&#34;背景&#34;&gt;背景
+&lt;/h2&gt;&lt;p&gt;由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。&lt;/p&gt;
+&lt;h2 id=&#34;本机环境&#34;&gt;本机环境
+&lt;/h2&gt;&lt;p&gt;MacOS 10.15.6（理论上适用于所有支持Docker的环境）&lt;/p&gt;
 &lt;p&gt;Docker Desktop 19.03.12&lt;/p&gt;
-&lt;h3 id=&#34;镜像准备&#34;&gt;镜像准备&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h3 id=&#34;镜像准备&#34;&gt;镜像准备
+&lt;/h3&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
@@ -466,8 +466,8 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;由于使用了Wordpress，所以环境的搭建涉及到了三个部分，ngin、mysql以及php，为了与生产环境一致，特别选择了对应的mysql与php的版本。理论上也不建议选择latest版本的镜像，选择相对稳定的版本会有更好的兼容性。&lt;/p&gt;
 &lt;p&gt;可以从&lt;a class=&#34;link&#34; href=&#34;hub.docker.com&#34; &gt;docker hub&lt;/a&gt;上搜索对应版本的镜像&lt;/p&gt;
-&lt;h4 id=&#34;拉取镜像&#34;&gt;拉取镜像&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;h4 id=&#34;拉取镜像&#34;&gt;拉取镜像
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
@@ -479,9 +479,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ docker pull daocloud.io/library/php:7.2.24-fpm
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id=&#34;构建nginxphp环境&#34;&gt;构建Nginx+PHP环境&lt;/h2&gt;
-&lt;h3 id=&#34;nginx配置&#34;&gt;Nginx配置&lt;/h3&gt;
-&lt;p&gt;Nginx的镜像是不能解析php文件的，因此我们需要为nginx配置php-fpm来负责解析处理php代码并返回处理结果。&lt;/p&gt;
+&lt;/div&gt;&lt;h2 id=&#34;构建nginxphp环境&#34;&gt;构建Nginx+PHP环境
+&lt;/h2&gt;&lt;h3 id=&#34;nginx配置&#34;&gt;Nginx配置
+&lt;/h3&gt;&lt;p&gt;Nginx的镜像是不能解析php文件的，因此我们需要为nginx配置php-fpm来负责解析处理php代码并返回处理结果。&lt;/p&gt;
 &lt;p&gt;为此，我们需要做一下几件事情：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;修改nginx的配置，指定php处理方式&lt;/li&gt;
@@ -516,35 +516,35 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# default.conf
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;server {
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    listen       80;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    server_name  localhost;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# default.conf&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;server&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;listen&lt;/span&gt;       &lt;span class=&#34;mi&#34;&gt;80&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;server_name&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;localhost&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    location / {
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        root   /usr/share/nginx/html;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        index  index.php index.html index.htm;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;location&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;root&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;share&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nginx&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;index&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;index&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;php&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;index&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;index&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;htm&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    error_page   500 502 503 504  /50x.html;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    location = /50x.html {
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        root   /usr/share/nginx/html;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;error_page&lt;/span&gt;   &lt;span class=&#34;mi&#34;&gt;500&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;502&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;503&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;504&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;location&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;50&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;root&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;usr&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;share&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nginx&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    location ~ \.php$ {
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        fastcgi_pass   php:9000;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        fastcgi_index  index.php;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        fastcgi_param  SCRIPT_FILENAME  /var/www/html/$fastcgi_script_name;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        include        fastcgi_params;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;n&#34;&gt;location&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;~&lt;/span&gt; \&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;php&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;$&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;fastcgi_pass&lt;/span&gt;   &lt;span class=&#34;n&#34;&gt;php&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;fastcgi_index&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;index&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;php&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;fastcgi_param&lt;/span&gt;  &lt;span class=&#34;n&#34;&gt;SCRIPT_FILENAME&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;var&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;www&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/$&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;fastcgi_script_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;n&#34;&gt;include&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;fastcgi_params&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;同样，为了方便开发，可以把nginx中的网页目录映射到主机中，这里使用了&lt;code&gt;Users/kagaya/docker/www&lt;/code&gt;作为主机中的网站根目录，使用&lt;code&gt;-v&lt;/code&gt;将其挂载到nginx中的&lt;code&gt;/usr/share/nginx/html&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;使用Docker 挂载主机配置目录到容器，并使用&lt;code&gt;--link&lt;/code&gt;参数来连接php容器，docker link采用了修改Hosts文件的方式使得可以通过自定义的名称访问到对应的ip地址，使得容器之间能通过网络互相访问&lt;/p&gt;
 &lt;p&gt;最后使用&lt;code&gt;-p 80:80&lt;/code&gt;将nginx的80端口开放到主机的80端口，使得主机可以通过localhost访问到nginx&lt;/p&gt;
-&lt;h3 id=&#34;php配置&#34;&gt;PHP配置&lt;/h3&gt;
-&lt;p&gt;php配置相对简单，只需要挂载网站根目录到容器即可&lt;/p&gt;
+&lt;h3 id=&#34;php配置&#34;&gt;PHP配置
+&lt;/h3&gt;&lt;p&gt;php配置相对简单，只需要挂载网站根目录到容器即可&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
@@ -553,8 +553,8 @@
 &lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;$ docker run -d --name php -v /Users/kagaya/docker/www:/var/www/html daocloud.io/library/php:7.2.24-fpm
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id=&#34;使用docker-compose一键部署多个服务&#34;&gt;使用Docker-compose一键部署多个服务&lt;/h3&gt;
-&lt;p&gt;由于涉及到了多个容器服务，可以采用Docker-compose工具来方便的同时配置部署多个容器服务&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id=&#34;使用docker-compose一键部署多个服务&#34;&gt;使用Docker-compose一键部署多个服务
+&lt;/h3&gt;&lt;p&gt;由于涉及到了多个容器服务，可以采用Docker-compose工具来方便的同时配置部署多个容器服务&lt;/p&gt;
 &lt;p&gt;新建目录，如&lt;code&gt;webdev&lt;/code&gt;，目录下新建docker-compose.ym文件，配置如下：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -613,8 +613,8 @@
 	
 	
 &gt;&lt;/p&gt;
-&lt;h2 id=&#34;在docker内连接mysql&#34;&gt;在Docker内连接Mysql&lt;/h2&gt;
-&lt;p&gt;对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现&lt;/p&gt;
+&lt;h2 id=&#34;在docker内连接mysql&#34;&gt;在Docker内连接Mysql
+&lt;/h2&gt;&lt;p&gt;对于Wordpress来说，需要配置对应的mysql数据库，为此，我们需要让nginx和php能够访问到mysql容器，于是我们同样可以使用Link方式来实现&lt;/p&gt;
 &lt;p&gt;同时，我们还可以将mysql的3306端口映射到主机，方便我们用数据库管理软件进行操作&lt;/p&gt;
 &lt;p&gt;如果相对数据库中的数据进行持久化，也可以把mysql容器中的&lt;code&gt;/var/lib/mysql&lt;/code&gt;目录映射出来&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;

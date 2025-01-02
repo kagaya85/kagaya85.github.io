@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments">
 <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
 
-<link rel='canonical' href='https://blog.kagaya.fun/p/2022/microrank/'>
+<link rel='canonical' href='http://localhost:1313/p/2022/microrank/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位'>
-<meta property='og:description' content='MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments'>
-<meta property='og:url' content='https://blog.kagaya.fun/p/2022/microrank/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位">
+<meta property='og:description' content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments">
+<meta property='og:url' content='http://localhost:1313/p/2022/microrank/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='PaperReview' /><meta property='article:tag' content='RootCauseLocalization' /><meta property='article:tag' content='AIOps' /><meta property='article:published_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='article:modified_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='PaperReview' /><meta property='article:tag' content='RootCauseLocalization' /><meta property='article:tag' content='AIOps' /><meta property='article:published_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='article:modified_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='og:image' content='http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位">
 <meta name="twitter:description" content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
-}
-</script>
-
+    <meta name="twitter:image" content='http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V8T3W98XW5');
+        }
+      </script>
     </head>
     <body class="
     article-page
@@ -69,7 +72,7 @@ if (!doNotTrack) {
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                        <img src="/img/avatar_hu670781931259558488.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -89,7 +92,6 @@ if (!doNotTrack) {
         
         
         
-
         <li >
             <a href='/' >
                 
@@ -108,7 +110,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/post' >
                 
@@ -129,7 +130,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/about/' >
                 
@@ -147,7 +147,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/archives/' >
                 
@@ -168,7 +167,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://twitter.com/kagaya_85' target="_blank">
                 
@@ -187,7 +185,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://github.com/kagaya85' target="_blank">
                 
@@ -206,7 +203,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://bangumi.tv/user/kagaya85' target="_blank">
                 
@@ -224,7 +220,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/search/' >
                 
@@ -241,12 +236,12 @@ if (!doNotTrack) {
             </a>
         </li>
         
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -254,7 +249,7 @@ if (!doNotTrack) {
 
 
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -262,10 +257,11 @@ if (!doNotTrack) {
 
 
 
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
     </ol>
 </aside>
 
@@ -318,8 +314,8 @@ if (!doNotTrack) {
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2022/microrank/">
-                <img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hud5b69478f86bbcad283f710553f87a38_331275_800x0_resize_box_3.png"
-                        srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hud5b69478f86bbcad283f710553f87a38_331275_800x0_resize_box_3.png 800w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hud5b69478f86bbcad283f710553f87a38_331275_1600x0_resize_box_3.png 1600w"
+                <img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu14872838036886577416.png"
+                        srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu14872838036886577416.png 800w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu16381936607916237683.png 1600w"
                         width="800" 
                         height="190" 
                         loading="lazy"
@@ -405,11 +401,11 @@ if (!doNotTrack) {
     >MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)</a></p>
 <p>源码链接：</p>
 </blockquote>
-<h2 id="tldr">TL;DR</h2>
-<p>这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。</p>
-<h2 id="algorithm">Algorithm</h2>
-<h3 id="spectrum-based-fault-localization">Spectrum-based fault localization</h3>
-<p>Spectrum-based fault localization (SBFL) ，谱分析在故障定位中是比较有效且简单的方法。简单来说，在一个程序$P$和其对应的测试集合中，对于程序中的每一个元素$O\in P$，定义一个四元组：</p>
+<h2 id="tldr">TL;DR
+</h2><p>这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。</p>
+<h2 id="algorithm">Algorithm
+</h2><h3 id="spectrum-based-fault-localization">Spectrum-based fault localization
+</h3><p>Spectrum-based fault localization (SBFL) ，谱分析在故障定位中是比较有效且简单的方法。简单来说，在一个程序$P$和其对应的测试集合中，对于程序中的每一个元素$O\in P$，定义一个四元组：</p>
 <p>$$
 (O_{ef},O_{ep},O_{nf},O_{np})
 $$
@@ -418,11 +414,11 @@ $O_{ef}$: 覆盖O的测试case中失败的数量</p>
 <p>$O_{nf}$: 没有覆盖O的测试case中失败的数量</p>
 <p>$O_{np}$: 没有覆盖O的测试case中通过的数量</p>
 <p>类似软件测试中的思路，当经过一个服务执行的异常trace越多且执行正常trace的数量越少，那么这个服务越有可能是导致异常的根因。</p>
-<h3 id="system">System</h3>
-<p><img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png"
+<h3 id="system">System
+</h3><p><img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png"
 	width="1914"
 	height="454"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hud5b69478f86bbcad283f710553f87a38_331275_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hud5b69478f86bbcad283f710553f87a38_331275_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu17095812258569412963.png 480w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu872652717049474084.png 1024w"
 	loading="lazy"
 	
 		alt="整体流程"
@@ -435,16 +431,16 @@ $O_{ef}$: 覆盖O的测试case中失败的数量</p>
 ></p>
 <p>MicroRank主要分为四个部分：Anomaly Detector, Data Preparator, PageRank Scorer 和 Weighted Spectrum Ranker</p>
 <p>系统通过一个时间窗口（文中是30s），如果实时的异常大于一个期望值，就认为出现了异常，并触发根因定位，由Data Preparator来区分时间窗口内的正常/异常trace，并且构建调用图，由一个基于PageRank的打分器为每一个operation（即服务接口，下文同）进行异常分数和正常分数的打分，输入到Spectrum Ranker不断的更新权重进行排序</p>
-<h3 id="anomaly-detector">Anomaly Detector</h3>
-<p>异常检测器主要计算每个operation在一段时间（比如一个小时）内的平均处理时间 $\mu_o$ 和标准差 $\delta_o$ ,文中特别说明了只有在出现预测偏差的时候才需要更新上述的两个值。</p>
+<h3 id="anomaly-detector">Anomaly Detector
+</h3><p>异常检测器主要计算每个operation在一段时间（比如一个小时）内的平均处理时间 $\mu_o$ 和标准差 $\delta_o$ ,文中特别说明了只有在出现预测偏差的时候才需要更新上述的两个值。</p>
 <p>在一个时间窗口内，异常检测需要统计trace涉及的operation以及对应的数量 $count_o$ ，通过下面式子计算期望一条trace的期望响应时间 $L_{excepted}$ ：</p>
 <p>$$
 L_{excepted} = \sum count_o \times (\mu_o + n \times \delta_o)
 $$
 一条trace的期望响应时间计算为各个operation的n sigma的乘积的和，在文中$n=1.5$，如果实际trace的响应时间大于期望值，则会被认为是异常trace，同时触发根因定位并刷新时间窗口。</p>
 <p>这里其实存在一些问题：对于OpenTracing格式的span来说，各个span的duration是包含了子span的duration，理论上只需要计算root span的duration即可，不需要累加每个span的duration。</p>
-<h3 id="pagerank-scorer">PageRank Scorer</h3>
-<p>文中为了提高谱分析的性能，增加了一个基于PageRank的打分器，分别对异常和正常的trace进行游走计算权重信息。基本思想就是对trace上的每一个operation进行打分来评价trace的重要性，越能够帮助找到根因的trace重要性会越高：</p>
+<h3 id="pagerank-scorer">PageRank Scorer
+</h3><p>文中为了提高谱分析的性能，增加了一个基于PageRank的打分器，分别对异常和正常的trace进行游走计算权重信息。基本思想就是对trace上的每一个operation进行打分来评价trace的重要性，越能够帮助找到根因的trace重要性会越高：</p>
 <ol>
 <li>如果一个operation被越多的异常trace经过，那么它很有可能是根因</li>
 <li>如果一个异常trace经过了越少的operation，那么这条trace的重要性越高，因为它包含根因的范围更小（更容易定位根因）</li>
@@ -468,7 +464,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png"
 	width="744"
 	height="265"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu6922b210f8220786934aa0896522f4ae_53807_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu6922b210f8220786934aa0896522f4ae_53807_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu5060164549456508794.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu12030256419391883049.png 1024w"
 	loading="lazy"
 	
 		alt="请求依赖图"
@@ -482,7 +478,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png"
 	width="719"
 	height="229"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu199e1f2c5903970c8abe4f207f9b0472_47948_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu199e1f2c5903970c8abe4f207f9b0472_47948_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu14236338730072688234.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu17115640358046474737.png 1024w"
 	loading="lazy"
 	
 		alt="请求与服务依赖图"
@@ -529,8 +525,8 @@ $$
 v^{(0)}=[v_o^T, v_t^T]^T=[\frac{1}{N_o},\frac{1}{N_o},\cdots,\frac{1}{N_o},\frac{1}{N_t},\frac{1}{N_t},\cdots,\frac{1}{N_t}]^T
 $$
 $N_o$和$N_t$分别是operation数量和trace种类的数量（上文例子中的req1,2,3则为三种trace），通过（3）式迭代计算（实例代码中迭代次数为25），最后得出正常的评分P和异常trace评分向量</p>
-<h3 id="weighted-spectrum-ranker">Weighted Spectrum Ranker</h3>
-<p>最后，按照谱分析的方法，计算开头式(1)中提到的四个值：</p>
+<h3 id="weighted-spectrum-ranker">Weighted Spectrum Ranker
+</h3><p>最后，按照谱分析的方法，计算开头式(1)中提到的四个值：</p>
 <p>$$
 \begin{array} \
 O_{ef} = F * N_{ef}, &amp; O_{nf} =  F * (N_f - N_{ef}) \
@@ -541,7 +537,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png"
 	width="964"
 	height="528"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu4a64e17dc2f4796f4e64b1ea8f39baa5_101767_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu4a64e17dc2f4796f4e64b1ea8f39baa5_101767_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu11255077761870772467.png 480w, /p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu10481954821140086567.png 1024w"
 	loading="lazy"
 	
 		alt="不同的四元组计算方法"
@@ -552,12 +548,12 @@ $$</p>
 		data-flex-basis="438px"
 	
 ></p>
-<h2 id="experiments">Experiments</h2>
-<p>作者通过实验模拟了在线故障定位的流程：</p>
+<h2 id="experiments">Experiments
+</h2><p>作者通过实验模拟了在线故障定位的流程：</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png"
 	width="1568"
 	height="358"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu8272023cdbf844e2243e99a4a8323665_106377_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu8272023cdbf844e2243e99a4a8323665_106377_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu7069929080434444467.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu12072560808738534117.png 1024w"
 	loading="lazy"
 	
 		alt="在线检测时间轴"
@@ -572,7 +568,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png"
 	width="1460"
 	height="1282"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu28f8487a0ea1b1910181e059241e250b_401697_480x0_resize_box_3.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu28f8487a0ea1b1910181e059241e250b_401697_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu17966311383628171713.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu2169254971505139587.png 1024w"
 	loading="lazy"
 	
 		alt="实验结果对比"
@@ -583,8 +579,8 @@ $$</p>
 		data-flex-basis="273px"
 	
 ></p>
-<h2 id="thoughts">Thoughts</h2>
-<ol>
+<h2 id="thoughts">Thoughts
+</h2><ol>
 <li>MicroRank方法只适用于Latency类型的异常，对于请求失败等结构异常</li>
 <li>作者认为调用关系是稳定的，然而现实情况是可能业务系统中只有部分系统能够维持稳定的调用关系</li>
 <li>文中的节点operation其实既可以是服务也可以是服务实例或者接口，作者在这一块的区别并没有详细阐述</li>
@@ -627,24 +623,25 @@ $$</p>
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
                 defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.querySelector(`.article-content`), {
+        renderMathInElement(document.body, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
                 { left: "\\(", right: "\\)", display: false },
                 { left: "\\[", right: "\\]", display: true }
-            ]
+            ],
+            ignoredClasses: ["gist"]
         });})
 </script>
     
@@ -659,7 +656,7 @@ $$</p>
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -707,14 +704,14 @@ $$</p>
         
             2019 - 
         
-        2023 かがやの部屋
+        2025 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -803,7 +800,7 @@ $$</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

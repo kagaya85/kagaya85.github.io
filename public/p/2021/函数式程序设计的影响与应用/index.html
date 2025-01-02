@@ -1,31 +1,34 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。\n">
 <title>函数式程序设计的影响与应用</title>
 
-<link rel='canonical' href='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
+<link rel='canonical' href='http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 
-<link rel="stylesheet" href="/scss/style.min.8191399262444ab68b72a18c97392f5349be20a1615d77445be51e974c144cff.css"><meta property='og:title' content='函数式程序设计的影响与应用'>
-<meta property='og:description' content='简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电'>
-<meta property='og:url' content='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
+<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="函数式程序设计的影响与应用">
+<meta property='og:description' content="简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。\n">
+<meta property='og:url' content='http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='FunctionalProgramming' /><meta property='article:tag' content='Paper' /><meta property='article:tag' content='Overview' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='SSA' /><meta property='article:published_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='FunctionalProgramming' /><meta property='article:tag' content='Paper' /><meta property='article:tag' content='Overview' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='SSA' /><meta property='article:published_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-03-27T00:00:00&#43;00:00'/><meta property='og:image' content='http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="函数式程序设计的影响与应用">
-<meta name="twitter:description" content="简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-V8T3W98XW5', { 'anonymize_ip': false });
-}
-</script>
-
+<meta name="twitter:description" content="简介 函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象1。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png' />
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V8T3W98XW5');
+        }
+      </script>
     </head>
     <body class="
     article-page
@@ -69,7 +72,7 @@ if (!doNotTrack) {
                     
                     
                         
-                        <img src="/img/avatar_hu84db507eb8e14f8e7f807ecb710408fc_380431_300x0_resize_box_3.png" width="300"
+                        <img src="/img/avatar_hu670781931259558488.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -89,7 +92,6 @@ if (!doNotTrack) {
         
         
         
-
         <li >
             <a href='/' >
                 
@@ -108,7 +110,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/post' >
                 
@@ -129,7 +130,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/about/' >
                 
@@ -147,7 +147,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/archives/' >
                 
@@ -168,7 +167,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://twitter.com/kagaya_85' target="_blank">
                 
@@ -187,7 +185,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://github.com/kagaya85' target="_blank">
                 
@@ -206,7 +203,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='https://bangumi.tv/user/kagaya85' target="_blank">
                 
@@ -224,7 +220,6 @@ if (!doNotTrack) {
         </li>
         
         
-
         <li >
             <a href='/search/' >
                 
@@ -241,12 +236,12 @@ if (!doNotTrack) {
             </a>
         </li>
         
+        <li class="menu-bottom-section">
+            <ol class="menu">
 
-        <div class="menu-bottom-section">
-            
-            
-                <li id="dark-mode-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="8" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -254,7 +249,7 @@ if (!doNotTrack) {
 
 
 
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
   <path stroke="none" d="M0 0h24v24H0z"/>
   <circle cx="16" cy="12" r="2" />
   <rect x="2" y="6" width="20" height="12" rx="6" />
@@ -262,10 +257,11 @@ if (!doNotTrack) {
 
 
 
-                    <span>暗色模式</span>
-                </li>
-            
-        </div>
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
     </ol>
 </aside>
 
@@ -329,8 +325,8 @@ if (!doNotTrack) {
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_3.png"
-                        srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_800x0_resize_box_3.png 800w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hufdde9e8b983bf6af308db93c404c60c9_5864242_1600x0_resize_box_3.png 1600w"
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hu3002255733806898886.png"
+                        srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hu3002255733806898886.png 800w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1_hu10326527788920089766.png 1600w"
                         width="800" 
                         height="450" 
                         loading="lazy"
@@ -405,17 +401,17 @@ if (!doNotTrack) {
     <section class="article-content">
     
     
-    <h2 id="简介">简介</h2>
-<p>函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。</p>
+    <h2 id="简介">简介
+</h2><p>函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。</p>
 <p>尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。</p>
 <p>当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用</p>
-<h2 id="函数式语言的发展">函数式语言的发展</h2>
-<h3 id="haskell">Haskell</h3>
-<p>Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
+<h2 id="函数式语言的发展">函数式语言的发展
+</h2><h3 id="haskell">Haskell
+</h3><p>Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>与命令式编程语言不同，Haskell是一种纯函数式编程语言。虽然它现在仍然局限在学术界和需要大量使用高等数学的行业如金融业，但是这并不意味着数值计算。</p>
 <p>功能编程范式依赖于编程功能 ，其行为为数学函数，允许创建不修改外部数据或具有与外部上下文的可观察的交互功能。可观察的交互是指将数据写入文件或引发异常的事情。在技术上这意味着功能没有 side-effects，这也可能成为一等公民的功能。函数和其他类型一样，也可以作为其他函数的参数。</p>
-<h3 id="fp-in-golang">FP in Golang</h3>
-<p>Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。</p>
+<h3 id="fp-in-golang">FP in Golang
+</h3><p>Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。</p>
 <p>尽管Go不是专门设计的函数式编程语言，但其语法支持我们使用一些函数式的编程思维。只需要满足两个规则：</p>
 <ul>
 <li>没有数据赋值：数据对象赋值后不再改变</li>
@@ -534,15 +530,15 @@ if (!doNotTrack) {
 <p>Go语言中实现引用透明的方法是通过避免引用传递或指针传递的使用。虽然在Go语言中都是通过值传递的方式来传递参数，但是像切片或者Map这样的数据结构是通过指针的方式来进行传递。因此我们在使用函数式的程序设计思路来构造我们的程序时，应当注意引用透明性，避免在函数的计算结果受外部的状态影响或者影响外部的状态。</p>
 <p>对于Go语言来说，由函数式所带来的引用透明性可以带来很多显而易见的好处，比如我们可以缓存每一次函数调用的结果来达到空间换时间的目的，又或者幂等的函数使得函数的计算结构变得可预测。同时函数式天生的模块化设计理念可以让自底向上的程序设计变得更加容易。程序的调试也变得更加简单，由于函数都是各自独立的，他们的计算结果只依赖于各自的输入参数。</p>
 <p>最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生<sup id="fnref1:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，与Go语言的高并发设计理念不谋而合。</p>
-<h2 id="函数式语言的应用">函数式语言的应用</h2>
-<h3 id="fp-in-compiler">FP in Compiler</h3>
-<p>在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。</p>
+<h2 id="函数式语言的应用">函数式语言的应用
+</h2><h3 id="fp-in-compiler">FP in Compiler
+</h3><p>在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。</p>
 <p>将程式码转换为SSA形式，最简单的方法，就是将每个被赋值的变数，以一个新的变数来取代，而新的变数名称则为一个带着编号的旧变数。SSA通过加一个特别的描述，称之为<em>Φ 函式</em>，来实现对于变量赋值来源不确定时的表示<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>。</p>
 <p>在《SSA is Functional Programming》<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>这篇文章中，作者提出了一种观点，认为SSA form其实是一种函数式编程，对于一次赋值，左侧是对应函数的形式参数，右侧是对应函数调用的实际参数。通过函数之间的嵌套调用，可以很清楚的表现SSA中的变量的实际作用范围。</p>
 <p>因此，对于SSA来说，SSA form的一个重要属性是，变量的定义决定了每次的使用（或在C函数中使用的情况下，支配使用节点的前驱节点）。 SSA的解释中通常未声明此属性，但是对SSA进行许多分析和优化是必需的-它是SSA语义的一部分。 在具有嵌套作用域的函数式程序中，此限制已明确且静态地编码到函数嵌套的结构中。 变量范围的概念有助于我们构造中间形式。</p>
 <p>而对于使用函数式程序设计的成语言来说，使用SSA的过程中，往往会绘制带有方框，任务，条件和控制流边缘的流程图。 这种表示法虽然容易被滥用，但通常更适合于解释思想以及直观地可视化地表现算法和状态转换。 函数式程序员可以借鉴这样一种方法，避免迷失在函数式编程的概念中。</p>
-<h3 id="fp-in-parallel-programming">FP in Parallel Programming</h3>
-<p>为了提高计算机的运行速度和系统的处理能力，在总体设计和逻辑设计中广泛采用并行操作技术，使各部件并行工作。要求操作系统具有并发性及资源共享，可以采用并行程序设计的方法。</p>
+<h3 id="fp-in-parallel-programming">FP in Parallel Programming
+</h3><p>为了提高计算机的运行速度和系统的处理能力，在总体设计和逻辑设计中广泛采用并行操作技术，使各部件并行工作。要求操作系统具有并发性及资源共享，可以采用并行程序设计的方法。</p>
 <p>对于命令式的语言来说，进行并行程序设计时会遇到许多困难<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>：</p>
 <ul>
 <li>程序员必须构思一个符合规范的并行算法</li>
@@ -564,10 +560,10 @@ if (!doNotTrack) {
 <li>程序结果是确定的，也就是说，额外的的因素例如调度策略并不会使得每一次执行的结果不同</li>
 </ul>
 <p>并行函数式编程是一种处于青春期的技术。它的潜力是巨大的，但是在它获得广泛信誉之前，需要在实际应用中进行实践测试。幸运的是，现在可以实现支持实际应用程序的实现，并且可以预期，在未来几年中，使用函数式编程的使用将大大增加。使函数式程序具有吸引力的原因正是那些对分布式计算系统和运行时资源管理系统的大量需求。但是，随着实现的改进，函数式编程的成本应变得越来越可忽略。随着软件变得越来越复杂，其收益将越来越有价值。</p>
-<h3 id="fp-in-cloud">FP in Cloud</h3>
-<p>云原生是一种构建和运行应用程序的方法，是一套技术体系和方法论。云原生（CloudNative）是一个组合词，Cloud+Native。Cloud表示应用程序位于云中，而不是传统的数据中心；Native表示应用程序从设计之初即考虑到云的环境，原生为云而设计，在云上以最佳姿势运行，充分利用和发挥云平台的弹性+分布式优势。可以简单的将云原生理解为：<strong>云原生 = 微服务 + DevOps + 持续交付 + 容器化</strong></p>
-<h4 id="性能场景">性能场景</h4>
-<p>云原生技术中最有具有代表性的技术之一，便是无服务Serverless技术。在Serverless中，不仅对基础设施进行了虚拟化，抽象化管理，而且可以按需启动和支付需要的资源（CPU、memory、网络带宽）。这样人们可以只考虑架构解决方案而不用去担心潜在的基础设施配置、供应、伸缩或管理<sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup>。</p>
+<h3 id="fp-in-cloud">FP in Cloud
+</h3><p>云原生是一种构建和运行应用程序的方法，是一套技术体系和方法论。云原生（CloudNative）是一个组合词，Cloud+Native。Cloud表示应用程序位于云中，而不是传统的数据中心；Native表示应用程序从设计之初即考虑到云的环境，原生为云而设计，在云上以最佳姿势运行，充分利用和发挥云平台的弹性+分布式优势。可以简单的将云原生理解为：<strong>云原生 = 微服务 + DevOps + 持续交付 + 容器化</strong></p>
+<h4 id="性能场景">性能场景
+</h4><p>云原生技术中最有具有代表性的技术之一，便是无服务Serverless技术。在Serverless中，不仅对基础设施进行了虚拟化，抽象化管理，而且可以按需启动和支付需要的资源（CPU、memory、网络带宽）。这样人们可以只考虑架构解决方案而不用去担心潜在的基础设施配置、供应、伸缩或管理<sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup>。</p>
 <p>在《Functional Programming in Serverless World》<sup id="fnref:9"><a href="#fn:9" class="footnote-ref" role="doc-noteref">9</a></sup>中，作者利用AWS的Lambda Serverless服务对几种函数式语言在Serverless场景中的性能进行了测试，作者主要做了四个方面的测试：</p>
 <ul>
 <li>包大小</li>
@@ -579,7 +575,7 @@ if (!doNotTrack) {
 <p><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png"
 	width="2099"
 	height="2099"
-	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu8a9a1c7e26c285275fe2682029c2bc2e_108875_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu1015944569728219425.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu6533533926159356779.png 1024w"
 	loading="lazy"
 	
 		alt="包大小对比"
@@ -592,7 +588,7 @@ if (!doNotTrack) {
 > <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png"
 	width="2099"
 	height="2099"
-	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_huaac06480cc1b1e39a9871f47c530b505_108017_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu536980269799004202.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu16808929019532103047.png 1024w"
 	loading="lazy"
 	
 		alt="占用内存对比"
@@ -606,7 +602,7 @@ if (!doNotTrack) {
 <p><img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png"
 	width="2099"
 	height="2099"
-	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hudec9cb7e99b6d2b3559e0aa826bc2efd_107539_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu113629708269735224.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu18348777042182670285.png 1024w"
 	loading="lazy"
 	
 		alt="执行效率对比"
@@ -619,7 +615,7 @@ if (!doNotTrack) {
 > <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png"
 	width="2099"
 	height="2099"
-	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_480x0_resize_box_3.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu8fb3f8b5909514f428b8c3440aabe456_93199_1024x0_resize_box_3.png 1024w"
+	srcset="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu6016970050138491387.png 480w, /p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu12180964666984603155.png 1024w"
 	loading="lazy"
 	
 		alt="冷启动时间对比"
@@ -631,8 +627,8 @@ if (!doNotTrack) {
 	
 ></p>
 <p>从这些测试中可以看出，不同的函数式语言在无服务器场景下运行情况是又较大的区别的。作者认为，对于Serverless技术不应该盲目的使用，而是更具应用场景再决定是否使用Serverless。同时，作者还建议，对于一个Serverless服务，最可靠安全的函数式语言应该是F#，因为由于各个云服务提供的Serverless服务所支持的语言不同，但对于.NET Core平台的支持都是最充足的。</p>
-<h4 id="云原生应用场景">云原生应用场景</h4>
-<p>在《Functional Programming Languages in Computing Clouds》<sup id="fnref:10"><a href="#fn:10" class="footnote-ref" role="doc-noteref">10</a></sup>这篇文章中，作者对于云计算场景下的函数式程序设计语言提出了两个问题：</p>
+<h4 id="云原生应用场景">云原生应用场景
+</h4><p>在《Functional Programming Languages in Computing Clouds》<sup id="fnref:10"><a href="#fn:10" class="footnote-ref" role="doc-noteref">10</a></sup>这篇文章中，作者对于云计算场景下的函数式程序设计语言提出了两个问题：</p>
 <ul>
 <li>云计算构建中有哪些新的范式和问题？</li>
 <li>函数式编程语言（FPL）是否适合这些范式，它们是否提供新的方法来应对新的问题和挑战？</li>
@@ -736,12 +732,12 @@ if (!doNotTrack) {
 <pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">validateCreatePostEvent</span> <span class="o">=</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">asUserPostEvent</span><span class="p">,</span> <span class="nx">queryParamsIsNull</span><span class="p">,</span> <span class="nx">pathParamsIsNull</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="分布式系统开发">分布式系统开发</h4>
-<p>在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>，作者讨论了分布式环境下对于函数式编程语言F#的使用。</p>
+</div><h4 id="分布式系统开发">分布式系统开发
+</h4><p>在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》<sup id="fnref:12"><a href="#fn:12" class="footnote-ref" role="doc-noteref">12</a></sup>，作者讨论了分布式环境下对于函数式编程语言F#的使用。</p>
 <p>分布式系统的开发本质上非常复杂，部分原因是在客户端和服务器端使用了不同的语言和技术，而且这些技术之间通常没有透明的无缝集成。 因此，开发人员必须将整个系统视为许多互操作的模块，始终牢记这些模块如何协同工作并交换信息。 这也使开发更加复杂，因为我们需要在源代码树中分离服务器端和客户端代码。</p>
 <p>作者强调了F＃非常适合于分布式云计算。 由于函数样式迫使我们以一种由无状态函数组成的方式分解问题，无状态函数仅在给定初始数据的情况下计算结果，因此我们自然可以在集群中的不同节点上并行运行那些独立的函数。 任务的分配仍然是开发人员的责任，但是功能分解过程的整体性质使其变得更加容易。</p>
-<h3 id="fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions</h3>
-<p>在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样</p>
+<h3 id="fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions
+</h3><p>在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -841,10 +837,10 @@ if (!doNotTrack) {
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>第一种方式我们可以通过返回的<code>interface{}</code>获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的<code>defer</code>函数，便可以方便的实现对于配置项的临时修改和恢复。</p>
-<h2 id="pros-and-cons-of-fp">Pros and Cons of FP</h2>
-<p>正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。</p>
-<h3 id="advantages">Advantages</h3>
-<p>函数式编程的有点是非常显而易见的，从不同角度来说，函数式程序设计的优越性往往有以下几个方面：</p>
+<h2 id="pros-and-cons-of-fp">Pros and Cons of FP
+</h2><p>正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。</p>
+<h3 id="advantages">Advantages
+</h3><p>函数式编程的有点是非常显而易见的，从不同角度来说，函数式程序设计的优越性往往有以下几个方面：</p>
 <ul>
 <li>函数式程序设计是非常安全的，尤其是在并行和分布式编程中，因为纯函数是天生线程安全的<sup id="fnref:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
 <li>纯函数容易理解，不需要关注任何可能被改变的隐藏状态。这使得代码更短，从而保证可以容忍的错误数量更少<sup id="fnref:15"><a href="#fn:15" class="footnote-ref" role="doc-noteref">15</a></sup></li>
@@ -856,8 +852,8 @@ if (!doNotTrack) {
 <li>正如前一节提到的Functional Options在Golang中的应用，函数式的方法可以很好的提升代码的可读性。函数式设计出来的方法往往可以拥有自解释性（self-documented），方法的功能和行为等内容都定义在了输入参数或函数名当中，不需要额外的注释就可以让阅读者很好的理解代码的功能和预测代码运行的结果<sup id="fnref1:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
 <li>函数式程序设计中对于纯函数的使用，使得方法的计算结果变得可缓存。因为纯函数的输出只取决于函数的输入参数，那么我们便可以预先计算并缓存一些计算结果，这样在之后遇到相同的输入参数时，我们就可以直接使用缓存的结果，从而提高程序的执行效率<sup id="fnref2:11"><a href="#fn:11" class="footnote-ref" role="doc-noteref">11</a></sup></li>
 </ul>
-<h3 id="disadvantages">Disadvantages</h3>
-<p>函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：</p>
+<h3 id="disadvantages">Disadvantages
+</h3><p>函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：</p>
 <p>首先是资源占用和运行效率方面：</p>
 <ul>
 <li>函数式设计的程序往往会比命令式的程序在执行效率上更慢，大多数FP使用特殊的不可变数据结构。如FP通过调用set函数设置一个新值，返回一个设置来新值的新数据结构而不是在原来的数据结构上进行修改<sup id="fnref4:14"><a href="#fn:14" class="footnote-ref" role="doc-noteref">14</a></sup></li>
@@ -871,13 +867,13 @@ if (!doNotTrack) {
 <li>在某些应用场景中计算机无法按函数式的方式运行，如一些有状态和命令式的操作，他们本质上就是一个巨大的状态机，FP在这里无法起作用<sup id="fnref4:16"><a href="#fn:16" class="footnote-ref" role="doc-noteref">16</a></sup>。</li>
 <li>同理，其他一些有状态的对象，在OOP中可以很好的处理应对，但是对于FP来说，就是十分棘手的困难。</li>
 </ul>
-<h2 id="总结">总结</h2>
-<p>在本文中，我简单介绍了函数式语言的发展，并概述了函数式的设计思维在一些已有场景的应用，同时从正反两个角度分别阐述了函数式程序设计的优越性和局限性。</p>
+<h2 id="总结">总结
+</h2><p>在本文中，我简单介绍了函数式语言的发展，并概述了函数式的设计思维在一些已有场景的应用，同时从正反两个角度分别阐述了函数式程序设计的优越性和局限性。</p>
 <p>综上所述，函数式程序设计经过了很长一段时间的发展，人们已经总结出了许多行而有效的应用方法，但它并不是银色子弹，不能一劳永逸地解决我们程序设计中的所有问题，恰恰相反，函数式程序设计的应用往往会给我们带来新的问题。我们应当从函数式中学到一种我们在面向对象的程序设计中接触不到的程序设计理念，并将其很好的与OOP进行结合。</p>
 <p>事实也证明FP与OOP是正交的，它们可以很好的结合起来，针对不同问题各取所长。OOP强调对象状态的改变，混合了声明与状态的概念，而FP有着天生适合并发的优势，以及自解释等提高代码质量的优点。</p>
 <p>细细品味函数式编程，就会觉得FP天生就有一种独特的魅力，我们可以好好利用函数式编程的思维来实现某些符合函数式特性场景的具体需求。所以，在今后的学习工作中，也应当做到具体问题具体分析，运用好函数式程序设计这个巧妙的工具来解决我们遇到的各种问题，提高自身的程序设计能力和代码软件的质量。</p>
-<h2 id="参考文献">参考文献</h2>
-<div class="footnotes" role="doc-endnotes">
+<h2 id="参考文献">参考文献
+</h2><div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
@@ -987,24 +983,25 @@ if (!doNotTrack) {
     
         <link 
                 rel="stylesheet" 
-                href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css"integrity="sha256-J&#43;iAE0sgH8QSz9hpcDxXIftnj65JEZgNhGcgReTTK9s="crossorigin="anonymous"
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
             ><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js"integrity="sha256-InsNdER1b2xUewP&#43;pKCUJpkhiqwHgqiPXDlIk7GzBu4="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
                 defer
                 >
             </script><script 
-                src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js"integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="crossorigin="anonymous"
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
                 defer
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.querySelector(`.article-content`), {
+        renderMathInElement(document.body, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
                 { left: "\\(", right: "\\)", display: false },
                 { left: "\\[", right: "\\]", display: true }
-            ]
+            ],
+            ignoredClasses: ["gist"]
         });})
 </script>
     
@@ -1025,7 +1022,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6d416da1ddfbb7f98c712123bd095a5e_985951_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1049,7 +1046,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_huf1cd1c1b59220aee6296caa95cb97389_220526_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1073,7 +1070,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu2315d63bffc53ea5fa23e960b91d356d_855728_250x150_fill_q75_box_smart1.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1097,7 +1094,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_huc297a0f1028b89bda40fcadefea13798_151152_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu12794881910683849128.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1121,7 +1118,7 @@ if (!doNotTrack) {
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hue470a64b4465831dfaa5ecda4dac4eb4_424026_250x150_fill_box_smart1_3.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu8637115685238192666.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1148,7 +1145,7 @@ if (!doNotTrack) {
         
     <div class="disqus-container">
     <div id="disqus_thread"></div>
-<script type="application/javascript">
+<script>
     window.disqus_config = function () {
     
     
@@ -1196,14 +1193,14 @@ if (!doNotTrack) {
         
             2019 - 
         
-        2023 かがやの部屋
+        2025 かがやの部屋
     </section>
     
     <section class="powerby">
         
             Let's code the fantastic world!!! <br/>
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.16.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1292,7 +1289,7 @@ if (!doNotTrack) {
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
