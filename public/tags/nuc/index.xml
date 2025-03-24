@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>NUC on かがやの部屋</title>
-        <link>http://localhost:1313/tags/nuc/</link>
+        <link>https://blog.kagaya.fun/tags/nuc/</link>
         <description>Recent content in NUC on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Mon, 17 Jan 2022 16:35:05 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/nuc/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 17 Jan 2022 16:35:05 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/nuc/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
-        <link>http://localhost:1313/p/2022/first-nas/</link>
+        <link>https://blog.kagaya.fun/p/2022/first-nas/</link>
         <pubDate>Mon, 17 Jan 2022 16:35:05 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2022/first-nas/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2022/first-nas/59474391_p0.jpeg" alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心" /&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
+        <guid>https://blog.kagaya.fun/p/2022/first-nas/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg" alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心" /&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
 &lt;/h2&gt;&lt;p&gt;为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视的1T ssd接一块败家之眼的m2硬盘盒用来存自己下载的番剧，同时也方便和朋友分享；后来阿b推出了放映室的功能，在网页上就可以很方便的和朋友一同看番看电影。但这样终究是不方便，首先放映室的内容只能先定于阿b已经拥有版权的内容，其次，你的朋友最好还要有大会员。好在我本身就是个爱折腾的人，刚好前段时间给群友搞了一个ts服务器来让群友们吹水聊天以及游戏语音，我就开始想能不能通过自建的服务器也实现一个类似的流媒体平台，随时和朋友分享自己私藏的电影番剧。&lt;/p&gt;
 &lt;p&gt;假如有这样一个场景：某天有朋友（小姐姐）想看个电影但苦于没有资源，又不想去各种牛皮癣广告横飞的小网站，只得求助于你。你虽然早已掌握科学上网快速通过各种途径网罗了种子资源，熟练地运用bt下载器下载到了最新的4K HDR 10bit资源，那么你该怎么和远在网线另一端的她分享呢？当然你可以把bt文件丢过去耐心地教她怎么用FDM来下载，但是，如果此时我们能有一个自己的流媒体服务器，不就可以随时随地的给任何人分享硬盘里的片了吗？&lt;/p&gt;
 &lt;p&gt;之前发现小区是有公网ip的，在暴力破解了宽带账号把光猫改成桥接以后，就可以直通外网了，尽管上行带宽并不富裕，但这么好的资源不拿来搭服务器简直浪费，而又“恰好”实验室发电脑是一台最新nuc11，配了11代的酷睿i7-1165G7，平时都用mac的我正愁该如何在毕业前发挥它的剩余价值，这波天时地利就被赶上了，于是就有了下面的折腾。&lt;/p&gt;
@@ -23,10 +23,10 @@
 &lt;p&gt;主机用的是白嫖的Intel NUC11PAHi7 猎豹峡谷，40w的TDP，硬盘从海鲜市场捡了两块4T的希捷酷狼，硬盘盒同样也是从海鲜市场捡的二手世特力双盘位带raid的硬盘盒，可以两块组硬raid1。同时配了APC的BK650M2 UPS来保证电源的稳定。&lt;/p&gt;
 &lt;p&gt;刚拿到世特力的硬盘盒时发现卖家并没有给原装的脚垫，直接放到桌子上会有挺强烈的共振，怕搞坏硬盘临时垫了块纸板，放假回来后买了带一点厚度的减震贴贴到四个角，瞬间稳稳当当，噪音也减弱了不少。4T的酷狼是5400转，本身声音也很小，房间不大我都是直接放到床边，几乎听不到什么声音，室友也表示很安静没有什么影响。&lt;/p&gt;
 &lt;p&gt;硬盘盒之后组装新nas后还可以拿来扩展新nas的空间，缺点就是usb不支持硬盘smart信息的查询，尽管它还带有一个esata的接口，不知道是否支持。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/IMG_20220219_235223.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223.jpg&#34;
 	width=&#34;2736&#34;
 	height=&#34;3648&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/IMG_20220219_235223_hu4430874144846312012.jpg 480w, http://localhost:1313/p/2022/first-nas/IMG_20220219_235223_hu7130846192623160740.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223_hu_8a8c44c5cfbaa7.jpg 480w, https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223_hu_7ae9f94856691975.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;整体摆放到一起还是挺小巧的&#34;
@@ -446,10 +446,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;上面的pumbg代表支持唤醒的类型：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png&#34;
 	width=&#34;328&#34;
 	height=&#34;244&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu15001406751426224739.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu11715052368475697144.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_7bcf1dcb5c8fc09f.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_a5005e65e6d1fdf0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;唤醒类型&#34;
@@ -540,10 +540,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;所以不能在使用之前的VAAPI，转而使用最新的QuickSync方式：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png&#34;
 	width=&#34;1686&#34;
 	height=&#34;738&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu5965231619095395841.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu439903483516730527.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_15c7e3152d6ede6a.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_f9268461fdf9da4b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ScreenShot_2022-01-27_at_18.26.01@2x&#34;
@@ -669,10 +669,10 @@
 &lt;h2 id=&#34;最终效果&#34;&gt;最终效果
 &lt;/h2&gt;&lt;p&gt;做好端口映射后公网就可以访问网页：&lt;/p&gt;
 &lt;p&gt;我在这里顺手为域名去加了证书来支持https访问&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png&#34;
 	width=&#34;2384&#34;
 	height=&#34;1716&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu12854972361985046017.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu427268182039220923.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_ecad524f28a3f617.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_c73223b39314fb7d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;影片介绍页&#34;
@@ -686,10 +686,10 @@
 &lt;p&gt;直接访问网页是最方便的方式，但是受限与浏览器的原因，Chromium系的浏览器不能使用hevc的硬解，win10下的Edge应该可以通过额外的插件来实现hevc硬解，因此，想要通过客户端硬解来节省可怜的小水管带宽的话，可以使用Jellyfin的客户端：&lt;a class=&#34;link&#34; href=&#34;https://github.com/jellyfin/jellyfin-media-player&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;jellyfin/jellyfin-media-player: Jellyfin Desktop Client based on Plex Media Player (github.com)&lt;/a&gt;，或者用safari等浏览器&lt;/p&gt;
 &lt;p&gt;最好提前用tmm等工具搜刮一下相关的介绍/图片补充元数据，然后统一重命名（为了不妨碍做种，我选择用&lt;code&gt;cp -al&lt;/code&gt;硬连接到Jellyfin的目录，再改名，这样也不会占用额外的空间）：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu14468041140517422245.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu5560592860852155322.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_718b7843e8f92f71.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_78eb5270b3d291ee.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;海报墙&#34;
@@ -700,10 +700,10 @@
 		data-flex-basis=&#34;377px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu13307123243525781779.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu1630261185790549126.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_f4898f41db607784.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_74a7fcbf62fe0602.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;少歌天下第一&#34;
@@ -715,10 +715,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;可以看到Jellyfin演员配图质量还是挺高的：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu7817955605556124208.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu3275003501582599586.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_a4c712bbacbe84b0.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_99caa720c66f8fae.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;演员介绍及相关推荐&#34;
@@ -729,10 +729,10 @@
 		data-flex-basis=&#34;377px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu5844610476441170220.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu10556457676853282906.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_f990a0b5d0949e82.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_a6adc795fffa0bdc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;播放页&#34;
@@ -744,10 +744,10 @@
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;转码速度还是挺快的，瓶颈主要是在家里的上行带宽只有可怜的10m多，所以网页端转码，最多只能开到1080p，码率也不敢太高更不可能多人一起看了， 而如果用客户端或者safari浏览器硬解，4K direct几乎可以十分流畅的播放：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png&#34;
 	width=&#34;594&#34;
 	height=&#34;1252&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu2996361429639595384.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu15660100880693197780.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_f1d001434c9b529f.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_879f6e234e801826.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;浏览器转码信息&#34;
@@ -757,10 +757,10 @@
 		data-flex-grow=&#34;47&#34;
 		data-flex-basis=&#34;113px&#34;
 	
-&gt; &lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png&#34;
+&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png&#34;
 	width=&#34;494&#34;
 	height=&#34;712&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu3902171525824113816.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu6843561046654981819.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_9dc5d0823fc2075.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_c0af5dbd1ef965dc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;客户端直推信息&#34;

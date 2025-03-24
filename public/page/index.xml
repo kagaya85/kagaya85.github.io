@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Pages on かがやの部屋</title>
-        <link>http://localhost:1313/page/</link>
+        <link>https://blog.kagaya.fun/page/</link>
         <description>Recent content in Pages on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 26 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/page/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 26 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.kagaya.fun/page/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>About</title>
-        <link>http://localhost:1313/about/</link>
+        <link>https://blog.kagaya.fun/about/</link>
         <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/about/</guid>
+        <guid>https://blog.kagaya.fun/about/</guid>
         <description>&lt;p&gt;你好，欢迎来到我的Page，很高兴能在这里遇见你.&lt;/p&gt;
 &lt;h2 id=&#34;简单介绍一下自己&#34;&gt;🙌🏼简单介绍一下自己
 &lt;/h2&gt;&lt;p&gt;本科同济，硕士复旦，现在在星环做云平台（Kubernetes）开发工程师&lt;/p&gt;
@@ -191,18 +191,18 @@
         </item>
         <item>
         <title>Archives</title>
-        <link>http://localhost:1313/archives/</link>
+        <link>https://blog.kagaya.fun/archives/</link>
         <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/archives/</guid>
+        <guid>https://blog.kagaya.fun/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>Search</title>
-        <link>http://localhost:1313/search/</link>
+        <link>https://blog.kagaya.fun/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/search/</guid>
+        <guid>https://blog.kagaya.fun/search/</guid>
         <description></description>
         </item>
         

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="Golang的切片扩容策略以及1.18中带来的优化">
 <title>Go1.18：新的切片扩容策略</title>
 
-<link rel='canonical' href='http://localhost:1313/p/2022/go118-new-growslice/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2022/go118-new-growslice/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Go1.18：新的切片扩容策略">
 <meta property='og:description' content="Golang的切片扩容策略以及1.18中带来的优化">
-<meta property='og:url' content='http://localhost:1313/p/2022/go118-new-growslice/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2022/go118-new-growslice/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Runtime' /><meta property='article:published_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='article:modified_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='og:image' content='http://localhost:1313/p/2022/go118-new-growslice/96944986_p0.jpeg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Runtime' /><meta property='article:published_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='article:modified_time' content='2022-03-27T14:04:09&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Go1.18：新的切片扩容策略">
 <meta name="twitter:description" content="Golang的切片扩容策略以及1.18中带来的优化"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='http://localhost:1313/p/2022/go118-new-growslice/96944986_p0.jpeg' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg' />
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
       <script>
         var doNotTrack = false;
@@ -72,7 +72,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu670781931259558488.png" width="300"
+                        <img src="/img/avatar_hu_988fdf6424700af.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -307,8 +307,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2022/go118-new-growslice/">
-                <img src="/p/2022/go118-new-growslice/96944986_p0_hu18347328604699528526.jpeg"
-                        srcset="/p/2022/go118-new-growslice/96944986_p0_hu18347328604699528526.jpeg 800w, /p/2022/go118-new-growslice/96944986_p0_hu10035984797308929821.jpeg 1600w"
+                <img src="/p/2022/go118-new-growslice/96944986_p0_hu_a9b576cb5a6f4310.jpeg"
+                        srcset="/p/2022/go118-new-growslice/96944986_p0_hu_a9b576cb5a6f4310.jpeg 800w, /p/2022/go118-new-growslice/96944986_p0_hu_c4494521f99ae3b1.jpeg 1600w"
                         width="800" 
                         height="450" 
                         loading="lazy"
@@ -431,14 +431,14 @@
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span> <span class="p">&lt;</span> <span class="mi">1024</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">doublecap</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// and prevent an infinite loop.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// and prevent an infinite loop.</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="o">+=</span> <span class="nx">newcap</span> <span class="o">/</span> <span class="mi">4</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// the newcap calculation overflowed.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// the newcap calculation overflowed.</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -489,7 +489,7 @@ $$
 <p><img src="/p/2022/go118-new-growslice/image-20220327154806590.png"
 	width="724"
 	height="436"
-	srcset="/p/2022/go118-new-growslice/image-20220327154806590_hu2393930188740210394.png 480w, /p/2022/go118-new-growslice/image-20220327154806590_hu3104722771686443509.png 1024w"
+	srcset="/p/2022/go118-new-growslice/image-20220327154806590_hu_98d6beb91fa691be.png 480w, /p/2022/go118-new-growslice/image-20220327154806590_hu_c919170b4006fef6.png 1024w"
 	loading="lazy"
 	
 		alt="go1.17中扩容前后对比"
@@ -571,17 +571,17 @@ $$
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">old</span><span class="p">.</span><span class="nx">cap</span> <span class="p">&lt;</span> <span class="nx">threshold</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">doublecap</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// and prevent an infinite loop.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Transition from growing 2x for small slices
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// to growing 1.25x for large slices. This formula
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// gives a smooth-ish transition between the two.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">newcap</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">newcap</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="nx">threshold</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Check 0 &lt; newcap to detect overflow</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// and prevent an infinite loop.</span>
+</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="mi">0</span> <span class="p">&lt;</span> <span class="nx">newcap</span> <span class="o">&amp;&amp;</span> <span class="nx">newcap</span> <span class="p">&lt;</span> <span class="nx">cap</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Transition from growing 2x for small slices</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// to growing 1.25x for large slices. This formula</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// gives a smooth-ish transition between the two.</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">newcap</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="nx">threshold</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">// the newcap calculation overflowed.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// Set newcap to the requested cap when</span>
+</span></span><span class="line"><span class="cl">      <span class="c1">// the newcap calculation overflowed.</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="nx">newcap</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">newcap</span> <span class="p">=</span> <span class="nx">cap</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -634,7 +634,7 @@ $$
 <p><img src="/p/2022/go118-new-growslice/image-20220327155204270.png"
 	width="724"
 	height="436"
-	srcset="/p/2022/go118-new-growslice/image-20220327155204270_hu16818658599224512656.png 480w, /p/2022/go118-new-growslice/image-20220327155204270_hu12661256115390059701.png 1024w"
+	srcset="/p/2022/go118-new-growslice/image-20220327155204270_hu_37f420e2ed21f509.png 480w, /p/2022/go118-new-growslice/image-20220327155204270_hu_289ed75f410ec4fd.png 1024w"
 	loading="lazy"
 	
 		alt="go1.18中扩容前后对比"
@@ -707,7 +707,8 @@ $$
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
@@ -717,6 +718,7 @@ $$
             ignoredClasses: ["gist"]
         });})
 </script>
+
     
 </article>
 
@@ -735,7 +737,7 @@ $$
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu_a2d13787f74ffb4a.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -759,7 +761,7 @@ $$
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu_ea2012bb3346cad3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -783,7 +785,7 @@ $$
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu_ea06fae9740b3a80.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -807,7 +809,7 @@ $$
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu12794881910683849128.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu_d1f7b77387e633d.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -831,7 +833,7 @@ $$
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu8637115685238192666.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu_2adb76bd363b903.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -913,7 +915,7 @@ $$
         
             Let's code the fantastic world!!! <br/>
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1002,7 +1004,7 @@ $$
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

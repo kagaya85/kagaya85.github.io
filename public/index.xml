@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>かがやの部屋</title>
-        <link>http://localhost:1313/</link>
+        <link>https://blog.kagaya.fun/</link>
         <description>Recent content on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Go1.18：新的切片扩容策略</title>
-        <link>http://localhost:1313/p/2022/go118-new-growslice/</link>
+        <link>https://blog.kagaya.fun/p/2022/go118-new-growslice/</link>
         <pubDate>Sun, 27 Mar 2022 14:04:09 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2022/go118-new-growslice/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2022/go118-new-growslice/96944986_p0.jpeg" alt="Featured image of post Go1.18：新的切片扩容策略" /&gt;&lt;p&gt;随着go 1.18版本的发布，go社区终于迎来了期盼已久的正式泛型语法，然而我在浏览关于1.18的changelog时发现1.18对于slice的扩容策略也做了一些修改，刚好我最近正在看draven大佬的新书也讲到了slice底层的源码的一些运行逻辑，在好奇心的驱使下，想知道社区究竟改动了什么以及为什么作出这些改动，于是翻开1.18的源码，便有了这篇文章。&lt;/p&gt;
+        <guid>https://blog.kagaya.fun/p/2022/go118-new-growslice/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2022/go118-new-growslice/96944986_p0.jpeg" alt="Featured image of post Go1.18：新的切片扩容策略" /&gt;&lt;p&gt;随着go 1.18版本的发布，go社区终于迎来了期盼已久的正式泛型语法，然而我在浏览关于1.18的changelog时发现1.18对于slice的扩容策略也做了一些修改，刚好我最近正在看draven大佬的新书也讲到了slice底层的源码的一些运行逻辑，在好奇心的驱使下，想知道社区究竟改动了什么以及为什么作出这些改动，于是翻开1.18的源码，便有了这篇文章。&lt;/p&gt;
 &lt;h2 id=&#34;growslice-in-go-117&#34;&gt;Growslice In Go 1.17
 &lt;/h2&gt;&lt;p&gt;首先我们先简单回顾一下go 1.17及以前的切片扩容策略，这部分的主要逻辑在&lt;code&gt;src/runtime/slice.go&lt;/code&gt;中的&lt;code&gt;growslice&lt;/code&gt;函数（省略部分代码，下同）：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -56,14 +56,14 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;old&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1024&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;doublecap&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Check 0 &amp;lt; newcap to detect overflow
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;// and prevent an infinite loop.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Check 0 &amp;lt; newcap to detect overflow&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// and prevent an infinite loop.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Set newcap to the requested cap when
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;// the newcap calculation overflowed.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Set newcap to the requested cap when&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// the newcap calculation overflowed.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
@@ -111,10 +111,10 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这段代码通过申请一个长度为&lt;code&gt;i&lt;/code&gt;的切片，然后对其append一个元素来触发扩容。每次实验新增加100个元素，同时打印扩容前后的大小（单位byte）：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590.png&#34;
 	width=&#34;724&#34;
 	height=&#34;436&#34;
-	srcset=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590_hu2393930188740210394.png 480w, http://localhost:1313/p/2022/go118-new-growslice/image-20220327154806590_hu3104722771686443509.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590_hu_98d6beb91fa691be.png 480w, https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327154806590_hu_c919170b4006fef6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;go1.17中扩容前后对比&#34;
@@ -196,17 +196,17 @@ $$
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;old&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;threshold&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;doublecap&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Check 0 &amp;lt; newcap to detect overflow
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;// and prevent an infinite loop.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// Transition from growing 2x for small slices
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// to growing 1.25x for large slices. This formula
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;c1&#34;&gt;// gives a smooth-ish transition between the two.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;threshold&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Check 0 &amp;lt; newcap to detect overflow&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// and prevent an infinite loop.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// Transition from growing 2x for small slices&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// to growing 1.25x for large slices. This formula&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;c1&#34;&gt;// gives a smooth-ish transition between the two.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;threshold&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Set newcap to the requested cap when
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;c1&#34;&gt;// the newcap calculation overflowed.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;      &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// Set newcap to the requested cap when&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;c1&#34;&gt;// the newcap calculation overflowed.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;newcap&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cap&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;      &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
@@ -256,10 +256,10 @@ $$
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;p&gt;我们重新验证一下前一节中的代码，可以看到1.18中优化后的扩容策略可以保证是一个单调函数&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270.png&#34;
 	width=&#34;724&#34;
 	height=&#34;436&#34;
-	srcset=&#34;http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270_hu16818658599224512656.png 480w, http://localhost:1313/p/2022/go118-new-growslice/image-20220327155204270_hu12661256115390059701.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270_hu_37f420e2ed21f509.png 480w, https://blog.kagaya.fun/p/2022/go118-new-growslice/image-20220327155204270_hu_289ed75f410ec4fd.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;go1.18中扩容前后对比&#34;
@@ -292,17 +292,16 @@ $$
         </item>
         <item>
         <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
-        <link>http://localhost:1313/p/2022/microrank/</link>
+        <link>https://blog.kagaya.fun/p/2022/microrank/</link>
         <pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2022/microrank/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png" alt="Featured image of post WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位" /&gt;&lt;blockquote&gt;
+        <guid>https://blog.kagaya.fun/p/2022/microrank/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png" alt="Featured image of post WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位" /&gt;&lt;blockquote&gt;
 &lt;p&gt;论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments&lt;/p&gt;
 &lt;p&gt;论文来源：WWW21&lt;/p&gt;
 &lt;p&gt;论文链接：&lt;a class=&#34;link&#34; href=&#34;https://dl.acm.org/doi/10.1145/3442381.3449905&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;源码链接：&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;源码链接：&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;tldr&#34;&gt;TL;DR
 &lt;/h2&gt;&lt;p&gt;这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。&lt;/p&gt;
 &lt;h2 id=&#34;algorithm&#34;&gt;Algorithm
@@ -317,10 +316,10 @@ $O_{ef}$: 覆盖O的测试case中失败的数量&lt;/p&gt;
 &lt;p&gt;$O_{np}$: 没有覆盖O的测试case中通过的数量&lt;/p&gt;
 &lt;p&gt;类似软件测试中的思路，当经过一个服务执行的异常trace越多且执行正常trace的数量越少，那么这个服务越有可能是导致异常的根因。&lt;/p&gt;
 &lt;h3 id=&#34;system&#34;&gt;System
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png&#34;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png&#34;
 	width=&#34;1914&#34;
 	height=&#34;454&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu17095812258569412963.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu872652717049474084.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_425b36aa4ae9cc96.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_b3784abf1a7da530.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;整体流程&#34;
@@ -363,10 +362,10 @@ A =
 \right]
 $$&lt;/p&gt;
 &lt;p&gt;其中$A_{st}$代表了从s出发到t结束的矩阵，矩阵中的值代表转移的概率，即$\frac{1}{相邻节点的数量}$。作者把每一次请求看作图中的一个单独的节点，构造了operation-trace的关系图，如下面图3到图6的变化：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png&#34;
 	width=&#34;744&#34;
 	height=&#34;265&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu5060164549456508794.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu12030256419391883049.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_37451bd6af5db2b2.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_3a81e98a340832a7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;请求依赖图&#34;
@@ -377,10 +376,10 @@ $$&lt;/p&gt;
 		data-flex-basis=&#34;673px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png&#34;
 	width=&#34;719&#34;
 	height=&#34;229&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu14236338730072688234.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu17115640358046474737.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_9ac40467c65343dd.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_3022a36ec9b66da.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;请求与服务依赖图&#34;
@@ -436,10 +435,10 @@ O_{ep} = P * N_{ep}, &amp;amp; O_{np} = P * (N_p - N_{ep})
 \end{array}
 $$&lt;/p&gt;
 &lt;p&gt;之后可以根据下表所示的方法计算对应的值，作者没有解释如何选择，而是通过实验对比各种计算方法的效果&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png&#34;
 	width=&#34;964&#34;
 	height=&#34;528&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu11255077761870772467.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu10481954821140086567.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_fb3ec07be16e3471.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_93d3b32ef00b375d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;不同的四元组计算方法&#34;
@@ -452,10 +451,10 @@ $$&lt;/p&gt;
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;experiments&#34;&gt;Experiments
 &lt;/h2&gt;&lt;p&gt;作者通过实验模拟了在线故障定位的流程：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png&#34;
 	width=&#34;1568&#34;
 	height=&#34;358&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu7069929080434444467.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu12072560808738534117.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_d2333cf15b90bdab.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_cf809e5c886a6e7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;在线检测时间轴&#34;
@@ -467,10 +466,10 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;不同计算方法的对比：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png&#34;
 	width=&#34;1460&#34;
 	height=&#34;1282&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu17966311383628171713.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu2169254971505139587.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_1db20e7d5abed50c.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_cf017eaf5eb8d643.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;实验结果对比&#34;
@@ -494,11 +493,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
-        <link>http://localhost:1313/p/2022/first-nas/</link>
+        <link>https://blog.kagaya.fun/p/2022/first-nas/</link>
         <pubDate>Mon, 17 Jan 2022 16:35:05 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2022/first-nas/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2022/first-nas/59474391_p0.jpeg" alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心" /&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
+        <guid>https://blog.kagaya.fun/p/2022/first-nas/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg" alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心" /&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
 &lt;/h2&gt;&lt;p&gt;为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视的1T ssd接一块败家之眼的m2硬盘盒用来存自己下载的番剧，同时也方便和朋友分享；后来阿b推出了放映室的功能，在网页上就可以很方便的和朋友一同看番看电影。但这样终究是不方便，首先放映室的内容只能先定于阿b已经拥有版权的内容，其次，你的朋友最好还要有大会员。好在我本身就是个爱折腾的人，刚好前段时间给群友搞了一个ts服务器来让群友们吹水聊天以及游戏语音，我就开始想能不能通过自建的服务器也实现一个类似的流媒体平台，随时和朋友分享自己私藏的电影番剧。&lt;/p&gt;
 &lt;p&gt;假如有这样一个场景：某天有朋友（小姐姐）想看个电影但苦于没有资源，又不想去各种牛皮癣广告横飞的小网站，只得求助于你。你虽然早已掌握科学上网快速通过各种途径网罗了种子资源，熟练地运用bt下载器下载到了最新的4K HDR 10bit资源，那么你该怎么和远在网线另一端的她分享呢？当然你可以把bt文件丢过去耐心地教她怎么用FDM来下载，但是，如果此时我们能有一个自己的流媒体服务器，不就可以随时随地的给任何人分享硬盘里的片了吗？&lt;/p&gt;
 &lt;p&gt;之前发现小区是有公网ip的，在暴力破解了宽带账号把光猫改成桥接以后，就可以直通外网了，尽管上行带宽并不富裕，但这么好的资源不拿来搭服务器简直浪费，而又“恰好”实验室发电脑是一台最新nuc11，配了11代的酷睿i7-1165G7，平时都用mac的我正愁该如何在毕业前发挥它的剩余价值，这波天时地利就被赶上了，于是就有了下面的折腾。&lt;/p&gt;
@@ -509,10 +508,10 @@ $$&lt;/p&gt;
 &lt;p&gt;主机用的是白嫖的Intel NUC11PAHi7 猎豹峡谷，40w的TDP，硬盘从海鲜市场捡了两块4T的希捷酷狼，硬盘盒同样也是从海鲜市场捡的二手世特力双盘位带raid的硬盘盒，可以两块组硬raid1。同时配了APC的BK650M2 UPS来保证电源的稳定。&lt;/p&gt;
 &lt;p&gt;刚拿到世特力的硬盘盒时发现卖家并没有给原装的脚垫，直接放到桌子上会有挺强烈的共振，怕搞坏硬盘临时垫了块纸板，放假回来后买了带一点厚度的减震贴贴到四个角，瞬间稳稳当当，噪音也减弱了不少。4T的酷狼是5400转，本身声音也很小，房间不大我都是直接放到床边，几乎听不到什么声音，室友也表示很安静没有什么影响。&lt;/p&gt;
 &lt;p&gt;硬盘盒之后组装新nas后还可以拿来扩展新nas的空间，缺点就是usb不支持硬盘smart信息的查询，尽管它还带有一个esata的接口，不知道是否支持。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/IMG_20220219_235223.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223.jpg&#34;
 	width=&#34;2736&#34;
 	height=&#34;3648&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/IMG_20220219_235223_hu4430874144846312012.jpg 480w, http://localhost:1313/p/2022/first-nas/IMG_20220219_235223_hu7130846192623160740.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223_hu_8a8c44c5cfbaa7.jpg 480w, https://blog.kagaya.fun/p/2022/first-nas/IMG_20220219_235223_hu_7ae9f94856691975.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;整体摆放到一起还是挺小巧的&#34;
@@ -932,10 +931,10 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;上面的pumbg代表支持唤醒的类型：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png&#34;
 	width=&#34;328&#34;
 	height=&#34;244&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu15001406751426224739.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu11715052368475697144.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_7bcf1dcb5c8fc09f.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_a5005e65e6d1fdf0.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;唤醒类型&#34;
@@ -1026,10 +1025,10 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;所以不能在使用之前的VAAPI，转而使用最新的QuickSync方式：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png&#34;
 	width=&#34;1686&#34;
 	height=&#34;738&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu5965231619095395841.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu439903483516730527.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_15c7e3152d6ede6a.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_f9268461fdf9da4b.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ScreenShot_2022-01-27_at_18.26.01@2x&#34;
@@ -1155,10 +1154,10 @@ $$&lt;/p&gt;
 &lt;h2 id=&#34;最终效果&#34;&gt;最终效果
 &lt;/h2&gt;&lt;p&gt;做好端口映射后公网就可以访问网页：&lt;/p&gt;
 &lt;p&gt;我在这里顺手为域名去加了证书来支持https访问&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png&#34;
 	width=&#34;2384&#34;
 	height=&#34;1716&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu12854972361985046017.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu427268182039220923.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_ecad524f28a3f617.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_c73223b39314fb7d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;影片介绍页&#34;
@@ -1172,10 +1171,10 @@ $$&lt;/p&gt;
 &lt;p&gt;直接访问网页是最方便的方式，但是受限与浏览器的原因，Chromium系的浏览器不能使用hevc的硬解，win10下的Edge应该可以通过额外的插件来实现hevc硬解，因此，想要通过客户端硬解来节省可怜的小水管带宽的话，可以使用Jellyfin的客户端：&lt;a class=&#34;link&#34; href=&#34;https://github.com/jellyfin/jellyfin-media-player&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;jellyfin/jellyfin-media-player: Jellyfin Desktop Client based on Plex Media Player (github.com)&lt;/a&gt;，或者用safari等浏览器&lt;/p&gt;
 &lt;p&gt;最好提前用tmm等工具搜刮一下相关的介绍/图片补充元数据，然后统一重命名（为了不妨碍做种，我选择用&lt;code&gt;cp -al&lt;/code&gt;硬连接到Jellyfin的目录，再改名，这样也不会占用额外的空间）：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu14468041140517422245.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu5560592860852155322.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_718b7843e8f92f71.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_78eb5270b3d291ee.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;海报墙&#34;
@@ -1186,10 +1185,10 @@ $$&lt;/p&gt;
 		data-flex-basis=&#34;377px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu13307123243525781779.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu1630261185790549126.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_f4898f41db607784.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_74a7fcbf62fe0602.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;少歌天下第一&#34;
@@ -1201,10 +1200,10 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;可以看到Jellyfin演员配图质量还是挺高的：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu7817955605556124208.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu3275003501582599586.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_a4c712bbacbe84b0.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_99caa720c66f8fae.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;演员介绍及相关推荐&#34;
@@ -1215,10 +1214,10 @@ $$&lt;/p&gt;
 		data-flex-basis=&#34;377px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png&#34;
 	width=&#34;3104&#34;
 	height=&#34;1974&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu5844610476441170220.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu10556457676853282906.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_f990a0b5d0949e82.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_a6adc795fffa0bdc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;播放页&#34;
@@ -1230,10 +1229,10 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;转码速度还是挺快的，瓶颈主要是在家里的上行带宽只有可怜的10m多，所以网页端转码，最多只能开到1080p，码率也不敢太高更不可能多人一起看了， 而如果用客户端或者safari浏览器硬解，4K direct几乎可以十分流畅的播放：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png&#34;
 	width=&#34;594&#34;
 	height=&#34;1252&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu2996361429639595384.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu15660100880693197780.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_f1d001434c9b529f.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_879f6e234e801826.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;浏览器转码信息&#34;
@@ -1243,10 +1242,10 @@ $$&lt;/p&gt;
 		data-flex-grow=&#34;47&#34;
 		data-flex-basis=&#34;113px&#34;
 	
-&gt; &lt;img src=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png&#34;
+&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png&#34;
 	width=&#34;494&#34;
 	height=&#34;712&#34;
-	srcset=&#34;http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu3902171525824113816.png 480w, http://localhost:1313/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu6843561046654981819.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_9dc5d0823fc2075.png 480w, https://blog.kagaya.fun/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_c0af5dbd1ef965dc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;客户端直推信息&#34;
@@ -1419,11 +1418,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>2021春季看番总结与推荐</title>
-        <link>http://localhost:1313/p/2021/bangumi-in-2021-spring/</link>
+        <link>https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/</link>
         <pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/p/2021/bangumi-in-2021-spring/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2021/bangumi-in-2021-spring/87505047_p0.jpg" alt="Featured image of post 2021春季看番总结与推荐" /&gt;&lt;p&gt;打开我的bangumi简单回顾一下2021年年初看过的动漫：如果算上从去年秋季开播的半年番和剧场版，总共看了15部，其中只有一部剧场版，即前几天刚上映的《绯红的子弹》。这个追番量对我个人来说其实还蛮多的，毕竟平时学校实验室的事情也比较短，工作日的话基本只有晚上回家才能看一两集，因此只有一部分番剧让我可以保持足够的兴趣在刚刚更新的时候去看，有一部分番剧只能等冬季番结束，春季番开始但没有完全开始的这个空档补回来。后面简单回顾总结一下看过的冬季番，特别是安利一下我比较喜欢的番剧。&lt;/p&gt;
+        <guid>https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/87505047_p0.jpg" alt="Featured image of post 2021春季看番总结与推荐" /&gt;&lt;p&gt;打开我的bangumi简单回顾一下2021年年初看过的动漫：如果算上从去年秋季开播的半年番和剧场版，总共看了15部，其中只有一部剧场版，即前几天刚上映的《绯红的子弹》。这个追番量对我个人来说其实还蛮多的，毕竟平时学校实验室的事情也比较短，工作日的话基本只有晚上回家才能看一两集，因此只有一部分番剧让我可以保持足够的兴趣在刚刚更新的时候去看，有一部分番剧只能等冬季番结束，春季番开始但没有完全开始的这个空档补回来。后面简单回顾总结一下看过的冬季番，特别是安利一下我比较喜欢的番剧。&lt;/p&gt;
 &lt;h2 id=&#34;tldr&#34;&gt;TL;DR
 &lt;/h2&gt;&lt;p&gt;推荐：&lt;/p&gt;
 &lt;ul&gt;
@@ -1459,10 +1458,10 @@ $$&lt;/p&gt;
 &lt;h2 id=&#34;安利推荐&#34;&gt;安利推荐
 &lt;/h2&gt;&lt;h3 id=&#34;摇曳露营&#34;&gt;摇曳露营∆
 &lt;/h3&gt;&lt;p&gt;尽管久闻摇曳露营的大名，但是一直以为就是个普普通通的萌豚番，没什么动力去看。本来也是没打算看冬季更新的第二季的，因为完全没看过前作，而且一直以来在B站追番的习惯对于阿b没有买的番一般也很少关注（这让我错过了不少优秀的作品）。不过在友人A的强烈安利下抱着试一试的心态去看了第一集，确实是一部值得一看的作品，真香。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/262897_d3555.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/262897_d3555.jpg&#34;
 	width=&#34;2903&#34;
 	height=&#34;4096&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/262897_d3555_hu1939331947573759526.jpg 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/262897_d3555_hu11924002977121955474.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/262897_d3555_hu_e3529b72f4d21eef.jpg 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/262897_d3555_hu_85bf5e933d2980e.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;摇曳露营∆&#34;
@@ -1481,20 +1480,18 @@ $$&lt;/p&gt;
 &lt;p&gt;ゆっくりおやすみ / 轻轻的说一声晚安&lt;/p&gt;
 &lt;p&gt;少し寂しくて暖かい / 虽然会有些寂寞但仍然温馨&lt;/p&gt;
 &lt;p&gt;旅の終わり / 旅途的结束&lt;/p&gt;
-&lt;p&gt;——《はるのとなり》&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;——《はるのとなり》&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;就是这么神奇，或者说如果对上电波的话，它能让如今快节奏的生活来一点悠哉悠哉的调味品，让整个人能够沉静下来，和主角们一起旅行，感受生活。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;人活着就要多看露营，只要看露营人就会感到幸福&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;人活着就要多看露营，只要看露营人就会感到幸福&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;摇曳露营确实描绘了一种理想的远离城市喧嚣的露营生活，甚至让我有了约朋友们一起出门去露营的想法，也和朋友一起去转了五角场的迪卡侬看了下露营装备的价格。碰巧B站上发现了一位&lt;a class=&#34;link&#34; href=&#34;https://space.bilibili.com/713725/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;露营up主&lt;/a&gt;，可以先云体验一下，等之后有条件了，一定实现一下这个梦想。&lt;/p&gt;
 &lt;h3 id=&#34;奇蛋物语wonder-egg-priority&#34;&gt;奇蛋物语（Wonder Egg Priority）
 &lt;/h3&gt;&lt;p&gt;这应该是这一季最给我最大惊喜的番剧了&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/316607_r5I9k.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/316607_r5I9k.jpg&#34;
 	width=&#34;380&#34;
 	height=&#34;536&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/316607_r5I9k_hu11109997836885065725.jpg 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/316607_r5I9k_hu8952158249890000604.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/316607_r5I9k_hu_939d7c216ebce61.jpg 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/316607_r5I9k_hu_77e1184a5a111ada.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;ワンダーエッグ・プライオリティ 奇蛋物语&#34;
@@ -1512,8 +1509,7 @@ $$&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;也就是故事的剧情和动画制作，先说看完整部作品的剧情方面的感受。剧情脚本主要由活跃于日本TV电视剧界的著名编剧野岛伸司&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;负责，这一次也是他第一次尝试跨界来做动画，本身脚本实力毋庸置疑。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;野岛伸司，日本知名编剧，新潟县柏崎市出身。活跃领域亦包括诗、绘本、小说、作词等方面。曾执笔多部脍炙人口的电视剧，如《101次求婚》、《高校教师》、《同一屋檐下》、《人间失格》、《圣者的行进》等剧，为90年代的社会写实派路线代表性人物，其企画的《沒有家的女孩》和担任原案的《新白色之恋》亦造成话题。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;野岛伸司，日本知名编剧，新潟县柏崎市出身。活跃领域亦包括诗、绘本、小说、作词等方面。曾执笔多部脍炙人口的电视剧，如《101次求婚》、《高校教师》、《同一屋檐下》、《人间失格》、《圣者的行进》等剧，为90年代的社会写实派路线代表性人物，其企画的《沒有家的女孩》和担任原案的《新白色之恋》亦造成话题。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;野岛本身的风格也十分独特，非常喜欢在作品表现一些社会问题，切入社会的阴暗面，诸如校园暴力、自残、师生恋等等，也有著名的“TBS野岛伸司黑暗四部曲”。这次《奇蛋》的剧情也是野岛擅长的对未成年人自杀问题的讨论。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;14岁少女·大户爱在深夜散步的途中，随着神秘声音的指引，获得了一枚「蛋」。&lt;/p&gt;
@@ -1521,15 +1517,14 @@ $$&lt;/p&gt;
 「那么就在现在做出选择」
 「请相信自己——」
 「打破这枚蛋——」&lt;/p&gt;
-&lt;p&gt;而在打破「蛋」之后，等待着爱的是……。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;而在打破「蛋」之后，等待着爱的是……。&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;故事中的四位主角都是因为失去了对自己至关重要的人（自杀）通过「奇蛋」而相遇，每一枚「蛋」都是对应着一位因各种原因自杀的少女，主角们需要通过打破「蛋」来进入「蛋」中少女的世界，通过揭露背后的原因以及战斗，将其从自杀的阴影中解脱出来。每一次打破「蛋」都是一次挑战或者任务，当主角累计完成足够的任务之后，就可以让那位对自己重要的人复活。&lt;/p&gt;
 &lt;p&gt;整个故事前期是以主角进入一枚枚「蛋」来作为单元剧展开的，每一个单元剧都会涉及一个新人物的故事，并通过主角们来挖掘背后的牵扯的复杂感情瓜葛，揭露一些不为人知的阴暗角落。同时后期会有一些神奇的展开，交代「蛋」的来源以及与其紧密相关的两位神秘人「表帐」「里账」的背景，让剧情层次再上一层。&lt;/p&gt;
 &lt;p&gt;动画制作方面是《奇蛋》的另一个亮点，与相对阴暗的故事内容相比，画面风格却是十分鲜艳明亮的，让人甚至有一种错觉会认为剧情是十分轻松愉快的。我认为野岛也是选择这样一种动画独特的表达形式之前早就已经做好的决定，光鲜艳丽的画面背后，往往是不为人知的黑暗面。就像一把尖刀划破了这表面的虚伪，正正好好刺中了背后的邪恶与丑陋，给观众强烈的视觉与心灵震感。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x.png&#34;
 	width=&#34;982&#34;
 	height=&#34;542&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x_hu8210059202466035273.png 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x_hu8789297864483000705.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x_hu_a178ce15649c9b88.png 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.22.16@2x_hu_1d7807d923474863.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;第一集主角遇到的一位性格开朗的女生&#34;
@@ -1542,12 +1537,11 @@ $$&lt;/p&gt;
 &gt;&lt;/p&gt;
 &lt;p&gt;而在这样的背景下，四位不同身世的主角要做的事情就是打破奇蛋去战斗，和黑暗、消极战斗，和自己内心的阴暗情绪战斗，拯救需要帮助的人并最终拯救自己，这也是这部番要表达的主题：打破现状，勇于斗争。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;勇于对抗生活的消极、乐观生活的处事态度——苦恼的事情，烦恼的瞬间，都会像汽水中的气泡一样，稍纵即逝。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20.png&#34;
+&lt;p&gt;勇于对抗生活的消极、乐观生活的处事态度——苦恼的事情，烦恼的瞬间，都会像汽水中的气泡一样，稍纵即逝。&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20.png&#34;
 	width=&#34;981&#34;
 	height=&#34;546&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20_hu15617406120315745549.png 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20_hu3904033335257195850.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20_hu_c26449e20163aedc.png 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.18.20_hu_4a83ccd43ef3c4a5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;与之形成对比的是反派的阴影&#34;
@@ -1560,10 +1554,10 @@ $$&lt;/p&gt;
 &gt;&lt;/p&gt;
 &lt;p&gt;人设，战斗部分也是看点之一，导演&lt;a class=&#34;link&#34; href=&#34;https://bangumi.tv/person/12586&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;若林信&lt;/a&gt;很好把握住了武戏与文戏之间的节奏，战斗部分酣畅淋漓，紧张刺激，特别是女主那句“我已经怒不可遏了！”更像是传统战斗番最后用来结束战斗的必杀技宣言，为一场战斗画上句号。要知道女主大户爱本身也是因为在学校被孤立，拒绝上学，后来因为唯一的朋友自杀而深受打击，并变得越来越封闭自己，当随着剧情的发展，本来最需要他人帮助的爱，为了他人挺身而出，通过这句台词宣告了自己可以战胜内心的脆弱，逐渐成长。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11.png&#34;
 	width=&#34;973&#34;
 	height=&#34;545&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11_hu16215146292217853846.png 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11_hu11087368674654458754.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11_hu_d492df9295563043.png 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ScreenShot_2021-05-16_at_14.36.11_hu_4891da350c62ac00.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;我已经怒不可遏了！&#34;
@@ -1577,12 +1571,11 @@ $$&lt;/p&gt;
 &lt;p&gt;整体看下来剧情方面还是很吸引人的，非常佩服野岛对于剧情铺垫与情感发展的掌握能力，故事中有非常多的人物对白，同时与战斗环节相辅相成，既不会让对白显得枯燥，也不会让战斗显得空洞，总之十分推荐。&lt;/p&gt;
 &lt;h3 id=&#34;无职转生&#34;&gt;无职转生
 &lt;/h3&gt;&lt;blockquote&gt;
-&lt;p&gt;“我要在这个异世界拿出真本事！”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/277554_xcDQ8.jpg&#34;
+&lt;p&gt;“我要在这个异世界拿出真本事！”&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/277554_xcDQ8.jpg&#34;
 	width=&#34;424&#34;
 	height=&#34;600&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/277554_xcDQ8_hu619537290228113382.jpg 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/277554_xcDQ8_hu9236743160690488237.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/277554_xcDQ8_hu_72f95128cd9130c8.jpg 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/277554_xcDQ8_hu_918f610bdab8c729.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;无职转生&#34;
@@ -1596,10 +1589,10 @@ $$&lt;/p&gt;
 &lt;p&gt;《无职转生》这部番可以说是上一季中最大的争议之一了，但是产生这样的争议其实并不奇怪，完全是因为小众圈子与主流文化观念产生矛盾和冲突引起的，这么多年了类似的甚至更过分的深夜动画也没有像这样引起b站的舆论危机，可以说负有管理和推广责任的b站应该负有主要责任。对于一直强调自己社区属性的b站来说，之后只会有更多类似的问题，如何处理不同社区文化之间，社区文化与主流文化之间的矛盾，做好社区经营管理者，对于b站来说是破圈发展之后必须要面对的问题。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;有点跑题了，说回到《无职转生》，先说结论，作为一部动画来说来看，无职确实可以算上是一部优秀的作品。异世界转生系列作品近几年实在是太多了，很难再有给人眼前一亮的作品出现了，所以我本来并没有抱有太大期待，直到我看到了下面这张gif：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0.gif&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0.gif&#34;
 	width=&#34;930&#34;
 	height=&#34;521&#34;
-	srcset=&#34;http://localhost:1313/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0_hu8917672382981549908.gif 480w, http://localhost:1313/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0_hu3654379298136545003.gif 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0_hu_5c3d075d3fd5ffe8.gif 480w, https://blog.kagaya.fun/p/2021/bangumi-in-2021-spring/ZHNaL1ZGcVJlMC9yd1MzeXpIWXZLK3kwNUhiNzJzWXhvWEJ0ckdYL3FyZUkydE9FUFZWTHdBPT0_hu_d8662c2f3381212a.gif 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;一个开播前广为流传的gif&#34;
@@ -1629,18 +1622,17 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>Amazing Go Interface</title>
-        <link>http://localhost:1313/p/2021/amazing-go-interface/</link>
+        <link>https://blog.kagaya.fun/p/2021/amazing-go-interface/</link>
         <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/p/2021/amazing-go-interface/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2021/amazing-go-interface/golang.jpeg" alt="Featured image of post Amazing Go Interface" /&gt;&lt;p&gt;从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫&lt;strong&gt;Amazing Go&lt;/strong&gt;。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。&lt;/p&gt;
+        <guid>https://blog.kagaya.fun/p/2021/amazing-go-interface/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg" alt="Featured image of post Amazing Go Interface" /&gt;&lt;p&gt;从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫&lt;strong&gt;Amazing Go&lt;/strong&gt;。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。&lt;/p&gt;
 &lt;p&gt;希望能对你有所帮助。&lt;/p&gt;
 &lt;p&gt;本篇就是这个系列的第一篇，我打算从我最喜欢的Golang特性，也是众多gopher津津乐道的Go特性——Interface说起。&lt;/p&gt;
 &lt;h2 id=&#34;why-interface&#34;&gt;Why Interface?
 &lt;/h2&gt;&lt;p&gt;在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;In computing, an &lt;strong&gt;interface&lt;/strong&gt; is a shared boundary across which two or more separate components of a computer system exchange information.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;In computing, an &lt;strong&gt;interface&lt;/strong&gt; is a shared boundary across which two or more separate components of a computer system exchange information.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;接口&lt;/strong&gt;的作用其实就是为不同层级的模块提供了一个定义好的&lt;strong&gt;中间层&lt;/strong&gt;，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C++和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。&lt;/p&gt;
 &lt;h3 id=&#34;c-interface&#34;&gt;C++ Interface
@@ -1761,10 +1753,10 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;输出结果：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png&#34;
 	width=&#34;772&#34;
 	height=&#34;260&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu4131997697939419370.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu5117609755696736936.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu_30cdb19a1bf93df.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu_648fed8ab5fc4c73.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-04_at_19.16.38@2x&#34;
@@ -1972,8 +1964,7 @@ $$&lt;/p&gt;
 &lt;h3 id=&#34;duck-typing&#34;&gt;Duck Typing
 &lt;/h3&gt;&lt;p&gt;鸭子类型（Duck Typing）&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;是一种动态类型语言的设计风格：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;If it walks like a duck and it quacks like a duck, then it must be a duck&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;If it walks like a duck and it quacks like a duck, then it must be a duck&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;鸭子类型在Python等&lt;strong&gt;动态类型&lt;/strong&gt;的语言中得到了非常广泛的应用，在鸭子类型中，关注点在于&lt;strong&gt;对象的行为&lt;/strong&gt;，能作什么，而不是关注对象所属的类型。这样，我们就可以在不继承对象的情况下实现了多态。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
@@ -2118,15 +2109,15 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;Spike&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 接口类型
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 喵喵喵
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// Tom
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Pat&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 接口类型&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 喵喵喵&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// Tom&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;d&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 汪汪汪
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// this dog&amp;#39;s name is Spike
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Bark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 汪汪汪&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// this dog&amp;#39;s name is Spike&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;由于Go是一门静态类型的语言，意味着可以通过静态类型检查让你你可以放心的使用鸭子类型，而避免了可能的类型错误同时还能享受鸭子类型带来的简洁高效的语法。&lt;/p&gt;
@@ -2190,8 +2181,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;foo.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// f 满足io.Reader
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;foo.txt&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// f 满足io.Reader&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;f&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;/li&gt;
@@ -2257,8 +2248,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Fatal&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Copy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;zr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 读取到stdout
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Fatal&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Copy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;os&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Stdout&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;zr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 读取到stdout&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Fatal&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;zr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
@@ -2284,16 +2275,16 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Reader&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nx&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Writer&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;DataType&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 这个接口包含了 Read(), Write(), DataType() 三个方法
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 这个接口包含了 Read(), Write(), DataType() 三个方法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id=&#34;easy-to-test&#34;&gt;Easy to test
 &lt;/h3&gt;&lt;p&gt;使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 &lt;code&gt;Mock&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;对于上文的接口Pet，我们使用mockery来生成对应的mock&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png&#34;
 	width=&#34;1830&#34;
 	height=&#34;184&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu1556418704324950835.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu16365847392673437516.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu_bcd0820d3e2467bf.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu_74f868eaa3241e85.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-11_at_17.07.31&#34;
@@ -2404,16 +2395,16 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;mp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;On&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;GetName&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Return&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;mock name&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;myPat&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 这里模拟将mock传入给以Pat为参数的函数中来测试对应函数功能
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;myPat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 调用Pat.GetName
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;myPat&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Pat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 这里模拟将mock传入给以Pat为参数的函数中来测试对应函数功能&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Log&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;myPat&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;GetName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 调用Pat.GetName&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png&#34;
 	width=&#34;1336&#34;
 	height=&#34;326&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6591652098177965681.png 480w, http://localhost:1313/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6643112678696136226.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu_717c319dd623691e.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu_318ef09708fba3bd.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2021-04-11_at_17.12.28@2x&#34;
@@ -2452,11 +2443,11 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;ToString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;any&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Stringer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;ToString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;any&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Stringer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ok&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; 
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;any&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;strconv&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Itoa&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;float&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
@@ -2495,10 +2486,10 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;此时我们声明一个变量为Binary类型，在内存中的结构如下（假设为32bits系统），需要占用两个32bits空间&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer1.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1.png&#34;
 	width=&#34;159&#34;
 	height=&#34;83&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer1_hu671820870761876410.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer1_hu16336029155658501355.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1_hu_ea9742cc5b330ee5.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer1_hu_9592d53ef7c239a5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer1&#34;
@@ -2510,10 +2501,10 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;紧接着我们把它复制给一个Stringer接口类型或者通过强制类型转换把它转换为Stringer，那么在内存中会分配一个interface结构体来保存我们的Binary变量&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer2.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2.png&#34;
 	width=&#34;486&#34;
 	height=&#34;238&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer2_hu11882903150325669475.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer2_hu15874367863518674544.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2_hu_dc65842d73b2d3d8.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer2_hu_724ab94ba8dd9329.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer2&#34;
@@ -2530,10 +2521,10 @@ $$&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;如果一个interface不包含任何方法，就可以用实际的类型变量存储在itab指针的位置&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer3.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3.png&#34;
 	width=&#34;317&#34;
 	height=&#34;170&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer3_hu10650001449220074261.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer3_hu18158471826396362538.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3_hu_2d8fffd3cabf860b.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer3_hu_365c3dc7e98e6fcc.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer3&#34;
@@ -2547,10 +2538,10 @@ $$&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;而对于占用不大于32bits的变量，则可以直接存放在data部分替换原来的data指针&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer4.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4.png&#34;
 	width=&#34;418&#34;
 	height=&#34;238&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer4_hu10707638083075873035.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer4_hu6125221285406795370.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4_hu_f234041dfcde452f.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer4_hu_de4973e3d85dcb25.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer4&#34;
@@ -2564,10 +2555,10 @@ $$&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;又或者同时满足上面两种情况下&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer5.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5.png&#34;
 	width=&#34;299&#34;
 	height=&#34;83&#34;
-	srcset=&#34;http://localhost:1313/p/2021/amazing-go-interface/gointer5_hu3358795277071618919.png 480w, http://localhost:1313/p/2021/amazing-go-interface/gointer5_hu2336829562826341647.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5_hu_48754655c9f4136d.png 480w, https://blog.kagaya.fun/p/2021/amazing-go-interface/gointer5_hu_3a19906181940b26.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;gointer5&#34;
@@ -2588,9 +2579,9 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 64bit golang src/runtime/runtime2.go
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;eface&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 16 bytes
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 64bit golang src/runtime/runtime2.go&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;eface&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 16 bytes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt;  &lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Pointer&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -2605,9 +2596,9 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 64bit golang src/runtime/runtime2.go
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 16 bytes
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;tab&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;itab&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 64bit golang src/runtime/runtime2.go&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;iface&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 16 bytes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;tab&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;itab&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;data&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Pointer&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -2629,18 +2620,18 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// src/runtime/runtime2.go
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// layout of Itab known to compilers
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// allocated in non-garbage-collected memory
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Needs to be in sync with
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// ../cmd/compile/internal/gc/reflect.go:/^func.dumptabs.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;itab&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// src/runtime/runtime2.go&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// layout of Itab known to compilers&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// allocated in non-garbage-collected memory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Needs to be in sync with&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// ../cmd/compile/internal/gc/reflect.go:/^func.dumptabs.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;itab&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;inter&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;interfacetype&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;hash&lt;/span&gt;  &lt;span class=&#34;kt&#34;&gt;uint32&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// copy of _type.hash. Used for type switches.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;     &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fun&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;uintptr&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// variable sized. fun[0]==0 means _type does not implement inter.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;hash&lt;/span&gt;  &lt;span class=&#34;kt&#34;&gt;uint32&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// copy of _type.hash. Used for type switches.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;     &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;byte&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fun&lt;/span&gt;   &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;uintptr&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// variable sized. fun[0]==0 means _type does not implement inter.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;h2 id=&#34;generic-type&#34;&gt;Generic Type
@@ -2672,8 +2663,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;t2&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;F2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// string
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;F2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;拥有 type list 的 interface 仅能用于做为类型参数的约束，而不能像普通 interface 类型那样使用&lt;/p&gt;
@@ -2731,8 +2722,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;t3&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;MyT3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;F3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// main.MyT3
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;F3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// main.MyT3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;不过目前社区有了新提案 type set来统一interface的语法，不知道当1.18泛型正式开放后会是哪种形式:&lt;/p&gt;
@@ -2750,14 +2741,14 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 当前的type list
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SignedInteger&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 当前的type list&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SignedInteger&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int32&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int64&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// type set理念下的新语法
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SignedInteger&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// type set理念下的新语法&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SignedInteger&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int8&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int16&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int32&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int64&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -2803,11 +2794,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>函数式程序设计的影响与应用</title>
-        <link>http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
+        <link>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link>
         <pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png" alt="Featured image of post 函数式程序设计的影响与应用" /&gt;&lt;h2 id=&#34;简介&#34;&gt;简介
+        <guid>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png" alt="Featured image of post 函数式程序设计的影响与应用" /&gt;&lt;h2 id=&#34;简介&#34;&gt;简介
 &lt;/h2&gt;&lt;p&gt;函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。&lt;/p&gt;
 &lt;p&gt;尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。&lt;/p&gt;
 &lt;p&gt;当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用&lt;/p&gt;
@@ -2854,26 +2845,26 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// this is a higher-order-function that returns a function
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// A function is returned here as closure
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// variable x is obtained from the outer scope of this method and memorized in the closure
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// this is a higher-order-function that returns a function&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// A function is returned here as closure&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// variable x is obtained from the outer scope of this method and memorized in the closure&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;x&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;y&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// we are currying the add method to create more variations
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add10&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;c1&#34;&gt;// we are currying the add method to create more variations&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add10&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add20&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add30&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 15
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 25
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 35
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 15&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add20&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 25&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;add30&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 35&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;但是对于函数式编程中常用的递归调用来说，由于Go语言的编译器不支持对尾递归的调用优化，只能采用纯递归的方式，导致在递归时需要考虑调用堆栈的大小，因此在编写递归程序的时候我们不得不考虑递归的调用深度，或者改写为迭代方式，防止内存爆栈导致的程序异常。&lt;/p&gt;
@@ -2920,8 +2911,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;addOrMultiply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;multiply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// This is now a higher-order-function hence evaluation of the functions are delayed in if-else
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;addOrMultiply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;add&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onAdd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onMultiply&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// This is now a higher-order-function hence evaluation of the functions are delayed in if-else&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;addOrMultiply&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;add&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onAdd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;onMultiply&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;add&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;onAdd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
@@ -2931,8 +2922,7 @@ $$&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;最后，是关于函数式程序设计中的应用透明性：&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Functional programs do not have assignment statements, that is, the value of a variable in a functional program never changes once defined. This eliminates any chances of side effects because any variable can be replaced with its actual value at any point of execution. So, functional programs are referentially transparent.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;Functional programs do not have assignment statements, that is, the value of a variable in a functional program never changes once defined. This eliminates any chances of side effects because any variable can be replaced with its actual value at any point of execution. So, functional programs are referentially transparent.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;Go语言中实现引用透明的方法是通过避免引用传递或指针传递的使用。虽然在Go语言中都是通过值传递的方式来传递参数，但是像切片或者Map这样的数据结构是通过指针的方式来进行传递。因此我们在使用函数式的程序设计思路来构造我们的程序时，应当注意引用透明性，避免在函数的计算结果受外部的状态影响或者影响外部的状态。&lt;/p&gt;
 &lt;p&gt;对于Go语言来说，由函数式所带来的引用透明性可以带来很多显而易见的好处，比如我们可以缓存每一次函数调用的结果来达到空间换时间的目的，又或者幂等的函数使得函数的计算结构变得可预测。同时函数式天生的模块化设计理念可以让自底向上的程序设计变得更加容易。程序的调试也变得更加简单，由于函数都是各自独立的，他们的计算结果只依赖于各自的输入参数。&lt;/p&gt;
 &lt;p&gt;最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生&lt;sup id=&#34;fnref1:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;，与Go语言的高并发设计理念不谋而合。&lt;/p&gt;
@@ -2978,10 +2968,10 @@ $$&lt;/p&gt;
 &lt;li&gt;冷启动时间&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;结果如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu1015944569728219425.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu6533533926159356779.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu_bf436491e6c1641f.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu_b99921bc64f9a9f5.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;包大小对比&#34;
@@ -2991,10 +2981,10 @@ $$&lt;/p&gt;
 		data-flex-grow=&#34;100&#34;
 		data-flex-basis=&#34;240px&#34;
 	
-&gt; &lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png&#34;
+&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu536980269799004202.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu16808929019532103047.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu_42ea08e249e1ff6d.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu_1cbd0a6d8c576c71.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;占用内存对比&#34;
@@ -3005,10 +2995,10 @@ $$&lt;/p&gt;
 		data-flex-basis=&#34;240px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu113629708269735224.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu18348777042182670285.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu_bbdde69af793e9c7.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu_117cb7ffe4636778.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;执行效率对比&#34;
@@ -3018,10 +3008,10 @@ $$&lt;/p&gt;
 		data-flex-grow=&#34;100&#34;
 		data-flex-basis=&#34;240px&#34;
 	
-&gt; &lt;img src=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png&#34;
+&gt; &lt;img src=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png&#34;
 	width=&#34;2099&#34;
 	height=&#34;2099&#34;
-	srcset=&#34;http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu6016970050138491387.png 480w, http://localhost:1313/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu12180964666984603155.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu_ed896241ca24b6cc.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu_b74c012e99ceace6.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;冷启动时间对比&#34;
@@ -3189,8 +3179,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Option sets the options specified.  
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Option&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;opts&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;  
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Option sets the options specified.  &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Option&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;opts&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;  
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opt&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;range&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;opts&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;  
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nf&#34;&gt;opt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;  
@@ -3208,8 +3198,8 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Verbosity sets Foo&amp;#39;s verbosity level to v.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Verbosity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// Verbosity sets Foo&amp;#39;s verbosity level to v.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Verbosity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Server&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;        &lt;span class=&#34;nx&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;verbosity&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
@@ -3235,11 +3225,11 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 返回一个值
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}&lt;/span&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 返回一个值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;interface&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 返回option函数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 返回option函数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Foo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;option&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;第一种方式我们可以通过返回的&lt;code&gt;interface{}&lt;/code&gt;获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的&lt;code&gt;defer&lt;/code&gt;函数，便可以方便的实现对于配置项的临时修改和恢复。&lt;/p&gt;
@@ -3354,21 +3344,21 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>使用Kubernetes V1.20.0 与 Containerd 配置K8s集群</title>
-        <link>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
+        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</link>
         <pubDate>Thu, 17 Dec 2020 23:31:25 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png" alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" /&gt;&lt;h1 id=&#34;使用kubernetes-v1200-与-containerd-配置k8s集群&#34;&gt;使用Kubernetes V1.20.0 与 Containerd 配置K8s集群
+        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.png" alt="Featured image of post 使用Kubernetes V1.20.0 与 Containerd 配置K8s集群" /&gt;&lt;h1 id=&#34;使用kubernetes-v1200-与-containerd-配置k8s集群&#34;&gt;使用Kubernetes V1.20.0 与 Containerd 配置K8s集群
 &lt;/h1&gt;&lt;h2 id=&#34;写在前面&#34;&gt;写在前面
 &lt;/h2&gt;&lt;p&gt;Kubernetes在最新的1.20.0版本中表示正式放弃了Docker，原来的Docker项目也早已改名为Moby了，即便Docker在容器技术中仍占据主流，并且在其他地方也能够继续发光发热，但从长远来看，容器运行时必然也会进入一个多方竞争的时代。对于适配了Kubernetes CRI的容器运行时，我们便有了很多选择，如Containerd和CRI-O。Docker目前占据了约七成的份额，而第二名Containerd也占据了两成多。刚好实验室有搭建集群的需求，作为爱折腾星人，决定紧跟时代，用最新的V1.20.0的Kubernetes与Containerd来搭建我们的实验集群。我会简单讲解我的配置过程以及中间遇到的问题及解决方法，毕竟自己踩过的坑，得讲一遍才能记得深刻（笑）&lt;/p&gt;
 &lt;p&gt;本文所需shell脚本都在这个&lt;a class=&#34;link&#34; href=&#34;https://github.com/kagaya85/K8sTakeOff&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;repo&lt;/a&gt;，如果之后有需要也会不断更新，对于配置过程中产生的问题欢迎在issue中讨论。&lt;/p&gt;
 &lt;h2 id=&#34;配置基本环境&#34;&gt;配置基本环境
 &lt;/h2&gt;&lt;p&gt;这次打算在四台裸机上部署一个单master节点，三个worker节点的小集群，单机配置如下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x.png&#34;
 	width=&#34;1658&#34;
 	height=&#34;788&#34;
-	srcset=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu4245624608594174268.png 480w, http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu914337127192016713.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu_81a15d69d6a6f86e.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-18_at_21.54.34@2x_hu_e991947e35a2dd2c.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2020-12-18_at_21.54.34@2x&#34;
@@ -3688,10 +3678,10 @@ $$&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;如果以上步骤顺利的话，你现在可以在Master节点上使用&lt;code&gt;kubectl get nodes -o wide&lt;/code&gt;看到各个节点的信息，当然Status为NotReady是因为我们还没有执行最后一步，安装calico网络&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x.png&#34;
 	width=&#34;2844&#34;
 	height=&#34;486&#34;
-	srcset=&#34;http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu16542388964501495367.png 480w, http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu3128725688106299816.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu_72fdedff15b2bd9b.png 480w, https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/CleanShot_2020-12-17_at_22.41.02@2x_hu_b9d3886a47fef3f4.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;CleanShot_2020-12-17_at_22.41.02@2x&#34;
@@ -3784,11 +3774,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>使用Docker部署本地Wordpress开发环境</title>
-        <link>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
         <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境
+        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境
 &lt;/h1&gt;&lt;p&gt;为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。&lt;/p&gt;
 &lt;h2 id=&#34;背景&#34;&gt;背景
 &lt;/h2&gt;&lt;p&gt;由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。&lt;/p&gt;
@@ -4132,21 +4122,21 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>八佰看完了随便谈谈</title>
-        <link>http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
+        <link>https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</link>
         <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/%E5%85%AB%E4%BD%B0.jpg" alt="Featured image of post 八佰看完了随便谈谈" /&gt;&lt;h1 id=&#34;八佰看完了随便谈谈&#34;&gt;八佰看完了随便谈谈
+        <guid>https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/%E5%85%AB%E4%BD%B0.jpg" alt="Featured image of post 八佰看完了随便谈谈" /&gt;&lt;h1 id=&#34;八佰看完了随便谈谈&#34;&gt;八佰看完了随便谈谈
 &lt;/h1&gt;&lt;h2 id=&#34;我先给八佰一个好评&#34;&gt;我先给《八佰》一个好评
 &lt;/h2&gt;&lt;p&gt;《八佰》看完了，还专门去看了IMAX版。尽管这部电影从宣发到撤档再到重新定档上映，之间备受争议。但我还说要说，仅从抗战电影本身来说，这是部好电影，甚至超出了我之前看过的所有抗战片，我要给它很高的评价。《八佰》的出现对于中国抗战片来说有一定的特殊意义，类似《流浪地球》对于中国科幻片。这不仅因为它是一部少有的大陆拍摄的国军战役，而且制作团队对于电影的取材，伴奏配乐，画面分镜以及叙事节奏的掌握都十分出色。最后所表达的主题也很明确：**尽管这是一场必然失败的“表演”战役，但是“八佰壮士”用自己的行动向江对岸的人展示了中国军人真正的气魄，以此来唤醒更多中国人参与抗战。**这点我深表赞同。&lt;/p&gt;
 &lt;h2 id=&#34;个人认为唯一的争议&#34;&gt;个人认为唯一的争议
 &lt;/h2&gt;&lt;p&gt;说说争议点，对我来说唯一让我非常不满的是导演管虎本人，《八佰》是部好电影，但是宣发的时候特意要去找八十八师师长“飞将军”孙元良的后人，孙的行为在抗战期间颇有争议，尽管是孙元良当时亲自给谢晋元下令死守四行仓库，但是因为本人的污点，不应该成为宣发时的素材。&lt;/p&gt;
 &lt;h2 id=&#34;历史虚无主义&#34;&gt;历史虚无主义？
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;历史虚无主义——指不加具体分析而盲目否定人类社会的历史发展过程&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq.jpg&#34;
 	width=&#34;1080&#34;
 	height=&#34;451&#34;
-	srcset=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq_hu1555600689019512711.jpg 480w, http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq_hu1074540354976553081.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq_hu_5d7ba7eb4b1e1621.jpg 480w, https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/sq_hu_f1f9bd57fd82ba5f.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;升旗&#34;
@@ -4160,10 +4150,10 @@ $$&lt;/p&gt;
 &lt;p&gt;有人批评电影有历史虚无主义的嫌疑，认为一方面历史中日军并没有猛攻四行仓库，且电影中刻意夸大了国军的表现，认为事实中的国军并不是为了保卫上海而在电影中被“美化”，女学生送国旗也是从桥上光明正大地走过去而不是冒着子弹渡河。确实，电影确实在这方面有所夸张，但是电影之所以是电影而不是纪录片，为了表现主题而做适当的夸张处理，以此使感情的表达更加强烈，我觉得是可以接受的，在这一点上《八佰》确实也做到了。关于“美化”的问题，我觉得电影中处理的也比较恰当，如果我们交换时空设想一下，当时河对岸租界里的普通民众看来，对岸的中国军人在对抗日寇就是在保护自己（尽管他们也知道日军不会打到租界来），从谢晋元以及仓库里的士兵这些以执行军令为天职的军人看来，上级下达死守仓库的命令就是为了保卫上海最后一块领地而他们或许真的不知道这背后的真实目的是什么，电影中也表现了谢晋元团长的军人风度和民族气概以及士兵们视仓库为自己最后的坟墓，绝不后撤保卫上海的决心。在电影的最后，特使和谢团长的对峙中，戳破了这场战斗只是“表演”，只是为了在国际上获得同情，也是基本尊重史实的。所以我认为《八佰》出色地完成了它的任务，可以说它有虚构的成分，但最后宣扬的主题是没有问题的。既没有否定国军正面战场的妥协失利利用“表演”来博得国际社会同情的行为，也没有否定国军中也有像谢晋元及其部下英勇抗战的中国军人。&lt;/p&gt;
 &lt;h2 id=&#34;电影是好电影&#34;&gt;电影是好电影
 &lt;/h2&gt;&lt;p&gt;电影最出彩的看点我认为是河两岸的这种天堂与地狱强烈对比，也是四行仓库保卫战带上一股特殊悲壮气氛的关键点，而电影中也得到了很着重的描写刻画，两岸如此相近又如此遥远，这种矛盾冲突让整部电影都笼罩在一种特殊的氛围当中，而且&lt;strong&gt;越是比较，越是压抑，一次次地用镜头画面冲击人心&lt;/strong&gt;。电影中也运用了不少第一人称的镜头，无论是冲锋时突然满眼的鲜红色，还是深夜时对岸的灯红酒绿，都带给观众很强的心灵震撼。电影中也巧妙使用了关公意象，从对岸戏台上的表演到小湖北的想象，让观众更能体会到这场战役中仓库守军所面临的困境以及为国赴死的决心。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP.jpg&#34;
 	width=&#34;1000&#34;
 	height=&#34;418&#34;
-	srcset=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP_hu2308759109177315135.jpg 480w, http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP_hu13308649921541879948.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP_hu_8e3ce8dce560836f.jpg 480w, https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/fGaotP_hu_33cadd435e8415e.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;关公&#34;
@@ -4177,10 +4167,10 @@ $$&lt;/p&gt;
 &lt;p&gt;结局最后在“八百壮士”从桥面冲向租界撤退戛然而止，并在片尾拍摄了如今上海四行仓库的遗址，串起了历史与当今，这种对比让人更加感同身受。这是很标准的结尾，不出彩，但值得好评。&lt;/p&gt;
 &lt;h2 id=&#34;总结&#34;&gt;总结
 &lt;/h2&gt;&lt;p&gt;总而言之，制作团队的努力不可否认，淞沪会战“八百壮士”的英雄事迹不该遗忘，有机会一定也去四行仓库遗址看看。最后，我希望这部电影能够走出中国，毕竟长期以来，欧洲战场太平洋战场的好片子太多了，作为东方主战场的中国，需要更多类似《八佰》这样的电影，在尊重历史的基础上，向世界展示中国在世界反法西斯战争中的决心和努力，&lt;strong&gt;无论是共军还是国军&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl.jpg&#34;
 	width=&#34;1000&#34;
 	height=&#34;419&#34;
-	srcset=&#34;http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl_hu1250494465513726237.jpg 480w, http://localhost:1313/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl_hu9771088670577204355.jpg 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl_hu_1fdf7231bccebb0a.jpg 480w, https://blog.kagaya.fun/p/2020/%E5%85%AB%E4%BD%B0%E7%9C%8B%E5%AE%8C%E4%BA%86%E9%9A%8F%E4%BE%BF%E8%B0%88%E8%B0%88/izHBVl_hu_974cc89d566a7c82.jpg 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;护旗&#34;
@@ -4197,10 +4187,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>About</title>
-        <link>http://localhost:1313/about/</link>
+        <link>https://blog.kagaya.fun/about/</link>
         <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/about/</guid>
+        <guid>https://blog.kagaya.fun/about/</guid>
         <description>&lt;p&gt;你好，欢迎来到我的Page，很高兴能在这里遇见你.&lt;/p&gt;
 &lt;h2 id=&#34;简单介绍一下自己&#34;&gt;🙌🏼简单介绍一下自己
 &lt;/h2&gt;&lt;p&gt;本科同济，硕士复旦，现在在星环做云平台（Kubernetes）开发工程师&lt;/p&gt;
@@ -4380,19 +4370,19 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>Archives</title>
-        <link>http://localhost:1313/archives/</link>
+        <link>https://blog.kagaya.fun/archives/</link>
         <pubDate>Mon, 05 Aug 2019 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/archives/</guid>
+        <guid>https://blog.kagaya.fun/archives/</guid>
         <description></description>
         </item>
         <item>
         <title>DeepClone深克隆</title>
-        <link>http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+        <link>https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
         <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg" alt="Featured image of post DeepClone深克隆" /&gt;&lt;h1 id=&#34;deepclone深克隆&#34;&gt;DeepClone深克隆
+        <guid>https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg" alt="Featured image of post DeepClone深克隆" /&gt;&lt;h1 id=&#34;deepclone深克隆&#34;&gt;DeepClone深克隆
 &lt;/h1&gt;&lt;p&gt;之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。&lt;/p&gt;
 &lt;p&gt;于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识&lt;/p&gt;
 &lt;h2 id=&#34;为什么会有深克隆的问题谈谈弱类型&#34;&gt;为什么会有深克隆的问题——谈谈弱类型
@@ -4493,8 +4483,7 @@ $$&lt;/p&gt;
 &lt;/h2&gt;&lt;p&gt;JavaScript总共有七种数据类型&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;六种原始数据类型 Undefined, Null, Boolean, Number, String, Symbol
-一种引用类型 Object&lt;/p&gt;
-&lt;/blockquote&gt;
+一种引用类型 Object&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;对于原始数据类型，是直接可以通过等号&lt;code&gt;=&lt;/code&gt;进行复制的，相当于C++中的&lt;strong&gt;普通类型变量&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;而对于Object类型变量，JavaScript是通过变量引用一块内存空间实现的，相当于C++的&lt;strong&gt;指针类型变量&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;因此，我们需要能够区分变量类型从而做出不同的处理&lt;/p&gt;
@@ -4798,11 +4787,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>Unix系统分析——锁</title>
-        <link>http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
+        <link>https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
         <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.jpg" alt="Featured image of post Unix系统分析——锁" /&gt;&lt;h1 id=&#34;unix系统分析锁&#34;&gt;Unix系统分析——锁
+        <guid>https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.jpg" alt="Featured image of post Unix系统分析——锁" /&gt;&lt;h1 id=&#34;unix系统分析锁&#34;&gt;Unix系统分析——锁
 &lt;/h1&gt;&lt;p&gt;总结Unix系统中锁的相关知识&lt;/p&gt;
 &lt;h2 id=&#34;linux各种锁的实现&#34;&gt;Linux各种锁的实现
 &lt;/h2&gt;&lt;h3 id=&#34;原子操作&#34;&gt;原子操作
@@ -5135,10 +5124,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>pthread多线程编程初探</title>
-        <link>http://localhost:1313/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
+        <link>https://blog.kagaya.fun/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</link>
         <pubDate>Sat, 01 Jun 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/pthread%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E5%88%9D%E6%8E%A2/</guid>
         <description>&lt;h1 id=&#34;pthread多线程编程初探&#34;&gt;pthread多线程编程初探
 &lt;/h1&gt;&lt;p&gt;&lt;strong&gt;POSIX线程&lt;/strong&gt;（POSIX threads），简称Pthreads，是线程的&lt;strong&gt;POSIX标准&lt;/strong&gt;。该标准定义了创建和操纵线程的一整套API。&lt;/p&gt;
 &lt;h2 id=&#34;实验要求&#34;&gt;实验要求
@@ -5151,8 +5140,7 @@ $$&lt;/p&gt;
 &lt;p&gt;线程是更小的任务实例，对于进程来说，每个进程有着自己独立的数据段（全局变量）、BSS段（未初始化的全局变量和静态变量）、以及堆栈段（局部变量），同一个程序的进程还有着共享的代码段。而对于线程来说，为了解决进程间通信的痛点，进程的数据段、bss段、堆在线程间共享，这样线程之间可以共享进程中的大部分数据，而且一个线程创建和销毁的开销的十分小，可以说很好的解决了fork多进程的问题。&lt;/p&gt;
 &lt;p&gt;当然新的机制必然会带来新的问题，比如说共享的数据空间就需要考虑写竞争和一些其他的同步问题，这都需要在实践中一点一点的学习&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;在后面Unix系统分析的课程中了解到，其实linux中对于线程的管理也是按照进程的方式管理，只不过线程的地址空间与普通进程有区别，所以说linux中最小的任务实例还是进程&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h3 id=&#34;liunx的pthread&#34;&gt;Liunx的pthread
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;头文件&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
@@ -5321,13 +5309,13 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>CSS伪类的应用——实现聊天气泡效果</title>
-        <link>http://localhost:1313/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
+        <link>https://blog.kagaya.fun/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
         <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
         <description>&lt;h1 id=&#34;css伪类的应用实现聊天气泡效果&#34;&gt;CSS伪类的应用——实现聊天气泡效果
 &lt;/h1&gt;&lt;p&gt;在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/bili.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/bili.jpg&#34;
 	
 	
 	
@@ -5385,7 +5373,7 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/inlineblock.jpg&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/inlineblock.jpg&#34;
 	
 	
 	
@@ -5423,7 +5411,7 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/before.jpg&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/before.jpg&#34;
 	
 	
 	
@@ -5461,7 +5449,7 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这里的&lt;code&gt;background-color&lt;/code&gt;和背景色设置为相同&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/after.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/after.jpg&#34;
 	
 	
 	
@@ -5475,7 +5463,7 @@ $$&lt;/p&gt;
 &lt;p&gt;值得注意的是这里实现的角右侧只能紧贴垂直的边，理论上通过调整&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;left&lt;/code&gt;、&lt;code&gt;width&lt;/code&gt;、&lt;code&gt;height&lt;/code&gt;四个值应该可以实现将角移到圆角的部位&lt;/p&gt;
 &lt;p&gt;最终效果虽然还是有点差别但还是很接近了，&lt;/p&gt;
 &lt;p&gt;但是b站对于图片气泡直接使用了canvas实现，画一个气泡然后用图片填充&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/canvas.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/canvas.jpg&#34;
 	
 	
 	
@@ -5490,13 +5478,13 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>记人生中第一次面试</title>
-        <link>http://localhost:1313/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
+        <link>https://blog.kagaya.fun/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</link>
         <pubDate>Tue, 07 May 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/%E8%AE%B0%E4%BA%BA%E7%94%9F%E4%B8%AD%E7%AC%AC%E4%B8%80%E6%AC%A1%E9%9D%A2%E8%AF%95/</guid>
         <description>&lt;h1 id=&#34;记人生中第一次面试&#34;&gt;记人生中第一次面试
 &lt;/h1&gt;&lt;p&gt;在准备暑期实习的时候第一个就投了微软，现在坐在面试后返回学校的地铁上，打开了md编辑器，准备写点什么。我想，无论结果如何，这都是对我来说十分有意义的一次体验。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/Microsoft.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/Microsoft.jpg&#34;
 	
 	
 	
@@ -5519,10 +5507,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>SQL变量总结</title>
-        <link>http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+        <link>https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
         <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
         <description>&lt;h1 id=&#34;sql变量总结&#34;&gt;SQL变量总结
 &lt;/h1&gt;&lt;h3 id=&#34;变量分类&#34;&gt;变量分类
 &lt;/h3&gt;&lt;ul&gt;
@@ -5696,16 +5684,15 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;by Derrick&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;by Derrick&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
         <title>Mysql和MariaDB中的Rank排序的坑</title>
-        <link>http://localhost:1313/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+        <link>https://blog.kagaya.fun/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
         <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
         <description>&lt;h1 id=&#34;mysql和mariadb中的rank排序的坑&#34;&gt;Mysql和MariaDB中的Rank排序的坑
 &lt;/h1&gt;&lt;p&gt;题目中需要对一个成绩表按考试科目以及学生做排名&lt;/p&gt;
 &lt;p&gt;为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表&lt;/p&gt;
@@ -5830,10 +5817,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>难得看次电影，随便写写</title>
-        <link>http://localhost:1313/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
+        <link>https://blog.kagaya.fun/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</link>
         <pubDate>Fri, 08 Mar 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/%E9%9A%BE%E5%BE%97%E7%9C%8B%E6%AC%A1%E7%94%B5%E5%BD%B1%E9%9A%8F%E4%BE%BF%E5%86%99%E5%86%99/</guid>
         <description>&lt;h1 id=&#34;难得看次电影随便写写&#34;&gt;难得看次电影，随便写写
 &lt;/h1&gt;&lt;p&gt;​	趁着周五+惊奇队长第一天上映，拉着基友去学校边上的电影院一睹为快，顺便看了广受好评的奥斯卡最佳影片——Green Book 绿皮书&lt;/p&gt;
 &lt;p&gt;​	不得不说我真是很庆幸自己先看了惊奇队长，再看了绿皮书，然后心满意足地回到寝室。先说说惊奇队长，作为复仇者联盟的最强战力，上映的这部《惊奇队长》基本上是为了一个月后的《复联4》做铺垫的。一方面为了新加入的成员交代好故事背景，另一方面补充一些主线上的剧情。总得来说没有什么惊喜的地方，哦，对我来说最惊喜的地方是能再次在荧幕上看到富瑞和科尔森，两位在神盾局中举足轻重的人物。说真的，富瑞那时候还没有戴他那个标志性的眼罩，而且显得非常年轻，体态虽然宽大但丝毫不显臃肿，甚至当时作为三级特工的富瑞已经显得十分老练。刚出场的时候我一时还没认出来，直到科尔森喊出富瑞的名字，我惊喜的差点叫出来。富瑞的形象一直是那样稳重，看到他总会给人一种莫名的安全感，仿佛一切都在他的掌握之中。惊喜之余，也顺便给神盾局上柱香。另外，关于剧情主要还是意料之中地交代了惊奇队长身世以及能力的来源，虽然可能没有人看这篇blog，但我还是没有剧透的习惯，就不细说了，个人觉得就算没有看《惊奇队长》对于接下来的复联也不会有什么影响，比较关键的内容就是宇宙魔方是怎么到富瑞手里的以及富瑞在《复联3》里联系惊奇队长的那个寻呼机的来历，不过全身发出耀眼光芒的女侠还是蛮帅的，就凭一个人就能单挑一支舰队的能力（特效）来看，还是非常适合边吃爆米花边看的。&lt;/p&gt;
@@ -5852,17 +5839,16 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;2019年3月8日23点13分&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;2019年3月8日23点13分&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
         <title>DitF第十三集ed绘本《魔物与王子》翻译</title>
-        <link>http://localhost:1313/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
+        <link>https://blog.kagaya.fun/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</link>
         <pubDate>Mon, 21 Jan 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/67015109_p0.jpg" alt="Featured image of post DitF第十三集ed绘本《魔物与王子》翻译" /&gt;&lt;h1 id=&#34;ditf第十三集ed绘本魔物与王子翻译&#34;&gt;DitF第十三集ed绘本《魔物与王子》翻译
+        <guid>https://blog.kagaya.fun/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/ditf%E7%AC%AC%E5%8D%81%E4%B8%89%E9%9B%86ed%E7%BB%98%E6%9C%AC%E9%AD%94%E7%89%A9%E4%B8%8E%E7%8E%8B%E5%AD%90%E7%BF%BB%E8%AF%91/67015109_p0.jpg" alt="Featured image of post DitF第十三集ed绘本《魔物与王子》翻译" /&gt;&lt;h1 id=&#34;ditf第十三集ed绘本魔物与王子翻译&#34;&gt;DitF第十三集ed绘本《魔物与王子》翻译
 &lt;/h1&gt;&lt;p&gt;一个挺悲伤的故事（有翻译错误还请指教）&lt;/p&gt;
 &lt;p&gt;在某个国家漆黑的森林深处，有一个不为人知的种族生活在那里。背上长着巨大的他们十分的美丽，但是确实被成为“魔物”般的存在。那里生活着的“魔物”的公主。她的背上也有着巨大的灰色翅膀，当她成长到十六岁的时候，就被允许用翅膀飞到森林的外面。&lt;/p&gt;
 &lt;p&gt;然后，当过完十六岁生日的时候，公主第一次飞出森林，穿越过了险峻的山峰，飞过了河流。好不容易到达了一个住着不同种族的地方——人类的国家。空中的月光照映着她的脸庞。&lt;/p&gt;
@@ -5878,11 +5864,11 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>我们都在向前走，只有回忆驻留在原地</title>
-        <link>http://localhost:1313/p/2019/flavors-of-youth/</link>
+        <link>https://blog.kagaya.fun/p/2019/flavors-of-youth/</link>
         <pubDate>Fri, 18 Jan 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/flavors-of-youth/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/flavors-of-youth/ssqc.jpeg" alt="Featured image of post 我们都在向前走，只有回忆驻留在原地" /&gt;&lt;h1 id=&#34;我们都在向前走只有回忆驻留在原地&#34;&gt;我们都在向前走，只有回忆驻留在原地
+        <guid>https://blog.kagaya.fun/p/2019/flavors-of-youth/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/flavors-of-youth/ssqc.jpeg" alt="Featured image of post 我们都在向前走，只有回忆驻留在原地" /&gt;&lt;h1 id=&#34;我们都在向前走只有回忆驻留在原地&#34;&gt;我们都在向前走，只有回忆驻留在原地
 &lt;/h1&gt;&lt;p&gt;电影《肆式青春》短评&lt;/p&gt;
 &lt;p&gt;观看建议：这部电影是三位导演通过中国这个舞台来描绘他们眼中青春的故事，三个篇章之间关系不大，但各自讲述一段完整的故事，虽然篇幅较短，但请用心体会，如果能在将自己的经历带入其中一段故事中的话能获得最好的观看体验。&lt;/p&gt;
 &lt;p&gt;首先很遗憾，限于排片过少没能够第一时间去影院支持一下。其实很早就开始关注这部电影了，随着中国资本进入动画市场，也一直期待着有能有一部讲述中国自己故事的动画，不得不说，绘梦这次做的不错。整体看完以后觉得基本上没让我失望，个人看来第一篇与第三篇是比较出彩的，可以看到叫兽和李导真的是十分想把属于那个时代的回忆和情感通过动画的形式传达出来，各个细节十分到位，电影中的各种中国式场景想必各位也看得十分有亲切感。也许限于篇幅原因，有许多内容没能够呈现出来，但也确实足够表现出两位在中国这片土地上长大的年轻人对于那个一段美好时光的不舍之情，叙事节奏的把握我觉得真的是十分不错了。但我觉得缺点也是有的，题材的限制使得只有相似经历的人更容易在这个电影里获得共鸣，另外篇幅限制使得许多地方存在铺垫不足的问题。但个人认为这些不至于影响到整个电影所表达的东西，所以我还是会推荐更多人来看的。 正如《一碗乡愁》的导演叫兽所说的一样，他的目的是要引起一部分人的共鸣，如果你在看这部电影的时候，电影中的一个事物，一个情节，或者一个人物，能让你不由自主地将自己代入到电影之中，那可以说这部电影是成功的。无论是自己的那位和蔼的长辈，还是小时候最喜欢的一道美食，抑或是那个曾经羞涩的自己所暗恋的ta。尽管每个人的青春时光都不尽相同，但大家都经历过那个年代，总能找到一些只属于那个年代的印记，电影讲述的不只是导演们自己的故事，也是在讲述我们每一个80后，90后甚至00后的青春。&lt;/p&gt;
@@ -5891,10 +5877,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>打算重启kgyzone</title>
-        <link>http://localhost:1313/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
+        <link>https://blog.kagaya.fun/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</link>
         <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/%E6%89%93%E7%AE%97%E9%87%8D%E5%90%AFkgyzone/</guid>
         <description>&lt;h1 id=&#34;打算重启kgyzone&#34;&gt;打算重启kgyzone
 &lt;/h1&gt;&lt;p&gt;离建好kgyzone也过去一年多了，本来想好好在这里总结一下身边发生的事情，或是做一些技术记录，然而一直没有掌握worldpress的正确使用方法，人嘛，总想在走过的地方留下点什么东西，哪怕是一个脚印也好，好证明自己也曾存在过。&lt;/p&gt;
 &lt;p&gt;之后可以慢慢在这里发一下心得体会。或许可以直接将markdown格式的文件直接发上来，那样的话会方便很多。&lt;/p&gt;
@@ -5903,10 +5889,10 @@ $$&lt;/p&gt;
         </item>
         <item>
         <title>Search</title>
-        <link>http://localhost:1313/search/</link>
+        <link>https://blog.kagaya.fun/search/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/search/</guid>
+        <guid>https://blog.kagaya.fun/search/</guid>
         <description></description>
         </item>
         

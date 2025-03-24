@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>SQL on かがやの部屋</title>
-        <link>http://localhost:1313/tags/sql/</link>
+        <link>https://blog.kagaya.fun/tags/sql/</link>
         <description>Recent content in SQL on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sun, 07 Apr 2019 21:30:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/sql/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 07 Apr 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/sql/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>SQL变量总结</title>
-        <link>http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
+        <link>https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</link>
         <pubDate>Sun, 07 Apr 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/</guid>
         <description>&lt;h1 id=&#34;sql变量总结&#34;&gt;SQL变量总结
 &lt;/h1&gt;&lt;h3 id=&#34;变量分类&#34;&gt;变量分类
 &lt;/h3&gt;&lt;ul&gt;
@@ -185,16 +185,15 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;by Derrick&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;by Derrick&lt;/p&gt;&lt;/blockquote&gt;
 </description>
         </item>
         <item>
         <title>Mysql和MariaDB中的Rank排序的坑</title>
-        <link>http://localhost:1313/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
+        <link>https://blog.kagaya.fun/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</link>
         <pubDate>Mon, 01 Apr 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/mysql%E5%92%8Cmariadb%E4%B8%AD%E7%9A%84rank%E6%8E%92%E5%BA%8F%E7%9A%84%E5%9D%91/</guid>
         <description>&lt;h1 id=&#34;mysql和mariadb中的rank排序的坑&#34;&gt;Mysql和MariaDB中的Rank排序的坑
 &lt;/h1&gt;&lt;p&gt;题目中需要对一个成绩表按考试科目以及学生做排名&lt;/p&gt;
 &lt;p&gt;为了加快之后其他步骤的查询速度，我想着将所有成绩都添加好排名后建立一个临时表&lt;/p&gt;

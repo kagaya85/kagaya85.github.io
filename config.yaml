@@ -1,8 +1,9 @@
 baseurl: https://blog.kagaya.fun
 languageCode: zh-cn
 theme: hugo-theme-stack
-paginate: 5
 title: かがやの部屋
+pagination:
+    pagerSize: 5
 
 # Change it to your Disqus shortname before using
 disqusShortname: kagayablog

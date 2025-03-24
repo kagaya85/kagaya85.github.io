@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Docker on かがやの部屋</title>
-        <link>http://localhost:1313/tags/docker/</link>
+        <link>https://blog.kagaya.fun/tags/docker/</link>
         <description>Recent content in Docker on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/docker/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 23 Sep 2020 16:47:28 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/docker/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>使用Docker部署本地Wordpress开发环境</title>
-        <link>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
+        <link>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</link>
         <pubDate>Wed, 23 Sep 2020 16:47:28 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境
+        <guid>https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.png" alt="Featured image of post 使用Docker部署本地Wordpress开发环境" /&gt;&lt;h1 id=&#34;使用docker部署本地wordpress开发环境&#34;&gt;使用Docker部署本地Wordpress开发环境
 &lt;/h1&gt;&lt;p&gt;为了便于维护开发线上的wordpress站点，在本地构建一个wordpress开发环境。使用Docker来实现轻量化开发与部署环境的构建。&lt;/p&gt;
 &lt;h2 id=&#34;背景&#34;&gt;背景
 &lt;/h2&gt;&lt;p&gt;由于最近接手了一个网站的运维工作，使用的还是Wordpress，因为有涉及到一些布局的调整，因此决定在本地构建一个开发调试环境用于进行上线前的测试，但又不想离开本机中Vscode等开发环境（如代码提示等）。在考虑了包括虚拟机LANMP，本机直接构建环境等方案后，最后选择了Docker来部署开发环境，同时也可以进一步熟悉Docker的使用方法。有了Docker，免去了虚拟机中繁杂的环境配置过程，同时对环境进行模块化解耦后可以十分便捷的启动或更新开发环境组件，也使得开发环境尽可能的贴近生产环境，之后的部署上线将变得十分容易。&lt;/p&gt;

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>JavaScript on かがやの部屋</title>
-        <link>http://localhost:1313/tags/javascript/</link>
+        <link>https://blog.kagaya.fun/tags/javascript/</link>
         <description>Recent content in JavaScript on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/javascript/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 02 Jul 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/javascript/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>DeepClone深克隆</title>
-        <link>http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
+        <link>https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</link>
         <pubDate>Tue, 02 Jul 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg" alt="Featured image of post DeepClone深克隆" /&gt;&lt;h1 id=&#34;deepclone深克隆&#34;&gt;DeepClone深克隆
+        <guid>https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/deepclone%E6%B7%B1%E5%85%8B%E9%9A%86/asuka.jpg" alt="Featured image of post DeepClone深克隆" /&gt;&lt;h1 id=&#34;deepclone深克隆&#34;&gt;DeepClone深克隆
 &lt;/h1&gt;&lt;p&gt;之前去参加字节跳动面试的时候遇到了很尴尬的情况，连续两个面试官让我手写一个深克隆出来，尽管我明白需要深克隆的原因是什么，然而之前准备的时候虽然看到了有关深克隆的相关概念，因为看到“需要付出一定的性能代价，因此平常使用中需要尽量避免”这句话，于是便没有深究实现方法，结果当然也是没能够写出来。&lt;/p&gt;
 &lt;p&gt;于是打算利用这篇blog彻底理解这方面的概念和实现方法，也加深对JavaScript这门语言的认识&lt;/p&gt;
 &lt;h2 id=&#34;为什么会有深克隆的问题谈谈弱类型&#34;&gt;为什么会有深克隆的问题——谈谈弱类型
@@ -113,8 +113,7 @@
 &lt;/h2&gt;&lt;p&gt;JavaScript总共有七种数据类型&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;六种原始数据类型 Undefined, Null, Boolean, Number, String, Symbol
-一种引用类型 Object&lt;/p&gt;
-&lt;/blockquote&gt;
+一种引用类型 Object&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;对于原始数据类型，是直接可以通过等号&lt;code&gt;=&lt;/code&gt;进行复制的，相当于C++中的&lt;strong&gt;普通类型变量&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;而对于Object类型变量，JavaScript是通过变量引用一块内存空间实现的，相当于C++的&lt;strong&gt;指针类型变量&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;因此，我们需要能够区分变量类型从而做出不同的处理&lt;/p&gt;

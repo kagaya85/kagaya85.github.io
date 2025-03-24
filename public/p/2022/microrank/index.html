@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments">
 <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
 
-<link rel='canonical' href='http://localhost:1313/p/2022/microrank/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2022/microrank/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位">
 <meta property='og:description' content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments">
-<meta property='og:url' content='http://localhost:1313/p/2022/microrank/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2022/microrank/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='PaperReview' /><meta property='article:tag' content='RootCauseLocalization' /><meta property='article:tag' content='AIOps' /><meta property='article:published_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='article:modified_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='og:image' content='http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='PaperReview' /><meta property='article:tag' content='RootCauseLocalization' /><meta property='article:tag' content='AIOps' /><meta property='article:published_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='article:modified_time' content='2022-02-08T15:04:55&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位">
 <meta name="twitter:description" content="MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png' />
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
       <script>
         var doNotTrack = false;
@@ -72,7 +72,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu670781931259558488.png" width="300"
+                        <img src="/img/avatar_hu_988fdf6424700af.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -314,8 +314,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2022/microrank/">
-                <img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu14872838036886577416.png"
-                        srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu14872838036886577416.png 800w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu16381936607916237683.png 1600w"
+                <img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_868cb25acbad132a.png"
+                        srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_868cb25acbad132a.png 800w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_e1bee8ead19d16c7.png 1600w"
                         width="800" 
                         height="190" 
                         loading="lazy"
@@ -399,8 +399,7 @@
 <p>论文来源：WWW21</p>
 <p>论文链接：<a class="link" href="https://dl.acm.org/doi/10.1145/3442381.3449905"  target="_blank" rel="noopener"
     >MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)</a></p>
-<p>源码链接：</p>
-</blockquote>
+<p>源码链接：</p></blockquote>
 <h2 id="tldr">TL;DR
 </h2><p>这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。</p>
 <h2 id="algorithm">Algorithm
@@ -418,7 +417,7 @@ $O_{ef}$: 覆盖O的测试case中失败的数量</p>
 </h3><p><img src="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png"
 	width="1914"
 	height="454"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu17095812258569412963.png 480w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu872652717049474084.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_425b36aa4ae9cc96.png 480w, /p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_b3784abf1a7da530.png 1024w"
 	loading="lazy"
 	
 		alt="整体流程"
@@ -464,7 +463,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png"
 	width="744"
 	height="265"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu5060164549456508794.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu12030256419391883049.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_37451bd6af5db2b2.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_3a81e98a340832a7.png 1024w"
 	loading="lazy"
 	
 		alt="请求依赖图"
@@ -478,7 +477,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png"
 	width="719"
 	height="229"
-	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu14236338730072688234.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu17115640358046474737.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_9ac40467c65343dd.png 480w, /p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_3022a36ec9b66da.png 1024w"
 	loading="lazy"
 	
 		alt="请求与服务依赖图"
@@ -537,7 +536,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png"
 	width="964"
 	height="528"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu11255077761870772467.png 480w, /p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu10481954821140086567.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_fb3ec07be16e3471.png 480w, /p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_93d3b32ef00b375d.png 1024w"
 	loading="lazy"
 	
 		alt="不同的四元组计算方法"
@@ -553,7 +552,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png"
 	width="1568"
 	height="358"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu7069929080434444467.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu12072560808738534117.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_d2333cf15b90bdab.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_cf809e5c886a6e7.png 1024w"
 	loading="lazy"
 	
 		alt="在线检测时间轴"
@@ -568,7 +567,7 @@ $$</p>
 <p><img src="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png"
 	width="1460"
 	height="1282"
-	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu17966311383628171713.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu2169254971505139587.png 1024w"
+	srcset="/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_1db20e7d5abed50c.png 480w, /p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_cf017eaf5eb8d643.png 1024w"
 	loading="lazy"
 	
 		alt="实验结果对比"
@@ -634,7 +633,8 @@ $$</p>
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
@@ -644,6 +644,7 @@ $$</p>
             ignoredClasses: ["gist"]
         });})
 </script>
+
     
 </article>
 
@@ -711,7 +712,7 @@ $$</p>
         
             Let's code the fantastic world!!! <br/>
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -800,7 +801,7 @@ $$</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

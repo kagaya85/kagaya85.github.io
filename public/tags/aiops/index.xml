@@ -2,23 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>AIOps on かがやの部屋</title>
-        <link>http://localhost:1313/tags/aiops/</link>
+        <link>https://blog.kagaya.fun/tags/aiops/</link>
         <description>Recent content in AIOps on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Tue, 08 Feb 2022 15:04:55 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/aiops/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 08 Feb 2022 15:04:55 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/aiops/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title>
-        <link>http://localhost:1313/p/2022/microrank/</link>
+        <link>https://blog.kagaya.fun/p/2022/microrank/</link>
         <pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2022/microrank/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png" alt="Featured image of post WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位" /&gt;&lt;blockquote&gt;
+        <guid>https://blog.kagaya.fun/p/2022/microrank/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png" alt="Featured image of post WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位" /&gt;&lt;blockquote&gt;
 &lt;p&gt;论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments&lt;/p&gt;
 &lt;p&gt;论文来源：WWW21&lt;/p&gt;
 &lt;p&gt;论文链接：&lt;a class=&#34;link&#34; href=&#34;https://dl.acm.org/doi/10.1145/3442381.3449905&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;源码链接：&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;源码链接：&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;tldr&#34;&gt;TL;DR
 &lt;/h2&gt;&lt;p&gt;这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。&lt;/p&gt;
 &lt;h2 id=&#34;algorithm&#34;&gt;Algorithm
@@ -33,10 +32,10 @@ $O_{ef}$: 覆盖O的测试case中失败的数量&lt;/p&gt;
 &lt;p&gt;$O_{np}$: 没有覆盖O的测试case中通过的数量&lt;/p&gt;
 &lt;p&gt;类似软件测试中的思路，当经过一个服务执行的异常trace越多且执行正常trace的数量越少，那么这个服务越有可能是导致异常的根因。&lt;/p&gt;
 &lt;h3 id=&#34;system&#34;&gt;System
-&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png&#34;
+&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png&#34;
 	width=&#34;1914&#34;
 	height=&#34;454&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu17095812258569412963.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu872652717049474084.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_425b36aa4ae9cc96.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_b3784abf1a7da530.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;整体流程&#34;
@@ -79,10 +78,10 @@ A =
 \right]
 $$&lt;/p&gt;
 &lt;p&gt;其中$A_{st}$代表了从s出发到t结束的矩阵，矩阵中的值代表转移的概率，即$\frac{1}{相邻节点的数量}$。作者把每一次请求看作图中的一个单独的节点，构造了operation-trace的关系图，如下面图3到图6的变化：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png&#34;
 	width=&#34;744&#34;
 	height=&#34;265&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu5060164549456508794.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu12030256419391883049.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_37451bd6af5db2b2.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_3a81e98a340832a7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;请求依赖图&#34;
@@ -93,10 +92,10 @@ $$&lt;/p&gt;
 		data-flex-basis=&#34;673px&#34;
 	
 &gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png&#34;
 	width=&#34;719&#34;
 	height=&#34;229&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu14236338730072688234.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu17115640358046474737.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_9ac40467c65343dd.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_3022a36ec9b66da.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;请求与服务依赖图&#34;
@@ -152,10 +151,10 @@ O_{ep} = P * N_{ep}, &amp;amp; O_{np} = P * (N_p - N_{ep})
 \end{array}
 $$&lt;/p&gt;
 &lt;p&gt;之后可以根据下表所示的方法计算对应的值，作者没有解释如何选择，而是通过实验对比各种计算方法的效果&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png&#34;
 	width=&#34;964&#34;
 	height=&#34;528&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu11255077761870772467.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu10481954821140086567.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_fb3ec07be16e3471.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_93d3b32ef00b375d.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;不同的四元组计算方法&#34;
@@ -168,10 +167,10 @@ $$&lt;/p&gt;
 &gt;&lt;/p&gt;
 &lt;h2 id=&#34;experiments&#34;&gt;Experiments
 &lt;/h2&gt;&lt;p&gt;作者通过实验模拟了在线故障定位的流程：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png&#34;
 	width=&#34;1568&#34;
 	height=&#34;358&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu7069929080434444467.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu12072560808738534117.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_d2333cf15b90bdab.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_cf809e5c886a6e7.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;在线检测时间轴&#34;
@@ -183,10 +182,10 @@ $$&lt;/p&gt;
 	
 &gt;&lt;/p&gt;
 &lt;p&gt;不同计算方法的对比：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png&#34;
 	width=&#34;1460&#34;
 	height=&#34;1282&#34;
-	srcset=&#34;http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu17966311383628171713.png 480w, http://localhost:1313/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu2169254971505139587.png 1024w&#34;
+	srcset=&#34;https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_1db20e7d5abed50c.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_cf017eaf5eb8d643.png 1024w&#34;
 	loading=&#34;lazy&#34;
 	
 		alt=&#34;实验结果对比&#34;

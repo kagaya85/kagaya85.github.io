@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。\n">
 <title>Amazing Go Interface</title>
 
-<link rel='canonical' href='http://localhost:1313/p/2021/amazing-go-interface/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2021/amazing-go-interface/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Amazing Go Interface">
 <meta property='og:description' content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。\n">
-<meta property='og:url' content='http://localhost:1313/p/2021/amazing-go-interface/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2021/amazing-go-interface/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='http://localhost:1313/p/2021/amazing-go-interface/golang.jpeg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='Golang' /><meta property='article:tag' content='Amazing Go' /><meta property='article:published_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2021-04-12T00:00:00&#43;00:00'/><meta property='og:image' content='https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="Amazing Go Interface">
 <meta name="twitter:description" content="从今天开始打算尝试开一个系列的坑，分享一些Golang学习过程中觉得有趣的设计，系列的名字就打算叫Amazing Go。这个系列理论上并不打算作为一个语言教程，你可以单纯把它理解为一个Golang爱好者为了向别人介绍这门语言的优秀设计，也可以看作是对于Golang的某一项具体特性所做的原理剖析。我希望在每一篇文章中在介绍基础语法的基础上，挖掘背后的设计思路和原理，又或者从开发者的角度提供一些新的思考。\n"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='http://localhost:1313/p/2021/amazing-go-interface/golang.jpeg' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/p/2021/amazing-go-interface/golang.jpeg' />
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
       <script>
         var doNotTrack = false;
@@ -72,7 +72,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu670781931259558488.png" width="300"
+                        <img src="/img/avatar_hu_988fdf6424700af.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -320,8 +320,8 @@
     <header class="article-header">
         <div class="article-image">
             <a href="/p/2021/amazing-go-interface/">
-                <img src="/p/2021/amazing-go-interface/golang_hu10578507986455083206.jpeg"
-                        srcset="/p/2021/amazing-go-interface/golang_hu10578507986455083206.jpeg 800w, /p/2021/amazing-go-interface/golang_hu10288493121415898022.jpeg 1600w"
+                <img src="/p/2021/amazing-go-interface/golang_hu_984bfc423470c3a6.jpeg"
+                        srcset="/p/2021/amazing-go-interface/golang_hu_984bfc423470c3a6.jpeg 800w, /p/2021/amazing-go-interface/golang_hu_fbfb3515ea9585e1.jpeg 1600w"
                         width="800" 
                         height="465" 
                         loading="lazy"
@@ -402,8 +402,7 @@
 <h2 id="why-interface">Why Interface?
 </h2><p>在介绍Golang的接口语法之前，我们先简单回顾一下什么是接口。IOP（Interface Oriented Programing），即面向接口编程，尽管还是属于OOP面向对象编程的范畴，这也是**多态(polymorphism)**的重要实现手段，但我觉得还是有必要单独拿出来说。现在复杂的软件系统不是由一个人单独完成的，软件设计的工作往往会涉及到一个团队之间的沟通协作，我们也总希望软件具有良好的可扩展性和可维护性。同时，在敏捷软件开发过程中，软件拥有了生命力，能够快速迭代推陈出新。因此，我们希望通过一种方法来隐藏软件设计中的部分复杂度，对复杂的部分进行良好的封装来降低协作成本，提高开发效率，于是我们引入了接口（Interface）这一概念：</p>
 <blockquote>
-<p>In computing, an <strong>interface</strong> is a shared boundary across which two or more separate components of a computer system exchange information.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-</blockquote>
+<p>In computing, an <strong>interface</strong> is a shared boundary across which two or more separate components of a computer system exchange information.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p></blockquote>
 <p><strong>接口</strong>的作用其实就是为不同层级的模块提供了一个定义好的<strong>中间层</strong>，上游不再需要依赖下游的具体实现，充分地对上下游进行了解耦<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>。</p>
 <p>我认为接口是人类工程学中的一次伟大创造，有了接口，我们不再需要了解接口背后的实现方法，大大简化了使用门槛：就如同我们使用插座不需要了解火线和零线是如何通过交流电把能量传递到用电器中，在这里，插座就是一种接口，可以方便给所有符合接口标准的用电器提供电能，接口的好处不再赘述，下面会先简单介绍一下C++和Java等传统OOP语言的接口设计，并在下一节中着重介绍Golang中的接口设计。</p>
 <h3 id="c-interface">C++ Interface
@@ -527,7 +526,7 @@
 <p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x.png"
 	width="772"
 	height="260"
-	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu4131997697939419370.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu5117609755696736936.png 1024w"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu_30cdb19a1bf93df.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-04_at_19.16.38@2x_hu_648fed8ab5fc4c73.png 1024w"
 	loading="lazy"
 	
 		alt="CleanShot_2021-04-04_at_19.16.38@2x"
@@ -735,8 +734,7 @@
 <h3 id="duck-typing">Duck Typing
 </h3><p>鸭子类型（Duck Typing）<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>是一种动态类型语言的设计风格：</p>
 <blockquote>
-<p>If it walks like a duck and it quacks like a duck, then it must be a duck</p>
-</blockquote>
+<p>If it walks like a duck and it quacks like a duck, then it must be a duck</p></blockquote>
 <p>鸭子类型在Python等<strong>动态类型</strong>的语言中得到了非常广泛的应用，在鸭子类型中，关注点在于<strong>对象的行为</strong>，能作什么，而不是关注对象所属的类型。这样，我们就可以在不继承对象的情况下实现了多态。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -881,15 +879,15 @@
 </span></span><span class="line"><span class="cl">	<span class="nx">c</span><span class="p">.</span><span class="nx">name</span> <span class="p">=</span> <span class="s">&#34;Tom&#34;</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">d</span><span class="p">.</span><span class="nx">name</span> <span class="p">=</span> <span class="s">&#34;Spike&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">p</span> <span class="nx">Pat</span> <span class="c1">// 接口类型
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">p</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">c</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">p</span><span class="p">.</span><span class="nf">Bark</span><span class="p">()</span> <span class="c1">// 喵喵喵
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// Tom
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">p</span> <span class="nx">Pat</span> <span class="c1">// 接口类型</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">p</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">c</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">p</span><span class="p">.</span><span class="nf">Bark</span><span class="p">()</span> <span class="c1">// 喵喵喵</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// Tom</span>
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">p</span> <span class="p">=</span> <span class="nx">d</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">p</span><span class="p">.</span><span class="nf">Bark</span><span class="p">()</span> <span class="c1">// 汪汪汪
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// this dog&#39;s name is Spike
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">p</span><span class="p">.</span><span class="nf">Bark</span><span class="p">()</span> <span class="c1">// 汪汪汪</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// this dog&#39;s name is Spike</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>由于Go是一门静态类型的语言，意味着可以通过静态类型检查让你你可以放心的使用鸭子类型，而避免了可能的类型错误同时还能享受鸭子类型带来的简洁高效的语法。</p>
@@ -953,8 +951,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;foo.txt&#34;</span><span class="p">)</span> <span class="c1">// f 满足io.Reader
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">f</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">f</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;foo.txt&#34;</span><span class="p">)</span> <span class="c1">// f 满足io.Reader</span>
+</span></span><span class="line"><span class="cl"><span class="nx">f</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div></li>
@@ -1020,8 +1018,8 @@
 </span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">zr</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span> <span class="c1">// 读取到stdout
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">zr</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span> <span class="c1">// 读取到stdout</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">zr</span><span class="p">.</span><span class="nf">Close</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
@@ -1047,8 +1045,8 @@
 </span></span><span class="line"><span class="cl">  <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
 </span></span><span class="line"><span class="cl">  <span class="nx">io</span><span class="p">.</span><span class="nx">Writer</span>
 </span></span><span class="line"><span class="cl">  <span class="nf">DataType</span><span class="p">()</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// 这个接口包含了 Read(), Write(), DataType() 三个方法
-</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="c1">// 这个接口包含了 Read(), Write(), DataType() 三个方法</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="easy-to-test">Easy to test
 </h3><p>使用接口进行良好抽象锁带来的另一个好处就是使得代码变得易于测试，在 Go 语言中如果我们完全不使用接口，是写不出易于测试的代码的，作为静态语言的 Go，只有我们使用接口才能脱离依赖具体实现的窘境，接口的使用能够为我们带来更清晰的抽象，帮助我们思考如何对代码进行设计，也能让我们更方便地对依赖进行 <code>Mock</code>。</p>
@@ -1056,7 +1054,7 @@
 <p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31.png"
 	width="1830"
 	height="184"
-	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu1556418704324950835.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu16365847392673437516.png 1024w"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu_bcd0820d3e2467bf.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.07.31_hu_74f868eaa3241e85.png 1024w"
 	loading="lazy"
 	
 		alt="CleanShot_2021-04-11_at_17.07.31"
@@ -1167,16 +1165,16 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">mp</span><span class="p">.</span><span class="nf">On</span><span class="p">(</span><span class="s">&#34;GetName&#34;</span><span class="p">).</span><span class="nf">Return</span><span class="p">(</span><span class="s">&#34;mock name&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">	<span class="nx">myPat</span> <span class="o">:=</span> <span class="nf">Pat</span><span class="p">(</span><span class="nx">mp</span><span class="p">)</span> <span class="c1">// 这里模拟将mock传入给以Pat为参数的函数中来测试对应函数功能
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="nx">myPat</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// 调用Pat.GetName
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">myPat</span> <span class="o">:=</span> <span class="nf">Pat</span><span class="p">(</span><span class="nx">mp</span><span class="p">)</span> <span class="c1">// 这里模拟将mock传入给以Pat为参数的函数中来测试对应函数功能</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">t</span><span class="p">.</span><span class="nf">Log</span><span class="p">(</span><span class="nx">myPat</span><span class="p">.</span><span class="nf">GetName</span><span class="p">())</span> <span class="c1">// 调用Pat.GetName</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img src="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x.png"
 	width="1336"
 	height="326"
-	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6591652098177965681.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu6643112678696136226.png 1024w"
+	srcset="/p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu_717c319dd623691e.png 480w, /p/2021/amazing-go-interface/CleanShot_2021-04-11_at_17.12.28@2x_hu_318ef09708fba3bd.png 1024w"
 	loading="lazy"
 	
 		alt="CleanShot_2021-04-11_at_17.12.28@2x"
@@ -1215,11 +1213,11 @@
 </span></span><span class="line"><span class="cl">    <span class="nf">String</span><span class="p">()</span> <span class="kt">string</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">ToString</span><span class="p">(</span><span class="nx">any</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">any</span><span class="p">.(</span><span class="nx">Stringer</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">ToString</span><span class="p">(</span><span class="kt">any</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="kt">any</span><span class="p">.(</span><span class="nx">Stringer</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span> 
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">v</span><span class="p">.</span><span class="nf">String</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="nx">v</span> <span class="o">:=</span> <span class="nx">any</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">switch</span> <span class="nx">v</span> <span class="o">:=</span> <span class="kt">any</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="kt">int</span><span class="p">:</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">strconv</span><span class="p">.</span><span class="nf">Itoa</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="kt">float</span><span class="p">:</span>
@@ -1261,7 +1259,7 @@
 <p><img src="/p/2021/amazing-go-interface/gointer1.png"
 	width="159"
 	height="83"
-	srcset="/p/2021/amazing-go-interface/gointer1_hu671820870761876410.png 480w, /p/2021/amazing-go-interface/gointer1_hu16336029155658501355.png 1024w"
+	srcset="/p/2021/amazing-go-interface/gointer1_hu_ea9742cc5b330ee5.png 480w, /p/2021/amazing-go-interface/gointer1_hu_9592d53ef7c239a5.png 1024w"
 	loading="lazy"
 	
 		alt="gointer1"
@@ -1276,7 +1274,7 @@
 <p><img src="/p/2021/amazing-go-interface/gointer2.png"
 	width="486"
 	height="238"
-	srcset="/p/2021/amazing-go-interface/gointer2_hu11882903150325669475.png 480w, /p/2021/amazing-go-interface/gointer2_hu15874367863518674544.png 1024w"
+	srcset="/p/2021/amazing-go-interface/gointer2_hu_dc65842d73b2d3d8.png 480w, /p/2021/amazing-go-interface/gointer2_hu_724ab94ba8dd9329.png 1024w"
 	loading="lazy"
 	
 		alt="gointer2"
@@ -1296,7 +1294,7 @@
 <p><img src="/p/2021/amazing-go-interface/gointer3.png"
 	width="317"
 	height="170"
-	srcset="/p/2021/amazing-go-interface/gointer3_hu10650001449220074261.png 480w, /p/2021/amazing-go-interface/gointer3_hu18158471826396362538.png 1024w"
+	srcset="/p/2021/amazing-go-interface/gointer3_hu_2d8fffd3cabf860b.png 480w, /p/2021/amazing-go-interface/gointer3_hu_365c3dc7e98e6fcc.png 1024w"
 	loading="lazy"
 	
 		alt="gointer3"
@@ -1313,7 +1311,7 @@
 <p><img src="/p/2021/amazing-go-interface/gointer4.png"
 	width="418"
 	height="238"
-	srcset="/p/2021/amazing-go-interface/gointer4_hu10707638083075873035.png 480w, /p/2021/amazing-go-interface/gointer4_hu6125221285406795370.png 1024w"
+	srcset="/p/2021/amazing-go-interface/gointer4_hu_f234041dfcde452f.png 480w, /p/2021/amazing-go-interface/gointer4_hu_de4973e3d85dcb25.png 1024w"
 	loading="lazy"
 	
 		alt="gointer4"
@@ -1330,7 +1328,7 @@
 <p><img src="/p/2021/amazing-go-interface/gointer5.png"
 	width="299"
 	height="83"
-	srcset="/p/2021/amazing-go-interface/gointer5_hu3358795277071618919.png 480w, /p/2021/amazing-go-interface/gointer5_hu2336829562826341647.png 1024w"
+	srcset="/p/2021/amazing-go-interface/gointer5_hu_48754655c9f4136d.png 480w, /p/2021/amazing-go-interface/gointer5_hu_3a19906181940b26.png 1024w"
 	loading="lazy"
 	
 		alt="gointer5"
@@ -1351,9 +1349,9 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">eface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">eface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">data</span>  <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -1368,9 +1366,9 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">iface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">tab</span>  <span class="o">*</span><span class="nx">itab</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 64bit golang src/runtime/runtime2.go</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">iface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 bytes</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">tab</span>  <span class="o">*</span><span class="nx">itab</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">data</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -1392,18 +1390,18 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// src/runtime/runtime2.go
-</span></span></span><span class="line"><span class="cl"><span class="c1">// layout of Itab known to compilers
-</span></span></span><span class="line"><span class="cl"><span class="c1">// allocated in non-garbage-collected memory
-</span></span></span><span class="line"><span class="cl"><span class="c1">// Needs to be in sync with
-</span></span></span><span class="line"><span class="cl"><span class="c1">// ../cmd/compile/internal/gc/reflect.go:/^func.dumptabs.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">itab</span> <span class="kd">struct</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// src/runtime/runtime2.go</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// layout of Itab known to compilers</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// allocated in non-garbage-collected memory</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Needs to be in sync with</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ../cmd/compile/internal/gc/reflect.go:/^func.dumptabs.</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">itab</span> <span class="kd">struct</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">inter</span> <span class="o">*</span><span class="nx">interfacetype</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">hash</span>  <span class="kt">uint32</span> <span class="c1">// copy of _type.hash. Used for type switches.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_</span>     <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">byte</span>
-</span></span><span class="line"><span class="cl">	<span class="nx">fun</span>   <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="kt">uintptr</span> <span class="c1">// variable sized. fun[0]==0 means _type does not implement inter.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">hash</span>  <span class="kt">uint32</span> <span class="c1">// copy of _type.hash. Used for type switches.</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">_</span>     <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">byte</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fun</span>   <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="kt">uintptr</span> <span class="c1">// variable sized. fun[0]==0 means _type does not implement inter.</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="generic-type">Generic Type
@@ -1435,8 +1433,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">t2</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">F2</span><span class="p">(</span><span class="nx">t2</span><span class="p">)</span> <span class="c1">// string
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">F2</span><span class="p">(</span><span class="nx">t2</span><span class="p">)</span> <span class="c1">// string</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>拥有 type list 的 interface 仅能用于做为类型参数的约束，而不能像普通 interface 类型那样使用</p>
@@ -1494,8 +1492,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">t3</span> <span class="o">:=</span> <span class="nf">MyT3</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="nf">F3</span><span class="p">(</span><span class="nx">t3</span><span class="p">)</span> <span class="c1">// main.MyT3
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">F3</span><span class="p">(</span><span class="nx">t3</span><span class="p">)</span> <span class="c1">// main.MyT3</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>不过目前社区有了新提案 type set来统一interface的语法，不知道当1.18泛型正式开放后会是哪种形式:</p>
@@ -1513,14 +1511,14 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 当前的type list
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 当前的type list</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">type</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int8</span><span class="p">,</span> <span class="kt">int16</span><span class="p">,</span> <span class="kt">int32</span><span class="p">,</span> <span class="kt">int64</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// type set理念下的新语法
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// type set理念下的新语法</span>
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">SignedInteger</span> <span class="kd">interface</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="p">~</span><span class="kt">int</span> <span class="p">|</span> <span class="p">~</span><span class="kt">int8</span> <span class="p">|</span> <span class="p">~</span><span class="kt">int16</span> <span class="p">|</span> <span class="p">~</span><span class="kt">int32</span> <span class="p">|</span> <span class="p">~</span><span class="kt">int64</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -1606,7 +1604,8 @@
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
@@ -1616,6 +1615,7 @@
             ignoredClasses: ["gist"]
         });})
 </script>
+
     
 </article>
 
@@ -1634,7 +1634,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu_dcc665f2746ad8c8.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1658,7 +1658,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu_ea2012bb3346cad3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1682,7 +1682,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu_ea06fae9740b3a80.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1706,7 +1706,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu12794881910683849128.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8kubernetes-v1.20.0-%E4%B8%8E-containerd-%E9%85%8D%E7%BD%AEk8s%E9%9B%86%E7%BE%A4/k8s.b8c632bf3271c7b21cdd00e11ad01cf9_hu_d1f7b77387e633d.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1730,7 +1730,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu8637115685238192666.png" 
+                <img src="/p/2020/%E4%BD%BF%E7%94%A8docker%E9%83%A8%E7%BD%B2%E6%9C%AC%E5%9C%B0wordpress%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/CleanShot.554a537773fb716fd864252849e26e3c_hu_2adb76bd363b903.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -1812,7 +1812,7 @@
         
             Let's code the fantastic world!!! <br/>
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -1901,7 +1901,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

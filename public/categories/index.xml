@@ -2,57 +2,57 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Categories on かがやの部屋</title>
-        <link>http://localhost:1313/categories/</link>
+        <link>https://blog.kagaya.fun/categories/</link>
         <description>Recent content in Categories on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 27 Mar 2022 14:04:09 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/categories/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Technology</title>
-        <link>http://localhost:1313/categories/technology/</link>
+        <link>https://blog.kagaya.fun/categories/technology/</link>
         <pubDate>Sun, 27 Mar 2022 14:04:09 +0800</pubDate>
         
-        <guid>http://localhost:1313/categories/technology/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/technology/eva.png" alt="Featured image of post Technology" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/technology/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/technology/eva.png" alt="Featured image of post Technology" /&gt;</description>
         </item>
         <item>
         <title>Papers</title>
-        <link>http://localhost:1313/categories/papers/</link>
+        <link>https://blog.kagaya.fun/categories/papers/</link>
         <pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate>
         
-        <guid>http://localhost:1313/categories/papers/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/papers/%E8%8F%88%E5%A6%AE.jpeg" alt="Featured image of post Papers" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/papers/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/papers/%E8%8F%88%E5%A6%AE.jpeg" alt="Featured image of post Papers" /&gt;</description>
         </item>
         <item>
         <title>Anime</title>
-        <link>http://localhost:1313/categories/anime/</link>
+        <link>https://blog.kagaya.fun/categories/anime/</link>
         <pubDate>Fri, 30 Apr 2021 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/categories/anime/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/anime/irena.jpg" alt="Featured image of post Anime" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/anime/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/anime/irena.jpg" alt="Featured image of post Anime" /&gt;</description>
         </item>
         <item>
         <title>Essay</title>
-        <link>http://localhost:1313/categories/essay/</link>
+        <link>https://blog.kagaya.fun/categories/essay/</link>
         <pubDate>Mon, 17 Aug 2020 22:42:52 +0800</pubDate>
         
-        <guid>http://localhost:1313/categories/essay/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/essay/April.jpg" alt="Featured image of post Essay" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/essay/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/essay/April.jpg" alt="Featured image of post Essay" /&gt;</description>
         </item>
         <item>
         <title>Others</title>
-        <link>http://localhost:1313/categories/others/</link>
+        <link>https://blog.kagaya.fun/categories/others/</link>
         <pubDate>Tue, 01 Jan 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/categories/others/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/others/evergarden.png" alt="Featured image of post Others" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/others/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/others/evergarden.png" alt="Featured image of post Others" /&gt;</description>
         </item>
         <item>
         <title>Algorithm</title>
-        <link>http://localhost:1313/categories/algorithm/</link>
+        <link>https://blog.kagaya.fun/categories/algorithm/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1313/categories/algorithm/</guid>
-        <description>&lt;img src="http://localhost:1313/categories/algorithm/%E8%89%BE%E5%B0%94%E6%96%87.png" alt="Featured image of post Algorithm" /&gt;</description>
+        <guid>https://blog.kagaya.fun/categories/algorithm/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/categories/algorithm/%E8%89%BE%E5%B0%94%E6%96%87.png" alt="Featured image of post Algorithm" /&gt;</description>
         </item>
         
     </channel>

@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>CSS on かがやの部屋</title>
-        <link>http://localhost:1313/tags/css/</link>
+        <link>https://blog.kagaya.fun/tags/css/</link>
         <description>Recent content in CSS on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Fri, 17 May 2019 21:30:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/css/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 17 May 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/css/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>CSS伪类的应用——实现聊天气泡效果</title>
-        <link>http://localhost:1313/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
+        <link>https://blog.kagaya.fun/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</link>
         <pubDate>Fri, 17 May 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
+        <guid>https://blog.kagaya.fun/p/2019/css%E4%BC%AA%E7%B1%BB%E7%9A%84%E5%BA%94%E7%94%A8%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%B0%94%E6%B3%A1%E6%95%88%E6%9E%9C/</guid>
         <description>&lt;h1 id=&#34;css伪类的应用实现聊天气泡效果&#34;&gt;CSS伪类的应用——实现聊天气泡效果
 &lt;/h1&gt;&lt;p&gt;在做聊天室的时候为了实现一个气泡消息的效果，于是目标是要实现一个类似b站私信消息的感觉&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/bili.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/bili.jpg&#34;
 	
 	
 	
@@ -72,7 +72,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/inlineblock.jpg&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/inlineblock.jpg&#34;
 	
 	
 	
@@ -110,7 +110,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/before.jpg&#34;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/before.jpg&#34;
 	
 	
 	
@@ -148,7 +148,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;这里的&lt;code&gt;background-color&lt;/code&gt;和背景色设置为相同&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/after.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/after.jpg&#34;
 	
 	
 	
@@ -162,7 +162,7 @@
 &lt;p&gt;值得注意的是这里实现的角右侧只能紧贴垂直的边，理论上通过调整&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;left&lt;/code&gt;、&lt;code&gt;width&lt;/code&gt;、&lt;code&gt;height&lt;/code&gt;四个值应该可以实现将角移到圆角的部位&lt;/p&gt;
 &lt;p&gt;最终效果虽然还是有点差别但还是很接近了，&lt;/p&gt;
 &lt;p&gt;但是b站对于图片气泡直接使用了canvas实现，画一个气泡然后用图片填充&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/canvas.jpg&#34;
+&lt;p&gt;&lt;img src=&#34;https://blog.kagaya.fun/images/canvas.jpg&#34;
 	
 	
 	

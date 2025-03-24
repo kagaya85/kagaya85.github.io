@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+    <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n">
 <title>SQL变量总结</title>
 
-<link rel='canonical' href='http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
+<link rel='canonical' href='https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 
 <link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="SQL变量总结">
 <meta property='og:description' content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n">
-<meta property='og:url' content='http://localhost:1313/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
+<meta property='og:url' content='https://blog.kagaya.fun/p/2019/sql%E5%8F%98%E9%87%8F%E6%80%BB%E7%BB%93/'>
 <meta property='og:site_name' content='かがやの部屋'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='og:image' content='http://localhost:1313/default.jpg' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:tag' content='SQL' /><meta property='article:tag' content='Database' /><meta property='article:published_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='article:modified_time' content='2019-04-07T21:30:20&#43;08:00'/><meta property='og:image' content='https://blog.kagaya.fun/default.jpg' />
 <meta name="twitter:site" content="@kagaya_85">
     <meta name="twitter:creator" content="@kagaya_85"><meta name="twitter:title" content="SQL变量总结">
 <meta name="twitter:description" content="SQL变量总结 变量分类 用户变量 以@开始，形式为@变量名 全局变量 set global 变量名 或者 set @@global.变量名 对所有客户端生效 只有具有super权限才可以设置全局变量 会话变量 用户变量与mysql客户端绑定，只对当前用户使用的客户端生效 只对连接的客户端生效 局部变量 declare专门用于声明 作用范围在begin和end语句块之间 定义方法 &ldquo;=&quot;,如 set @a =3,@a:=5 &ldquo;:=&quot;。select常常这样使用 set可以使用以上两种形式设置变量。而select只能使用&rdquo;:=&ldquo;的形式设置变量 未定义的变量初始化是null 示例题目： X 市建了一个新的体育馆，每日人流量信息被记录在这三列信息中：序号 (id)、日期 (date)、 人流量 (people)。\n"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='http://localhost:1313/default.jpg' />
+    <meta name="twitter:image" content='https://blog.kagaya.fun/default.jpg' />
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-V8T3W98XW5"></script>
       <script>
         var doNotTrack = false;
@@ -72,7 +72,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu670781931259558488.png" width="300"
+                        <img src="/img/avatar_hu_988fdf6424700af.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -546,8 +546,7 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
-<p>by Derrick</p>
-</blockquote>
+<p>by Derrick</p></blockquote>
 
 </section>
 
@@ -592,7 +591,8 @@
                 >
             </script><script>
     window.addEventListener("DOMContentLoaded", () => {
-        renderMathInElement(document.body, {
+	const mainArticleElement = document.querySelector(".main-article");
+        renderMathInElement(mainArticleElement, {
             delimiters: [
                 { left: "$$", right: "$$", display: true },
                 { left: "$", right: "$", display: false },
@@ -602,6 +602,7 @@
             ignoredClasses: ["gist"]
         });})
 </script>
+
     
 </article>
 
@@ -633,7 +634,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu6241015841345412817.jpeg" 
+                <img src="/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu_dcc665f2746ad8c8.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -657,7 +658,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu18017601563814412478.jpeg" 
+                <img src="/p/2022/first-nas/59474391_p0.32a560cd3f516492790c20235e6b15c7_hu_ea06fae9740b3a80.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -681,7 +682,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu12583665954466134939.jpeg" 
+                <img src="/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu_a2d13787f74ffb4a.jpeg" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -705,7 +706,7 @@
         
         
             <div class="article-image">
-                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu12997195357150281760.png" 
+                <img src="/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu_ea2012bb3346cad3.png" 
                         width="250" 
                         height="150" 
                         loading="lazy"
@@ -787,7 +788,7 @@
         
             Let's code the fantastic world!!! <br/>
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.30.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -876,7 +877,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.2ad2d047be14514ce7f229b335e81a6fa3f427b759a050781321c88e9f9b962c.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');

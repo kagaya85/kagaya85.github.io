@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>Unix on かがやの部屋</title>
-        <link>http://localhost:1313/tags/unix/</link>
+        <link>https://blog.kagaya.fun/tags/unix/</link>
         <description>Recent content in Unix on かがやの部屋</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Tue, 25 Jun 2019 21:30:20 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/unix/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 25 Jun 2019 21:30:20 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/unix/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Unix系统分析——锁</title>
-        <link>http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
+        <link>https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</link>
         <pubDate>Tue, 25 Jun 2019 21:30:20 +0800</pubDate>
         
-        <guid>http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
-        <description>&lt;img src="http://localhost:1313/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.jpg" alt="Featured image of post Unix系统分析——锁" /&gt;&lt;h1 id=&#34;unix系统分析锁&#34;&gt;Unix系统分析——锁
+        <guid>https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/</guid>
+        <description>&lt;img src="https://blog.kagaya.fun/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.jpg" alt="Featured image of post Unix系统分析——锁" /&gt;&lt;h1 id=&#34;unix系统分析锁&#34;&gt;Unix系统分析——锁
 &lt;/h1&gt;&lt;p&gt;总结Unix系统中锁的相关知识&lt;/p&gt;
 &lt;h2 id=&#34;linux各种锁的实现&#34;&gt;Linux各种锁的实现
 &lt;/h2&gt;&lt;h3 id=&#34;原子操作&#34;&gt;原子操作
