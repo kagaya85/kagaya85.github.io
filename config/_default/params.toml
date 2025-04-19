@@ -20,7 +20,7 @@ subtitle = "明日は晴れるかな〜"
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/avatar.png"
+src = "img/avatar.jpg"
 
 [article]
 headingAnchor = false
