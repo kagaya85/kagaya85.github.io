@@ -1,6 +1,6 @@
 ---
 title: "为什么你需要Server-Side Apply"
-description: "通过高 Server-Side Apply 来提高资源管理的可靠性"
+description: "通过 Server-Side Apply 来提高资源管理的可靠性"
 slug: "server-side-apply"
 date: 2025-04-20T23:00:00+08:00
 image: cover.jpg

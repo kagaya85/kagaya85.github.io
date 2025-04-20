@@ -179,3 +179,6 @@ $$
 4. 另外在计算trace latency时也存在一些问题，对于OpenTracing规范的trace数据而言，最顶级的root span已经包含了整条trace的耗时数据，在文中却用了所有span累加的方法计算总耗时。
 5. 文中把调用trace当作节点与operation统一形成一张依赖图的方式比较有借鉴意义，谱分析的方式虽然简单淳朴，当时通过复现实验表明在大多数场景下还是最有效的。
 6. 作者虽然讨论了trace数量对结果的影响，但是没有讨论对性能的影响，对于在线方法来说，性能往往也是需要考虑的一点，在我复现的实验中，利用工业界的实际trace，5mins的数量级大概在万级别，此时在pagerank的性能就会非常差，往往需要几十个小时，所以还有不少改进的空间
+
+![notbyai-white](/images/notbyai/en/Written-By-Human-Not-By-AI-Badge-white.png)
+![notbyai-black](/images/notbyai/jp/Written-By-Human-Not-By-AI-Badge-black.png)

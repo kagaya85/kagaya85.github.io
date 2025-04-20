@@ -167,3 +167,6 @@ $$
 
 [^github-commit]: [runtime: make slice growth formula a bit smoother · golang/go@2dda92f (github.com)](https://github.com/golang/go/commit/2dda92ff6f9f07eeb110ecbf0fc2d7a0ddd27f9d)
 [^group-discussion]: [slices grow at 25% after 1024 but why 1024? (google.com)](https://groups.google.com/g/golang-nuts/c/UaVlMQ8Nz3o)
+
+![notbyai-white](/images/notbyai/en/Written-By-Human-Not-By-AI-Badge-white.png)
+![notbyai-black](/images/notbyai/jp/Written-By-Human-Not-By-AI-Badge-black.png)

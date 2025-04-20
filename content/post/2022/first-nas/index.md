@@ -542,3 +542,5 @@ volumes:
   jfcache:
 ```
 
+![notbyai-white](/images/notbyai/en/Written-By-Human-Not-By-AI-Badge-white.png)
+![notbyai-black](/images/notbyai/jp/Written-By-Human-Not-By-AI-Badge-black.png)
