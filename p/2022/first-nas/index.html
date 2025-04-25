@@ -1,0 +1,541 @@
+<!doctype html><html lang=zh-cn dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="你为什么需要一台NAS以及应该如何入门呢?"><title>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</title>
+<link rel=canonical href=https://blog.kagaya.fun/p/2022/first-nas/><link rel=stylesheet href=/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css><meta property='og:title' content="瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心"><meta property='og:description' content="你为什么需要一台NAS以及应该如何入门呢?"><meta property='og:url' content='https://blog.kagaya.fun/p/2022/first-nas/'><meta property='og:site_name' content='かがやの部屋'><meta property='og:type' content='article'><meta property='article:section' content='Post'><meta property='article:tag' content='NAS'><meta property='article:tag' content='NUC'><meta property='article:tag' content='Jellyfin'><meta property='article:tag' content='Linux'><meta property='article:published_time' content='2022-01-17T16:35:05+08:00'><meta property='article:modified_time' content='2022-01-17T16:35:05+08:00'><meta property='og:image' content='https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg'><meta name=twitter:site content="@kagaya_85"><meta name=twitter:creator content="@kagaya_85"><meta name=twitter:title content="瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心"><meta name=twitter:description content="你为什么需要一台NAS以及应该如何入门呢?"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://blog.kagaya.fun/p/2022/first-nas/59474391_p0.jpeg'><link rel="shortcut icon" href=/favicon.png></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label=切换菜单>
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/avatar_hu_9fea9f8a36741673.jpg width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🚀</span></figure><div class=site-meta><h1 class=site-name><a href=/>かがやの部屋</a></h1><h2 class=site-description>明日は晴れるかな〜</h2></div></header><ol class=menu-social><li><a href=https://bangumi.tv/user/kagaya85 target=_blank title=Bangumi rel=me><svg class="icon icon-tabler icon-tabler-device-tv" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="7" width="18" height="13" rx="2"/><polyline points="16 3 12 7 8 3"/></svg></a></li><li><a href=https://github.com/kagaya85 target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://x.com/kagaya_85 target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/about/><svg class="icon icon-tabler icon-tabler-user" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>About</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>暗色模式</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">目录</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#写在前面>写在前面</a></li><li><a href=#方案探索>方案探索</a><ol><li><a href=#硬件>硬件</a></li><li><a href=#nas底层系统选择>nas底层系统选择</a></li><li><a href=#硬件直通>硬件直通</a></li></ol></li><li><a href=#安装过程>安装过程</a><ol><li><a href=#配置ups>配置UPS</a></li><li><a href=#配置邮件提醒>配置邮件提醒</a></li><li><a href=#磁盘分区-fdiskparted和gdisk>磁盘分区 fdisk，parted和gdisk</a></li><li><a href=#自动挂载>自动挂载</a></li><li><a href=#配置nuc11显卡驱动>配置nuc11显卡驱动</a></li><li><a href=#wol配置>WOL配置</a></li><li><a href=#exfat-in-ubuntu>exfat in ubuntu</a></li><li><a href=#snap-docker>snap docker</a></li><li><a href=#jellyfin-硬解>Jellyfin 硬解</a></li><li><a href=#qbittorrent>qBittorrent</a></li><li><a href=#私有云盘>私有云盘</a></li></ol></li><li><a href=#最终效果>最终效果</a><ol><li><a href=#docker-compose配置参考>docker compose配置参考</a></li></ol></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/p/2022/first-nas/><img src=/p/2022/first-nas/59474391_p0_hu_f6e61f4577edd9f8.jpeg srcset="/p/2022/first-nas/59474391_p0_hu_f6e61f4577edd9f8.jpeg 800w, /p/2022/first-nas/59474391_p0_hu_438de9dce87f4419.jpeg 1600w" width=800 height=581 loading=lazy alt="Featured image of post 瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心"></a></div><div class=article-details><header class=article-category><a href=/categories/technology/ style=background-color:#6cf;color:#fff>Technology</a></header><div class=article-title-wrapper><h2 class=article-title><a href=/p/2022/first-nas/>瞎折腾：利用NUC11打造年轻人的第一台NAS与个人影音中心</a></h2><h3 class=article-subtitle>你为什么需要一台NAS以及应该如何入门呢?</h3></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Jan 17, 2022</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>阅读时长: 13 分钟</time></div></footer></div></header><section class=article-content><h2 id=写在前面>写在前面</h2><p>为什么我会突然想搞一台NAS呢，我这么问自己，仔细回想一下大概是因为自从番剧需要进行审核才能上映的政策出台后，我就准备了一块海康威视的1T ssd接一块败家之眼的m2硬盘盒用来存自己下载的番剧，同时也方便和朋友分享；后来阿b推出了放映室的功能，在网页上就可以很方便的和朋友一同看番看电影。但这样终究是不方便，首先放映室的内容只能先定于阿b已经拥有版权的内容，其次，你的朋友最好还要有大会员。好在我本身就是个爱折腾的人，刚好前段时间给群友搞了一个ts服务器来让群友们吹水聊天以及游戏语音，我就开始想能不能通过自建的服务器也实现一个类似的流媒体平台，随时和朋友分享自己私藏的电影番剧。</p><p>假如有这样一个场景：某天有朋友（小姐姐）想看个电影但苦于没有资源，又不想去各种牛皮癣广告横飞的小网站，只得求助于你。你虽然早已掌握科学上网快速通过各种途径网罗了种子资源，熟练地运用bt下载器下载到了最新的4K HDR 10bit资源，那么你该怎么和远在网线另一端的她分享呢？当然你可以把bt文件丢过去耐心地教她怎么用FDM来下载，但是，如果此时我们能有一个自己的流媒体服务器，不就可以随时随地的给任何人分享硬盘里的片了吗？</p><p>之前发现小区是有公网ip的，在暴力破解了宽带账号把光猫改成桥接以后，就可以直通外网了，尽管上行带宽并不富裕，但这么好的资源不拿来搭服务器简直浪费，而又“恰好”实验室发电脑是一台最新nuc11，配了11代的酷睿i7-1165G7，平时都用mac的我正愁该如何在毕业前发挥它的剩余价值，这波天时地利就被赶上了，于是就有了下面的折腾。</p><h2 id=方案探索>方案探索</h2><p>基于nas的媒体中心其实已经有不少成熟解决方案，Emby，Plex以及开源的Jellyfin都是最常用的。我们只需要吧nas里存的片共享给流媒体服务器，然后在外网暴露端口就行。这里主要又一些其他考虑：当前的主机需要在毕业后归还的，因此如何能够在保留大部分数据配置的情况下做到快速迁移整个nas系统便是我首先考虑的问题。同时之后肯定会再用一台自己组装的nas代替现在的系统，如何最大化复用硬件也是需要考虑的。因此在选择硬件和系统的时候就会有意留意以上两点。</p><h3 id=硬件>硬件</h3><p>硬件选择比较简单，主要思想通过主机+硬盘盒raid的方式来实现：</p><p>主机用的是白嫖的Intel NUC11PAHi7 猎豹峡谷，40w的TDP，硬盘从海鲜市场捡了两块4T的希捷酷狼，硬盘盒同样也是从海鲜市场捡的二手世特力双盘位带raid的硬盘盒，可以两块组硬raid1。同时配了APC的BK650M2 UPS来保证电源的稳定。</p><p>刚拿到世特力的硬盘盒时发现卖家并没有给原装的脚垫，直接放到桌子上会有挺强烈的共振，怕搞坏硬盘临时垫了块纸板，放假回来后买了带一点厚度的减震贴贴到四个角，瞬间稳稳当当，噪音也减弱了不少。4T的酷狼是5400转，本身声音也很小，房间不大我都是直接放到床边，几乎听不到什么声音，室友也表示很安静没有什么影响。</p><p>硬盘盒之后组装新nas后还可以拿来扩展新nas的空间，缺点就是usb不支持硬盘smart信息的查询，尽管它还带有一个esata的接口，不知道是否支持。</p><p><img src=/p/2022/first-nas/IMG_20220219_235223.jpg width=2736 height=3648 srcset="/p/2022/first-nas/IMG_20220219_235223_hu_8a8c44c5cfbaa7.jpg 480w, /p/2022/first-nas/IMG_20220219_235223_hu_7ae9f94856691975.jpg 1024w" loading=lazy alt=整体摆放到一起还是挺小巧的 class=gallery-image data-flex-grow=75 data-flex-basis=180px></p><h3 id=nas底层系统选择>nas底层系统选择</h3><p>在选择系统之前首先还是要明确需求，对我来说，需求主要有以下几点：</p><ol><li>可以7x24稳定运行</li><li>可以硬件直通方便媒体服务器使用硬件编解码</li><li>可以开虚拟机</li><li>对Docker容器能有较好的支持</li><li>可以方便备份迁移</li></ol><p>现在市面上几乎所有系统都可以用来做nas，因为对linux较为熟悉且为了获得原生的docker性能和体验，我在一开始就排除的windows系统，另外FreeNas（TrueNas）基于内存的缓存策略推荐使用大内存+ECC，硬件不具备也暂时不考虑，所以主要的选择在以下几个系统之间：</p><ul><li><p>EXSI、PVE等</p><p>这些虚拟机管理平台对于多虚拟机的需求还是很容易满足的，其中exsi作为企业级的平台虽然对于个人使用时免费的，但对于家用硬件设备可能存在兼容性问题，nuc上装的exsi7.0就遇到了没有网卡驱动以及显卡无法直通的问题等，有些可以自己手动解决，也有一些问题需要官方支持目前来说是无解的，这也是耗费了我不少时间去验证最后得出的结论。总之如果不是较新的硬件，没有兼容性问题的前提下，exsi易用的交互界面以及一些成熟的功能（硬件直通，虚拟机快照备份）可能会有很大优势，除此之外基于linux的pve应该可以提高较好的软硬件兼容性</p></li><li><p>OpenMediaVault</p><p>omv是我在exsi上用来体验的nas系统，开源免费，相对于TrueNas它更接近于传统nas系统，磁盘权限管理、软raid等功能都是有的，docker管理需要借助portainer插件也可以满足。这方面我没有深入体验也不过多评论了。</p></li><li><p>Ubuntu对我来说就是上手容易，相关社区生态比较活跃。我一开始也是从ubuntu开始配置起，这篇博客也主要是讲ubuntu上的一些nas的基本配置方便之后查询。在使用了一段时间后，确实可以满足我的基本需求，docker来跑一些nas服务，kvm来配置虚拟机，同时还可以当远程linux主机跑一些程序或者配置远程开发环境。总之，既然是linux，那么它几乎可以满足一切想象的需求。但缺点也很明显，不好迁移，本来这样一个系统如果是建立在exsi上可以方便的做到迁移，但是由于前述的一些原因，以及对于多硬盘的管理也不太直观便捷，有一定的维护成本。在考虑的一段时间后不得不放弃这个方案，转而寻求一些更加稳定方便的方案，于是我便注意到了Unraid。</p></li><li><p>Unraid</p><p>Unraid最吸引我的只有两点：</p><ol><li>系统安装在一块u盘之中，不占用nuc里的固态硬盘，这样固态可以拿出来当缓存，迁移系统只需要把u盘硬盘装在另一台电脑，系统配置可以完整保留。</li><li>方便直观的磁盘阵列管理，特别是unraid的理念可以方便添加减少硬盘而不需要重新构建阵列，在不追求读写性能的前提下可以说十分好用了。</li></ol><p>当然缺点就是它是一个收费的系统，价格也不便宜，我目前也在试用体验期，等一段时间的使用后可以考虑在聊聊感受。</p></li></ul><h3 id=硬件直通>硬件直通</h3><p>这里的需求主要还是用于硬件解码或者做软路由直通网卡用，前面也已经提到一些，如果不追求最新的硬件，那么exsi系统应该可以很好的满足需求，否则需要考虑原生的linux或者pve系统。另外硬件解码可以直接在docker容器里调用显卡，只需要关注所选用的系统是否有对应显卡的驱动即可。</p><h2 id=安装过程>安装过程</h2><p>这里简单记录一下当时主要的安装配置过程，想看最终效果的可以直接点<a class=link href=#%e6%9c%80%e7%bb%88%e6%95%88%e6%9e%9c>这里</a></p><h3 id=配置ups>配置UPS</h3><p>ups几乎是nas必备了，我选用的是APC的BK650M2，具体配置方法可以参考这篇文章：<a class=link href=https://www.jianshu.com/p/bb3a52916d79 target=_blank rel=noopener>使用NUT解决BK650M2-CH失联问题（一） - 简书 (jianshu.com)</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt install nut
+</span></span></code></pre></td></tr></table></div></div><h3 id=配置邮件提醒>配置邮件提醒</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo apt install mailutils
+</span></span></code></pre></td></tr></table></div></div><h3 id=磁盘分区-fdiskparted和gdisk>磁盘分区 fdisk，parted和gdisk</h3><p>fdisk:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>➜  ~ sudo fdisk /dev/sda
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Welcome to fdisk (util-linux 2.34).
+</span></span><span class=line><span class=cl>Changes will remain in memory only, until you decide to write them.
+</span></span><span class=line><span class=cl>Be careful before using the write command.
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Device does not contain a recognized partition table.
+</span></span><span class=line><span class=cl>The size of this disk is 3.7 TiB (4000787030016 bytes). DOS partition table format cannot be used on drives for volumes larger than 2199023255040 bytes for 512-byte sectors. Use GUID partition table format (GPT).
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Created a new DOS disklabel with disk identifier 0x277fe383.
+</span></span></code></pre></td></tr></table></div></div><p>由于MBR分区表并不支持2T以上的容量，必须该用GPT分区表</p><p>我们先使用parted分区:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>➜  ~ sudo parted /dev/sda
+</span></span><span class=line><span class=cl>GNU Parted 3.3
+</span></span><span class=line><span class=cl>Using /dev/sda
+</span></span><span class=line><span class=cl>Welcome to GNU Parted! Type &#39;help&#39; to view a list of commands.
+</span></span><span class=line><span class=cl>(parted) print
+</span></span><span class=line><span class=cl>Error: /dev/sda: unrecognised disk label
+</span></span><span class=line><span class=cl>Model: ST4000VN 008-2DR166 (scsi)
+</span></span><span class=line><span class=cl>Disk /dev/sda: 4001GB
+</span></span><span class=line><span class=cl>Sector size (logical/physical): 512B/512B
+</span></span><span class=line><span class=cl>Partition Table: unknown
+</span></span><span class=line><span class=cl>Disk Flags:
+</span></span><span class=line><span class=cl>(parted) mklabel gpt
+</span></span><span class=line><span class=cl>(parted) print
+</span></span><span class=line><span class=cl>Model: ST4000VN 008-2DR166 (scsi)
+</span></span><span class=line><span class=cl>Disk /dev/sda: 4001GB
+</span></span><span class=line><span class=cl>Sector size (logical/physical): 512B/512B
+</span></span><span class=line><span class=cl>Partition Table: gpt
+</span></span><span class=line><span class=cl>Disk Flags:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Number  Start  End  Size  File system  Name  Flags
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>(parted) mkpart primary 0GB 4001GB
+</span></span><span class=line><span class=cl>(parted) print
+</span></span><span class=line><span class=cl>Model: ST4000VN 008-2DR166 (scsi)
+</span></span><span class=line><span class=cl>Disk /dev/sda: 4001GB
+</span></span><span class=line><span class=cl>Sector size (logical/physical): 512B/512B
+</span></span><span class=line><span class=cl>Partition Table: gpt
+</span></span><span class=line><span class=cl>Disk Flags:
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Number  Start   End     Size    File system  Name     Flags
+</span></span><span class=line><span class=cl> 1      33.6MB  4001GB  4001GB               primary
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>(parted) quit
+</span></span><span class=line><span class=cl>Information: You may need to update /etc/fstab.
+</span></span></code></pre></td></tr></table></div></div><p>然后使用mkfs创建文件系统：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>➜  ~ sudo mkfs.ext4 /dev/sda1
+</span></span><span class=line><span class=cl>mke2fs 1.45.5 (07-Jan-2020)
+</span></span><span class=line><span class=cl>/dev/sda1 alignment is offset by 512 bytes.
+</span></span><span class=line><span class=cl>This may result in very poor performance, (re)-partitioning suggested.
+</span></span><span class=line><span class=cl>Creating filesystem with 976741831 4k blocks and 244187136 inodes
+</span></span><span class=line><span class=cl>Filesystem UUID: be74b765-92e7-4d99-a203-36863909129b
+</span></span><span class=line><span class=cl>Superblock backups stored on blocks:
+</span></span><span class=line><span class=cl>	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+</span></span><span class=line><span class=cl>	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+</span></span><span class=line><span class=cl>	102400000, 214990848, 512000000, 550731776, 644972544
+</span></span></code></pre></td></tr></table></div></div><p>parted的默认起始扇区为65535，并不是8的整数倍，并且存在不少浪费，转用gdisk试一下</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Command (? for help): p
+</span></span><span class=line><span class=cl>Disk /dev/sda: 7814037168 sectors, 3.6 TiB
+</span></span><span class=line><span class=cl>Model: 008-2DR166
+</span></span><span class=line><span class=cl>Sector size (logical/physical): 512/512 bytes
+</span></span><span class=line><span class=cl>Disk identifier (GUID): C32F7F72-31A6-4EAC-BB7A-5E9EF5E88865
+</span></span><span class=line><span class=cl>Partition table holds up to 128 entries
+</span></span><span class=line><span class=cl>Main partition table begins at sector 2 and ends at sector 33
+</span></span><span class=line><span class=cl>First usable sector is 34, last usable sector is 7814037134
+</span></span><span class=line><span class=cl>Partitions will be aligned on 2048-sector boundaries
+</span></span><span class=line><span class=cl>Total free space is 2014 sectors (1007.0 KiB)
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Number  Start (sector)    End (sector)  Size       Code  Name
+</span></span><span class=line><span class=cl>   1            2048      7814037134   3.6 TiB     8300  Linux filesystem
+</span></span></code></pre></td></tr></table></div></div><p>lsblk看一下确认分区大小</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>sda                         8:0    0   3.7T  0 disk
+</span></span><span class=line><span class=cl>└─sda1                      8:1    0   3.7T  0 part
+</span></span></code></pre></td></tr></table></div></div><p>通过mkfs在对应的分区上创建文件系统:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>➜  ~ sudo mkfs.ext4 /dev/sda1
+</span></span><span class=line><span class=cl>mke2fs 1.45.5 (07-Jan-2020)
+</span></span><span class=line><span class=cl>Creating filesystem with 976754385 4k blocks and 244195328 inodes
+</span></span><span class=line><span class=cl>Filesystem UUID: 678f5019-216a-4d94-95ab-ca4b219b0a95
+</span></span><span class=line><span class=cl>Superblock backups stored on blocks:
+</span></span><span class=line><span class=cl>	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+</span></span><span class=line><span class=cl>	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+</span></span><span class=line><span class=cl>	102400000, 214990848, 512000000, 550731776, 644972544
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Allocating group tables: done
+</span></span><span class=line><span class=cl>Writing inode tables: done
+</span></span><span class=line><span class=cl>Creating journal (262144 blocks): done
+</span></span><span class=line><span class=cl>Writing superblocks and filesystem accounting information: done
+</span></span></code></pre></td></tr></table></div></div><h3 id=自动挂载>自动挂载</h3><p>自动挂载主要是通过查询对应磁盘的UUID，然后讲挂载命令写入系统的自动挂载文件</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>blkid
+</span></span><span class=line><span class=cl>vim <span class=nb>echo</span> <span class=s2>&#34;UUID=e943fbb7-020a-4c64-a48a-2597eb2496df /data ext4 defaults 0 0&#34;</span> &gt;&gt; /etc/fstab
+</span></span><span class=line><span class=cl><span class=c1># 或者直接 vim /etc/fstab 编辑文件按上面👆的格式添加一行：设备UUID 挂载点 文件系统 挂载选项 是否备份 是否检测</span>
+</span></span><span class=line><span class=cl>sudo mount -a <span class=c1># 挂载所有fstab中的设备</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=配置nuc11显卡驱动>配置nuc11显卡驱动</h3><p>Intel对ubuntu 20.04的支持还是比较好的，可以按官方文档来装驱动，see：<a class=link href=https://dgpu-docs.intel.com/installation-guides/ubuntu/ubuntu-focal.html target=_blank rel=noopener>GPGPU: Ubuntu 20.04 (focal) (intel.com)</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt-get install <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  intel-opencl-icd <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  intel-level-zero-gpu level-zero <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>  intel-media-va-driver-non-free libmfx1
+</span></span></code></pre></td></tr></table></div></div><p>安装驱动后没有看到/dev/dri文件夹，发现iris xe显卡有一些额外的包需要安装：</p><p>see: <a class=link href=https://askubuntu.com/questions/1299067/ubuntu-20-04-no-driver-loaded-for-intel-iris-xe-graphics target=_blank rel=noopener>Ubuntu 20.04 no driver loaded for Intel Iris Xe Graphics - Ask Ubuntu</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install linux-oem-20.04
+</span></span><span class=line><span class=cl>sudo reboot
+</span></span></code></pre></td></tr></table></div></div><h3 id=wol配置>WOL配置</h3><p>前提是需要在主板bios里打开WOL设置，具体参考对应主板的bios设置方法</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># 安装工具</span>
+</span></span><span class=line><span class=cl>sudo apt install ethtool
+</span></span><span class=line><span class=cl><span class=c1># 查看网卡设备，找到对应物理网卡</span>
+</span></span><span class=line><span class=cl>ip addr
+</span></span><span class=line><span class=cl><span class=c1># 用 ethtool 查看是否支持Wake-On-Lan</span>
+</span></span><span class=line><span class=cl>sudo ethtool eht0
+</span></span></code></pre></td></tr></table></div></div><p>可能会看到以下输出：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-gdscript3 data-lang=gdscript3><span class=line><span class=cl><span class=n>ethtool</span> <span class=n>eth0</span>
+</span></span><span class=line><span class=cl><span class=n>Settings</span> <span class=k>for</span> <span class=n>eth0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supported</span> <span class=n>ports</span><span class=p>:</span> <span class=p>[</span>  <span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supported</span> <span class=n>link</span> <span class=n>modes</span><span class=p>:</span>   <span class=mi>10</span><span class=n>baseT</span><span class=o>/</span><span class=n>Half</span> <span class=mi>10</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>100</span><span class=n>baseT</span><span class=o>/</span><span class=n>Half</span> <span class=mi>100</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>1000</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>2500</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supported</span> <span class=n>pause</span> <span class=n>frame</span> <span class=n>use</span><span class=p>:</span> <span class=n>Symmetric</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supports</span> <span class=n>auto</span><span class=o>-</span><span class=n>negotiation</span><span class=p>:</span> <span class=n>Yes</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supported</span> <span class=n>FEC</span> <span class=n>modes</span><span class=p>:</span> <span class=n>Not</span> <span class=n>reported</span>
+</span></span><span class=line><span class=cl>        <span class=n>Advertised</span> <span class=n>link</span> <span class=n>modes</span><span class=p>:</span>  <span class=mi>10</span><span class=n>baseT</span><span class=o>/</span><span class=n>Half</span> <span class=mi>10</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>100</span><span class=n>baseT</span><span class=o>/</span><span class=n>Half</span> <span class=mi>100</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>1000</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>                                <span class=mi>2500</span><span class=n>baseT</span><span class=o>/</span><span class=n>Full</span>
+</span></span><span class=line><span class=cl>        <span class=n>Advertised</span> <span class=n>pause</span> <span class=n>frame</span> <span class=n>use</span><span class=p>:</span> <span class=n>Symmetric</span>
+</span></span><span class=line><span class=cl>        <span class=n>Advertised</span> <span class=n>auto</span><span class=o>-</span><span class=n>negotiation</span><span class=p>:</span> <span class=n>Yes</span>
+</span></span><span class=line><span class=cl>        <span class=n>Advertised</span> <span class=n>FEC</span> <span class=n>modes</span><span class=p>:</span> <span class=n>Not</span> <span class=n>reported</span>
+</span></span><span class=line><span class=cl>        <span class=n>Speed</span><span class=p>:</span> <span class=mi>2500</span><span class=n>Mb</span><span class=o>/</span><span class=n>s</span>
+</span></span><span class=line><span class=cl>        <span class=n>Duplex</span><span class=p>:</span> <span class=n>Full</span>
+</span></span><span class=line><span class=cl>        <span class=n>Auto</span><span class=o>-</span><span class=n>negotiation</span><span class=p>:</span> <span class=n>on</span>
+</span></span><span class=line><span class=cl>        <span class=n>Port</span><span class=p>:</span> <span class=n>Twisted</span> <span class=n>Pair</span>
+</span></span><span class=line><span class=cl>        <span class=n>PHYAD</span><span class=p>:</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>        <span class=n>Transceiver</span><span class=p>:</span> <span class=n>internal</span>
+</span></span><span class=line><span class=cl>        <span class=n>MDI</span><span class=o>-</span><span class=n>X</span><span class=p>:</span> <span class=n>off</span> <span class=p>(</span><span class=n>auto</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>Supports</span> <span class=n>Wake</span><span class=o>-</span><span class=n>on</span><span class=p>:</span> <span class=n>pumbg</span>
+</span></span><span class=line><span class=cl>        <span class=n>Wake</span><span class=o>-</span><span class=n>on</span><span class=p>:</span> <span class=n>g</span>
+</span></span><span class=line><span class=cl>        <span class=n>Current</span> <span class=n>message</span> <span class=n>level</span><span class=p>:</span> <span class=mh>0x00000007</span> <span class=p>(</span><span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                               <span class=n>drv</span> <span class=n>probe</span> <span class=n>link</span>
+</span></span><span class=line><span class=cl>        <span class=n>Link</span> <span class=n>detected</span><span class=p>:</span> <span class=n>yes</span>
+</span></span></code></pre></td></tr></table></div></div><p>主要关注这两行:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>Supports Wake-on: pumbg
+</span></span><span class=line><span class=cl>Wake-on: g
+</span></span></code></pre></td></tr></table></div></div><p>上面的pumbg代表支持唤醒的类型：</p><p><img src=/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02.png width=328 height=244 srcset="/p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_7bcf1dcb5c8fc09f.png 480w, /p/2022/first-nas/ScreenShot_2022-03-20_at_22.23.02_hu_a5005e65e6d1fdf0.png 1024w" loading=lazy alt=唤醒类型 class=gallery-image data-flex-grow=134 data-flex-basis=322px></p><p>下面表示当前的状态，如果是<code>d</code>代表<code>disable</code>，可以通过下面的方式开启：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sudo ethtool -s eth0 wol g
+</span></span></code></pre></td></tr></table></div></div><p>其他配置可以参考这篇文章：<a class=link href=https://necromuralist.github.io/posts/enabling-wake-on-lan/ target=_blank rel=noopener>Enabling Wake-On-LAN (In Ubuntu 20.10) | The Cloistered Monkey (necromuralist.github.io)</a></p><h3 id=exfat-in-ubuntu>exfat in ubuntu</h3><p>由于我之前为了在多平台之间通用，移动硬盘被格式化为零exfat格式，linux默认读写exfat的时候偶尔会有问题，安装额外的包来获得更稳定的兼容：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt install exfat-utils
+</span></span></code></pre></td></tr></table></div></div><h3 id=snap-docker>snap docker</h3><p>配置好docker compose后，启动遇到了下面的问题：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>➜ docker-compose up -d
+</span></span><span class=line><span class=cl>Starting jellyfin ...
+</span></span><span class=line><span class=cl>Starting webdav      ... error
+</span></span><span class=line><span class=cl>Starting qbittorrent ...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Starting qbittorrent ... error
+</span></span><span class=line><span class=cl>Starting jellyfin    ... error
+</span></span><span class=line><span class=cl>ERROR: for qbittorrent  Cannot start service qbittorrent: error while creating mount source path &#39;/data/config/qbittorrent&#39;: mkdir /data: read-only file system
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ERROR: for jellyfin  Cannot start service jellyfin: error while creating mount source path &#39;/data/config/jellyfin&#39;: mkdir /data: read-only file system
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ERROR: for webdav  Cannot start service webdav: error while creating mount source path &#39;/data/share&#39;: mkdir /data: read-only file system
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ERROR: for qbittorrent  Cannot start service qbittorrent: error while creating mount source path &#39;/data/config/qbittorrent&#39;: mkdir /data: read-only file system
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ERROR: for jellyfin  Cannot start service jellyfin: error while creating mount source path &#39;/data/config/jellyfin&#39;: mkdir /data: read-only file system
+</span></span><span class=line><span class=cl>ERROR: Encountered errors while bringing up the project.
+</span></span></code></pre></td></tr></table></div></div><p>查了一下，是snap自带docker的问题，删除ubuntu自带的docker重新安装官方的docker即可</p><p><a class=link href=https://stackoverflow.com/questions/52526219/docker-mkdir-read-only-file-system target=_blank rel=noopener>ubuntu - Docker - mkdir read-only file system - Stack Overflow</a></p><h3 id=jellyfin-硬解>Jellyfin 硬解</h3><p>实验室给的这个nuc11的这块1165g7自带来一个蓝厂最新的iris Xe核显，96EU，性能应该是同代核显里最强的了，据说能有mx350的水平？不拿来当解码器真是浪费了。</p><p>但问题也就出在这块核显实在太新了，需要新的驱动程序，配置方式也有一些不同，因此考虑显卡直通之前，一定先要调研好软硬件的兼容性。</p><p>Jellyfin的官方文档：<a class=link href=https://jellyfin.org/docs/general/administration/hardware-acceleration.html#tips-for-intel-gen9-and-gen11-when-using-vaapi-or-qsv-on-linux target=_blank rel=noopener>Hardware Acceleration | Documentation - Jellyfin Project</a>，中有这么一段话：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>For Intel Comet Lake or newer iGPUs, the legacy i965 VA-API driver is incompatible with your hardware. Please follow the instructions from Configuring Intel QuickSync(QSV) on Debian/Ubuntu to get the newer iHD driver.
+</span></span></code></pre></td></tr></table></div></div><p>所以不能在使用之前的VAAPI，转而使用最新的QuickSync方式：</p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x.png width=1686 height=738 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_15c7e3152d6ede6a.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.26.01@2x_hu_f9268461fdf9da4b.png 1024w" loading=lazy alt=ScreenShot_2022-01-27_at_18.26.01@2x class=gallery-image data-flex-grow=228 data-flex-basis=548px></p><p>11代cpu核显需要使用新的驱动，而且因为licenses的原因docker镜像里不能包含驱动，所以需要手动安装：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt update
+</span></span><span class=line><span class=cl>sudo apt install vainfo intel-media-va-driver-non-free -y
+</span></span></code></pre></td></tr></table></div></div><p>安装好驱动后，<code>ls /dev/dri</code>检查一下是否有对应的目录</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>➜  ~ ls /dev/dri
+</span></span><span class=line><span class=cl>by-path  card0  renderD128
+</span></span></code></pre></td></tr></table></div></div><p>然后就可以在docker-compose文件中把显卡驱动共享给容器，同时记得需要给容器添加到render的用户组里</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;3.9&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>services</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>jellyfin</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>linuxserver/jellyfin:10.7.7</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>jellyfin</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    	</span>- <span class=l>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>group_add</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>109 # add to render group, see</span><span class=p>:</span><span class=w> </span><span class=l>cat /etc/group | grep render</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    	</span>- <span class=l>...</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>devices</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/dev/dri:/dev/dri</span><span class=w> </span><span class=c># Intel 集显驱动</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p>或者把当前用户添加到render组同时通过设置容器内的启动用户为当前用户来实现统一的目的</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo usermod -a -G render <span class=o>[</span>username<span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>解码 2160p HEVC 10bit视频测试一下，安装intel-gpu-tool查看占用，可以看到确实有用到显卡的解码性能：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo apt install intel-gpu-tools
+</span></span><span class=line><span class=cl>sudo intel-gpu-top
+</span></span><span class=line><span class=cl>intel-gpu-top - 1100/1299 MHz<span class=p>;</span>    0% RC6<span class=p>;</span> ----- <span class=o>(</span>null<span class=o>)</span><span class=p>;</span>     <span class=m>3610</span> irqs/s
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>      IMC reads:   ------ <span class=o>(</span>null<span class=o>)</span>/s
+</span></span><span class=line><span class=cl>     IMC writes:   ------ <span class=o>(</span>null<span class=o>)</span>/s
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>          ENGINE      BUSY                                                                                                                    MI_SEMA MI_WAIT
+</span></span><span class=line><span class=cl>     Render/3D/0  100.00% <span class=p>|</span>████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉<span class=p>|</span>     36%      0%
+</span></span><span class=line><span class=cl>       Blitter/0    0.00% <span class=p>|</span>                                                                                                                 <span class=p>|</span>      0%      0%
+</span></span><span class=line><span class=cl>         Video/0   46.35% <span class=p>|</span>████████████████████████████████████████████████████▎                                                            <span class=p>|</span>      0%      0%
+</span></span><span class=line><span class=cl>         Video/1   39.64% <span class=p>|</span>████████████████████████████████████████████▊                                                                    <span class=p>|</span>      0%      0%
+</span></span><span class=line><span class=cl>  VideoEnhance/0   38.52% <span class=p>|</span>███████████████████████████████████████████▌                                                                     <span class=p>|</span>      0%      0%
+</span></span></code></pre></td></tr></table></div></div><h3 id=qbittorrent>qBittorrent</h3><p>直接访问页面会提示Unauthorized：<a class=link href=https://github.com/qbittorrent/qBittorrent/issues/8095#issuecomment-472740702 target=_blank rel=noopener>qBittorent UI returns 401 (blank page) when accessed through Kubernetes proxy · Issue #8095 · qbittorrent/qBittorrent (github.com)</a></p><p>需要在配置文件<code>qBittorrent.conf</code>加一行（注意需要通过映射目录做好配置的持久化）</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>WebUI\HostHeaderValidation=false
+</span></span></code></pre></td></tr></table></div></div><p>重启容器，然后访问页面，使用默认账户admin，密码adminadmin登陆</p><h3 id=私有云盘>私有云盘</h3><p>这里可以选择seafile和nextcloud，或者直接搭一个webdav服务器（可以参考最后的docker-compose配置），不过测试了下性能不太好。</p><h2 id=最终效果>最终效果</h2><p>做好端口映射后公网就可以访问网页：</p><p>我在这里顺手为域名去加了证书来支持https访问</p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x.png width=2384 height=1716 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_ecad524f28a3f617.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.45.53@2x_hu_c73223b39314fb7d.png 1024w" loading=lazy alt=影片介绍页 class=gallery-image data-flex-grow=138 data-flex-basis=333px></p><p>直接访问网页是最方便的方式，但是受限与浏览器的原因，Chromium系的浏览器不能使用hevc的硬解，win10下的Edge应该可以通过额外的插件来实现hevc硬解，因此，想要通过客户端硬解来节省可怜的小水管带宽的话，可以使用Jellyfin的客户端：<a class=link href=https://github.com/jellyfin/jellyfin-media-player target=_blank rel=noopener>jellyfin/jellyfin-media-player: Jellyfin Desktop Client based on Plex Media Player (github.com)</a>，或者用safari等浏览器</p><p>最好提前用tmm等工具搜刮一下相关的介绍/图片补充元数据，然后统一重命名（为了不妨碍做种，我选择用<code>cp -al</code>硬连接到Jellyfin的目录，再改名，这样也不会占用额外的空间）：</p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x.png width=3104 height=1974 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_718b7843e8f92f71.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.55.35@2x_hu_78eb5270b3d291ee.png 1024w" loading=lazy alt=海报墙 class=gallery-image data-flex-grow=157 data-flex-basis=377px></p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x.png width=3104 height=1974 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_f4898f41db607784.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.21@2x_hu_74a7fcbf62fe0602.png 1024w" loading=lazy alt=少歌天下第一 class=gallery-image data-flex-grow=157 data-flex-basis=377px></p><p>可以看到Jellyfin演员配图质量还是挺高的：</p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x.png width=3104 height=1974 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_a4c712bbacbe84b0.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_17.59.49@2x_hu_99caa720c66f8fae.png 1024w" loading=lazy alt=演员介绍及相关推荐 class=gallery-image data-flex-grow=157 data-flex-basis=377px></p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x.png width=3104 height=1974 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_f990a0b5d0949e82.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.02.26@2x_hu_a6adc795fffa0bdc.png 1024w" loading=lazy alt=播放页 class=gallery-image data-flex-grow=157 data-flex-basis=377px></p><p>转码速度还是挺快的，瓶颈主要是在家里的上行带宽只有可怜的10m多，所以网页端转码，最多只能开到1080p，码率也不敢太高更不可能多人一起看了， 而如果用客户端或者safari浏览器硬解，4K direct几乎可以十分流畅的播放：</p><p><img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x.png width=594 height=1252 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_f1d001434c9b529f.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.49.54@2x_hu_879f6e234e801826.png 1024w" loading=lazy alt=浏览器转码信息 class=gallery-image data-flex-grow=47 data-flex-basis=113px> <img src=/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x.png width=494 height=712 srcset="/p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_9dc5d0823fc2075.png 480w, /p/2022/first-nas/ScreenShot_2022-01-27_at_18.51.17@2x_hu_c0af5dbd1ef965dc.png 1024w" loading=lazy alt=客户端直推信息 class=gallery-image data-flex-grow=69 data-flex-basis=166px></p><h3 id=docker-compose配置参考>docker compose配置参考</h3><p>最后附一个docker-compose的配置参考：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span><span class=lnt>75
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;3.9&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>services</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>jellyfin</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>linuxserver/jellyfin:10.7.7</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>jellyfin</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>8096</span><span class=p>:</span><span class=m>8096</span><span class=w> </span><span class=c># web ui</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>8920</span><span class=p>:</span><span class=m>8920</span><span class=w> </span><span class=c># https</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>7359</span><span class=p>:</span><span class=m>7359</span><span class=l>/udp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>1900</span><span class=p>:</span><span class=m>1900</span><span class=l>/udp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>group_add</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>109 # add to render group, see</span><span class=p>:</span><span class=w> </span><span class=l>cat /etc/group | grep render</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PUID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PGID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>TZ=Asia/Shanghai</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/config/jellyfin:/config</span><span class=w> </span><span class=c># 配置</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>jfcache:/cache</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/share/media:/data</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/share/pt/qbittorrent/downloads/:/data/downloads:ro</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/cert:/cert</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>devices</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/dev/dri:/dev/dri</span><span class=w> </span><span class=c># Intel 集显驱动</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>unless-stopped</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>qbittorrent</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>linuxserver/qbittorrent:4.4.0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>qbittorrent</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>6881</span><span class=p>:</span><span class=m>6881</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>6881</span><span class=p>:</span><span class=m>6881</span><span class=l>/udp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>8080</span><span class=p>:</span><span class=m>8080</span><span class=w> </span><span class=c># web ui</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PUID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>PGID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>TZ=Asia/Shanghai</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>WEBUI_PORT=8080</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/config/qbittorrent:/config</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/share/pt/qbittorrent/downloads:/downloads</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/cert:/cert</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>unless-stopped</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>webdav</span><span class=p>:</span><span class=w> </span><span class=c># webdav服务器，外网使用性能不太好</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>hacdias/webdav:v4.1.1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>webdav</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>8081</span><span class=p>:</span><span class=m>80</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>TZ=Asia/Shanghai</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>command</span><span class=p>:</span><span class=w> </span><span class=p>[</span><span class=w> </span><span class=s2>&#34;--config&#34;</span><span class=p>,</span><span class=w> </span><span class=s2>&#34;/opt/webdav.config.yml&#34;</span><span class=w> </span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/share:/data</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/config/webdav/webdav.config.yml:/opt/webdav.config.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/cert:/cert</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>unless-stopped</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tmm</span><span class=p>:</span><span class=w> </span><span class=c># 一个影音刮削软件，可以直接部署到服务器上通过vnr远程使用</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>tinymediamanager/tinymediamanager:4.2.5.1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>container_name</span><span class=p>:</span><span class=w> </span><span class=l>tmm</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=m>4000</span><span class=p>:</span><span class=m>4000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>environment</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>USER_ID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>GROUP_ID=1000</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>TZ=Asia/Shanghai</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/config/tinymediamanager:/data</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/share/media:/media</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=l>/data/cert:/cert</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>restart</span><span class=p>:</span><span class=w> </span><span class=l>unless-stopped</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>volumes</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>jfcache</span><span class=p>:</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><p><img src=/images/notbyai/en/Written-By-Human-Not-By-AI-Badge-white.png loading=lazy alt=notbyai-white>
+<img src=/images/notbyai/jp/Written-By-Human-Not-By-AI-Badge-black.png loading=lazy alt=notbyai-black></p></section><footer class=article-footer><section class=article-tags><a href=/tags/nas/>NAS</a>
+<a href=/tags/nuc/>NUC</a>
+<a href=/tags/jellyfin/>Jellyfin</a>
+<a href=/tags/linux/>Linux</a></section><section class=article-copyright><svg class="icon icon-tabler icon-tabler-copyright" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><path d="M14.5 9a3.5 4 0 100 6"/></svg>
+<span>Licensed under CC BY-NC-SA 4.0</span></section></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".main-article");renderMathInElement(e,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><aside class=related-content--wrapper><h2 class=section-title>相关文章</h2><div class=related-content><div class="flex article-list--tile"><article class=has-image><a href=/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/><div class=article-image><img src=/p/2019/unix%E7%B3%BB%E7%BB%9F%E5%88%86%E6%9E%90%E9%94%81/81377457_p2.5584b6cb1e2cc2c5227c87c0d3770dd9_hu_18abea77596e26b8.jpg width=250 height=150 loading=lazy alt="Featured image of post Unix系统分析——锁" data-hash="md5-VYS2yx4swsUifIfA03cN2Q=="></div><div class=article-details><h2 class=article-title>Unix系统分析——锁</h2></div></a></article><article class=has-image><a href=/p/2025/server-side-apply/><div class=article-image><img src=/p/2025/server-side-apply/cover.72869207cdf4b587cbddf09967204ddf_hu_595c46de35395129.jpg width=250 height=150 loading=lazy alt="Featured image of post 为什么你需要Server-Side Apply" data-key=server-side-apply data-hash="md5-coaSB830tYfL3fCZZyBN3w=="></div><div class=article-details><h2 class=article-title>为什么你需要Server-Side Apply</h2></div></a></article><article class=has-image><a href=/p/2022/go118-new-growslice/><div class=article-image><img src=/p/2022/go118-new-growslice/96944986_p0.e27535ffc06304a5bd5ea65cb5633c38_hu_dcc665f2746ad8c8.jpeg width=250 height=150 loading=lazy alt="Featured image of post Go1.18：新的切片扩容策略" data-key=go118-new-growslice data-hash="md5-4nU1/8BjBKW9XqZctWM8OA=="></div><div class=article-details><h2 class=article-title>Go1.18：新的切片扩容策略</h2></div></a></article><article class=has-image><a href=/p/2021/amazing-go-interface/><div class=article-image><img src=/p/2021/amazing-go-interface/golang.a4569e34ee3c8189513108a2f7bedc42_hu_a2d13787f74ffb4a.jpeg width=250 height=150 loading=lazy alt="Featured image of post Amazing Go Interface" data-hash="md5-pFaeNO48gYlRMQii977cQg=="></div><div class=article-details><h2 class=article-title>Amazing Go Interface</h2></div></a></article><article class=has-image><a href=/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/><div class=article-image><img src=/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.6070a430e42cf2e95d720bb561ce38b0_hu_ea2012bb3346cad3.png width=250 height=150 loading=lazy alt="Featured image of post 函数式程序设计的影响与应用" data-hash="md5-YHCkMOQs8uldcgu1Yc44sA=="></div><div class=article-details><h2 class=article-title>函数式程序设计的影响与应用</h2></div></a></article></div></div></aside><div class=disqus-container><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//kagayablog.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><style>.disqus-container{background-color:var(--card-background);border-radius:var(--card-border-radius);box-shadow:var(--shadow-l1);padding:var(--card-padding)}</style><script>window.addEventListener("onColorSchemeChange",e=>{typeof DISQUS=="object"&&DISQUS.reset({reload:!0})})</script><footer class=site-footer><section class=copyright>&copy;
+2019 -
+2025 かがやの部屋</section><section class=powerby>Hope for the best and prepare for the worst.<br>使用 <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> 构建<br>主题 <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.30.0>Stack</a></b> 由 <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a> 设计</section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

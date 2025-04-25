@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>FunctionalProgramming on かがやの部屋</title><link>https://blog.kagaya.fun/tags/functionalprogramming/</link><description>Recent content in FunctionalProgramming on かがやの部屋</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 27 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/functionalprogramming/index.xml" rel="self" type="application/rss+xml"/><item><title>函数式程序设计的影响与应用</title><link>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</link><pubDate>Sat, 27 Mar 2021 00:00:00 +0000</pubDate><guid>https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/</guid><description>&lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/87461089_p1.png" alt="Featured image of post 函数式程序设计的影响与应用" />&lt;h2 id="简介">简介
+&lt;/h2>&lt;p>函数式编程（英语：functional programming）或称函数程序设计、泛函编程，在Wiki中是这么定义的：一种编程范式，它将电脑运算视为函数运算，并且避免使用程序状态以及易变对象&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>。比起指令式编程，函数式编程更加强调程序执行的结果而非执行的过程，倡导利用若干简单的执行单元让计算结果不断渐进，逐层推导复杂的运算，而不是设计一个复杂的执行过程。&lt;/p>
+&lt;p>尽管函数式编程已经诞生了很久的时间，但是随着分布式并行计算的兴起，函数式编程独特的设计逻辑以及自诞生之初所具备的特性往往会给我们一种新的视角来看待程序设计。每当我在使用函数式的思维来编写代码时，往往感觉自己就像在做数学计算，在代码中撰写一行行公式，给编程带来一种独特的体验。&lt;/p>
+&lt;p>当函数成为编程语言中的一等公民（first class citizen）时，给我们的编程思维都会带来很大的影响。当然，这会带来一些显而易见的好处，但是如同其他新技术一样，函数式的方法也存在一定的局限性。本文会以Haskell和Go两种语言为例，从函数式语言的发展讲起，紧接着讲述函数式语言在一些领域的应用（如近几年火热的Cloud Native），最后总结了目前人们对于函数式语言的优越性与局限性的看法。从以上三个方面阐释函数式程序设计的影戏那个与应用&lt;/p>
+&lt;h2 id="函数式语言的发展">函数式语言的发展
+&lt;/h2>&lt;h3 id="haskell">Haskell
+&lt;/h3>&lt;p>Haskell是一种标准化的，通用的纯函数式编程语言，有惰性求值和强静态类型。它的命名源自美国逻辑学家哈斯凯尔·加里，他在数理逻辑方面上的工作使得函数式编程语言有了广泛的基础。在Haskell中，“函数是第一类对象”。作为一门函数编程语言，主要控制结构是函数。Haskell语言是1990年在编程语言Miranda的基础上标准化的，并且以λ演算为基础发展而来&lt;sup id="fnref:2">&lt;a href="#fn:2" class="footnote-ref" role="doc-noteref">2&lt;/a>&lt;/sup>。&lt;/p>
+&lt;p>与命令式编程语言不同，Haskell是一种纯函数式编程语言。虽然它现在仍然局限在学术界和需要大量使用高等数学的行业如金融业，但是这并不意味着数值计算。&lt;/p>
+&lt;p>功能编程范式依赖于编程功能 ，其行为为数学函数，允许创建不修改外部数据或具有与外部上下文的可观察的交互功能。可观察的交互是指将数据写入文件或引发异常的事情。在技术上这意味着功能没有 side-effects，这也可能成为一等公民的功能。函数和其他类型一样，也可以作为其他函数的参数。&lt;/p>
+&lt;h3 id="fp-in-golang">FP in Golang
+&lt;/h3>&lt;p>Go语言是Google开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。Robert Griesemer、Rob Pike及肯·汤普逊于2007年9月开始设计Go，稍后Ian Lance Taylor、Russ Cox加入项目。Go是基于Inferno操作系统所开发的。Go于2009年11月正式宣布推出，成为开放源代码项目，支持Linux、macOS、Windows等操作系统。&lt;/p>
+&lt;p>尽管Go不是专门设计的函数式编程语言，但其语法支持我们使用一些函数式的编程思维。只需要满足两个规则：&lt;/p>
+&lt;ul>
+&lt;li>没有数据赋值：数据对象赋值后不再改变&lt;/li>
+&lt;li>没有隐藏状态：隐藏在内部的状态在设计的使用就应该被避免。对于函数式编程来说，状态没有消失，而是变得明确而且可见。&lt;/li>
+&lt;/ul>
+&lt;p>当我们在Go中使用了函数式的设计思维，意味着：&lt;/p>
+&lt;ul>
+&lt;li>No side-effect：函数和操作不应该在其函数范围外更改任何变量，函数应该将值返回给调用方，并且不影响任何外部状态，程序也更容易被理解，从而无需担心任何的“副作用”。&lt;/li>
+&lt;li>使用纯函数：函数应该是是幂等的，同样的入参只会得到相同的结果。一个函数的返回值应该只基于输入参数而没有任何的side-effect或依赖任何的全局变量。&lt;/li>
+&lt;li>Clean Code&lt;sup id="fnref:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>：因为函数没有隐藏的状态，可以更好的理解方法、函数、类、以及整个项目。&lt;/li>
+&lt;/ul>
+&lt;p>在Golang中，可以通过7种方法来实现函数式的编程&lt;sup id="fnref:4">&lt;a href="#fn:4" class="footnote-ref" role="doc-noteref">4&lt;/a>&lt;/sup>，其中包含像高阶函数、柯里化、闭包函数、纯函数等语法在Go语言中都是支持的。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// this is a higher-order-function that returns a function&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">x&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">y&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// A function is returned here as closure&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// variable x is obtained from the outer scope of this method and memorized in the closure&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">y&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">x&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="nx">y&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// we are currying the add method to create more variations&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">var&lt;/span> &lt;span class="nx">add10&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nf">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">var&lt;/span> &lt;span class="nx">add20&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nf">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kd">var&lt;/span> &lt;span class="nx">add30&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nf">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">30&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">add10&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 15&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">add20&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 25&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">add30&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">5&lt;/span>&lt;span class="p">))&lt;/span> &lt;span class="c1">// 35&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>但是对于函数式编程中常用的递归调用来说，由于Go语言的编译器不支持对尾递归的调用优化，只能采用纯递归的方式，导致在递归时需要考虑调用堆栈的大小，因此在编写递归程序的时候我们不得不考虑递归的调用深度，或者改写为迭代方式，防止内存爆栈导致的程序异常。&lt;/p>
+&lt;p>Golang一般使用了strict/eager的计算方式（除了&lt;code>&amp;amp;&amp;amp;&lt;/code>和&lt;code>||&lt;/code>运算符），这种方式与函数式所推崇的延迟求值相反，会在调用时立即计算出对应的结果，对于延迟求值来说，我们可以使用一些方法来模拟，像是高阶函数的方式，也可以利用Go语言中的一些特性，如sync包和channel结构来进行模拟。&lt;/p>
+&lt;p>一个高阶函数模拟的延迟求值方法，通过传入函数名而不是传入函数的调用，避免在传参时就计算出结果，而是在函数最后return后才计算对应的结果：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">add&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">x&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;executing add&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">x&lt;/span> &lt;span class="o">+&lt;/span> &lt;span class="nx">x&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">multiply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">x&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;executing multiply&amp;#34;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">x&lt;/span> &lt;span class="o">*&lt;/span> &lt;span class="nx">x&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">addOrMultiply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">true&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">add&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">multiply&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">addOrMultiply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kc">false&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">add&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">multiply&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="mi">4&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// This is now a higher-order-function hence evaluation of the functions are delayed in if-else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">addOrMultiply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">add&lt;/span> &lt;span class="kt">bool&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">onAdd&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">onMultiply&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">t&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">t&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kt">int&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="nx">add&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nf">onAdd&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nf">onMultiply&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">t&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后，是关于函数式程序设计中的应用透明性：&lt;/p>
+&lt;blockquote>
+&lt;p>Functional programs do not have assignment statements, that is, the value of a variable in a functional program never changes once defined. This eliminates any chances of side effects because any variable can be replaced with its actual value at any point of execution. So, functional programs are referentially transparent.&lt;/p>&lt;/blockquote>
+&lt;p>Go语言中实现引用透明的方法是通过避免引用传递或指针传递的使用。虽然在Go语言中都是通过值传递的方式来传递参数，但是像切片或者Map这样的数据结构是通过指针的方式来进行传递。因此我们在使用函数式的程序设计思路来构造我们的程序时，应当注意引用透明性，避免在函数的计算结果受外部的状态影响或者影响外部的状态。&lt;/p>
+&lt;p>对于Go语言来说，由函数式所带来的引用透明性可以带来很多显而易见的好处，比如我们可以缓存每一次函数调用的结果来达到空间换时间的目的，又或者幂等的函数使得函数的计算结构变得可预测。同时函数式天生的模块化设计理念可以让自底向上的程序设计变得更加容易。程序的调试也变得更加简单，由于函数都是各自独立的，他们的计算结果只依赖于各自的输入参数。&lt;/p>
+&lt;p>最后一点也是十分重要的，由于Go语言设计之初是为了更好的支持高并发场景，而函数式设计的方法天生就支持并发运行的场景，因为这些方法不需要共享数据，无信号量、无监控、无锁、从而也不会导致竞争危害和死锁的发生&lt;sup id="fnref1:3">&lt;a href="#fn:3" class="footnote-ref" role="doc-noteref">3&lt;/a>&lt;/sup>，与Go语言的高并发设计理念不谋而合。&lt;/p>
+&lt;h2 id="函数式语言的应用">函数式语言的应用
+&lt;/h2>&lt;h3 id="fp-in-compiler">FP in Compiler
+&lt;/h3>&lt;p>在Go语言的编译器在生成中间代码（IR）时，采用了静态单赋值的特性（Static Single Assignment form、通常简写为SSA form或是SSA），如果中间代码具有静态单赋值的特性，那么每个变量就只会被赋值一次。尽管某些代码在循环中执行了很多次，但是单赋值只表示程序文本的静态属性而不是执行的动态属性。&lt;/p>
+&lt;p>将程式码转换为SSA形式，最简单的方法，就是将每个被赋值的变数，以一个新的变数来取代，而新的变数名称则为一个带着编号的旧变数。SSA通过加一个特别的描述，称之为&lt;em>Φ 函式&lt;/em>，来实现对于变量赋值来源不确定时的表示&lt;sup id="fnref:5">&lt;a href="#fn:5" class="footnote-ref" role="doc-noteref">5&lt;/a>&lt;/sup>。&lt;/p>
+&lt;p>在《SSA is Functional Programming》&lt;sup id="fnref:6">&lt;a href="#fn:6" class="footnote-ref" role="doc-noteref">6&lt;/a>&lt;/sup>这篇文章中，作者提出了一种观点，认为SSA form其实是一种函数式编程，对于一次赋值，左侧是对应函数的形式参数，右侧是对应函数调用的实际参数。通过函数之间的嵌套调用，可以很清楚的表现SSA中的变量的实际作用范围。&lt;/p>
+&lt;p>因此，对于SSA来说，SSA form的一个重要属性是，变量的定义决定了每次的使用（或在C函数中使用的情况下，支配使用节点的前驱节点）。 SSA的解释中通常未声明此属性，但是对SSA进行许多分析和优化是必需的-它是SSA语义的一部分。 在具有嵌套作用域的函数式程序中，此限制已明确且静态地编码到函数嵌套的结构中。 变量范围的概念有助于我们构造中间形式。&lt;/p>
+&lt;p>而对于使用函数式程序设计的成语言来说，使用SSA的过程中，往往会绘制带有方框，任务，条件和控制流边缘的流程图。 这种表示法虽然容易被滥用，但通常更适合于解释思想以及直观地可视化地表现算法和状态转换。 函数式程序员可以借鉴这样一种方法，避免迷失在函数式编程的概念中。&lt;/p>
+&lt;h3 id="fp-in-parallel-programming">FP in Parallel Programming
+&lt;/h3>&lt;p>为了提高计算机的运行速度和系统的处理能力，在总体设计和逻辑设计中广泛采用并行操作技术，使各部件并行工作。要求操作系统具有并发性及资源共享，可以采用并行程序设计的方法。&lt;/p>
+&lt;p>对于命令式的语言来说，进行并行程序设计时会遇到许多困难&lt;sup id="fnref:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup>：&lt;/p>
+&lt;ul>
+&lt;li>程序员必须构思一个符合规范的并行算法&lt;/li>
+&lt;li>程序员需要将算法映射到编程语言提供的抽象上：
+&lt;ul>
+&lt;li>需要标识一定数量的顺序活动，成为可以被并行执行的任务或者进程&lt;/li>
+&lt;li>在任务之间定义接口，使之能够安全的进行数据同步和通信&lt;/li>
+&lt;li>任务之间任何的数据共享都需要程序员进行特殊保护&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>在某些系统中，程序员还需要负责将任务映射到对应处理器上，并确保可以和任何执行该任务的处理器进行通信&lt;/li>
+&lt;li>程序员往往不能干涉具体的调度细节，这样导致无法确定处理器下一步会执行哪一个任务，因此程序员还需要保证任务集不会产生死锁等问题&lt;/li>
+&lt;/ul>
+&lt;p>而与之相对比的函数式编程语言来说，对于解决并行程序设计有着先天的优势&lt;sup id="fnref1:7">&lt;a href="#fn:7" class="footnote-ref" role="doc-noteref">7&lt;/a>&lt;/sup>：&lt;/p>
+&lt;ul>
+&lt;li>不需要新的语言构造来表达并行性，或者并发任务之间的同步和通信。并发是完全隐式的，如果计算机有空间和容量执行任务，那么就会动态的产生新任务&lt;/li>
+&lt;li>无需采用特殊措施来保护并发任务的共享数据&lt;/li>
+&lt;li>相比顺序编程，并发的函数式编程并不会让程序功能变得复杂。因为都使用相同的技术，也没有新的结构被添加进来。&lt;/li>
+&lt;li>程序结果是确定的，也就是说，额外的的因素例如调度策略并不会使得每一次执行的结果不同&lt;/li>
+&lt;/ul>
+&lt;p>并行函数式编程是一种处于青春期的技术。它的潜力是巨大的，但是在它获得广泛信誉之前，需要在实际应用中进行实践测试。幸运的是，现在可以实现支持实际应用程序的实现，并且可以预期，在未来几年中，使用函数式编程的使用将大大增加。使函数式程序具有吸引力的原因正是那些对分布式计算系统和运行时资源管理系统的大量需求。但是，随着实现的改进，函数式编程的成本应变得越来越可忽略。随着软件变得越来越复杂，其收益将越来越有价值。&lt;/p>
+&lt;h3 id="fp-in-cloud">FP in Cloud
+&lt;/h3>&lt;p>云原生是一种构建和运行应用程序的方法，是一套技术体系和方法论。云原生（CloudNative）是一个组合词，Cloud+Native。Cloud表示应用程序位于云中，而不是传统的数据中心；Native表示应用程序从设计之初即考虑到云的环境，原生为云而设计，在云上以最佳姿势运行，充分利用和发挥云平台的弹性+分布式优势。可以简单的将云原生理解为：&lt;strong>云原生 = 微服务 + DevOps + 持续交付 + 容器化&lt;/strong>&lt;/p>
+&lt;h4 id="性能场景">性能场景
+&lt;/h4>&lt;p>云原生技术中最有具有代表性的技术之一，便是无服务Serverless技术。在Serverless中，不仅对基础设施进行了虚拟化，抽象化管理，而且可以按需启动和支付需要的资源（CPU、memory、网络带宽）。这样人们可以只考虑架构解决方案而不用去担心潜在的基础设施配置、供应、伸缩或管理&lt;sup id="fnref:8">&lt;a href="#fn:8" class="footnote-ref" role="doc-noteref">8&lt;/a>&lt;/sup>。&lt;/p>
+&lt;p>在《Functional Programming in Serverless World》&lt;sup id="fnref:9">&lt;a href="#fn:9" class="footnote-ref" role="doc-noteref">9&lt;/a>&lt;/sup>中，作者利用AWS的Lambda Serverless服务对几种函数式语言在Serverless场景中的性能进行了测试，作者主要做了四个方面的测试：&lt;/p>
+&lt;ul>
+&lt;li>包大小&lt;/li>
+&lt;li>内存占用&lt;/li>
+&lt;li>执行效率&lt;/li>
+&lt;li>冷启动时间&lt;/li>
+&lt;/ul>
+&lt;p>结果如下：&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg.png"
+width="2099"
+height="2099"
+srcset="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu_bf436491e6c1641f.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/pkg_hu_b99921bc64f9a9f5.png 1024w"
+loading="lazy"
+alt="包大小对比"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+> &lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem.png"
+width="2099"
+height="2099"
+srcset="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu_42ea08e249e1ff6d.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/mem_hu_1cbd0a6d8c576c71.png 1024w"
+loading="lazy"
+alt="占用内存对比"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe.png"
+width="2099"
+height="2099"
+srcset="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu_bbdde69af793e9c7.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/exe_hu_117cb7ffe4636778.png 1024w"
+loading="lazy"
+alt="执行效率对比"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+> &lt;img src="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start.png"
+width="2099"
+height="2099"
+srcset="https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu_ed896241ca24b6cc.png 480w, https://blog.kagaya.fun/p/2021/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%BD%B1%E5%93%8D%E4%B8%8E%E5%BA%94%E7%94%A8/start_hu_b74c012e99ceace6.png 1024w"
+loading="lazy"
+alt="冷启动时间对比"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>从这些测试中可以看出，不同的函数式语言在无服务器场景下运行情况是又较大的区别的。作者认为，对于Serverless技术不应该盲目的使用，而是更具应用场景再决定是否使用Serverless。同时，作者还建议，对于一个Serverless服务，最可靠安全的函数式语言应该是F#，因为由于各个云服务提供的Serverless服务所支持的语言不同，但对于.NET Core平台的支持都是最充足的。&lt;/p>
+&lt;h4 id="云原生应用场景">云原生应用场景
+&lt;/h4>&lt;p>在《Functional Programming Languages in Computing Clouds》&lt;sup id="fnref:10">&lt;a href="#fn:10" class="footnote-ref" role="doc-noteref">10&lt;/a>&lt;/sup>这篇文章中，作者对于云计算场景下的函数式程序设计语言提出了两个问题：&lt;/p>
+&lt;ul>
+&lt;li>云计算构建中有哪些新的范式和问题？&lt;/li>
+&lt;li>函数式编程语言（FPL）是否适合这些范式，它们是否提供新的方法来应对新的问题和挑战？&lt;/li>
+&lt;/ul>
+&lt;p>作者着重讨论的Haskell语言在云计算场景下的表现，发现Haskell非常适合不需要在物理（或虚拟）系统的边界上分布应用程序的使用场景，但却不适用于需要与应用程序进行通信的基于分布式云的工作负载的开发，特别是分布式工作负载的协调。&lt;/p>
+&lt;p>但随着一些在分布式环境中容纳不确定性的机制发展，从而使应用程序具有一定的抗脆弱性，Haskell在未来可能有资格成为合适的工具，而不是坚持严格的确定性，使得Haskell应用程序只能可以在本地系统上或通过阻塞的通信机制来保证确定性。Haskell的并行化功能是为单个系统设计的，因此未来的方向可能有一下几点：&lt;/p>
+&lt;ul>
+&lt;li>在分布式环境中使用轻便且健壮的通信协议&lt;/li>
+&lt;li>研究功能与第三方通信服务的集成（如etcd）&lt;/li>
+&lt;li>研究FPL在Serverless计算和IoT（那些现在没有使用FPL）中的潜在作用&lt;/li>
+&lt;/ul>
+&lt;p>同时，作者也讨论了Serverless技术带来的影响：Serverless计算与IoT通常不需要节点间的消息传递和协调，往往比起云计算更适合用函数式编程语言来实现。&lt;/p>
+&lt;p>Serverless技术中的代表，AWS Lambda，是一个运行代码的完全托管环境，通过将代码部署在lambda函数中，从受支持的AWS服务之一接受事件时触发我们的代码，并将事件作为参数传递。而函数式设计的程序，是将程序定义问函数，AWS Lambda提供了一个方便的抽象赖于其他的AWS服务进行交互，所有的一切都是我们作为参数接受的事件。通过函数组合的方式解决原来函数过于庞大复杂难以维护的问题，各个功能拆分为较小的函数，然后通过组合的方式实现最终的功能。遵循这种方法的优点是我们可以以可重用的方式考虑我们较小的功能。 然后，我们可以像将它们与积木一起玩时那样将它们放在一起。&lt;/p>
+&lt;p>比如说，对于一个验证函数&lt;sup id="fnref:11">&lt;a href="#fn:11" class="footnote-ref" role="doc-noteref">11&lt;/a>&lt;/sup>，为了通过验证，我们需要做很多项不同的检查：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">queryParamsIsNull&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">APIGatewayEvent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">queryStringParameters&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">ApplicationError&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;Error parsing request query params&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Query params should be empty&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">StatusCodes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">BAD_REQUEST&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">pathParamsIsNull&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">APIGatewayEvent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">pathParameters&lt;/span> &lt;span class="o">!==&lt;/span> &lt;span class="kc">null&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">ApplicationError&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;Error parsing request path params&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Path params should be empty&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">StatusCodes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">BAD_REQUEST&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">asUserPostEvent&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">APIGatewayEvent&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">try&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="kr">const&lt;/span> &lt;span class="nx">parsedBody&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">body&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">?&lt;/span> &lt;span class="nx">JSON&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">parse&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">body&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">:&lt;/span> &lt;span class="p">{};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">...&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">body&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">parsedBody&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span> &lt;span class="k">catch&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">error&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">throw&lt;/span> &lt;span class="k">new&lt;/span> &lt;span class="nx">ApplicationError&lt;/span>&lt;span class="p">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s1">&amp;#39;Error parsing request body&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">[&lt;/span>&lt;span class="s1">&amp;#39;Invalid JSON&amp;#39;&lt;/span>&lt;span class="p">],&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">StatusCodes&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">BAD_REQUEST&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">};&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>通过函数组合的方式，我们可以很方便的决定需要做哪些检查项：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="line">&lt;span class="cl">&lt;span class="kr">const&lt;/span> &lt;span class="nx">validateCreatePostEvent&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">compose&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">asUserPostEvent&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">queryParamsIsNull&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">pathParamsIsNull&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h4 id="分布式系统开发">分布式系统开发
+&lt;/h4>&lt;p>在另一片文章《Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#》&lt;sup id="fnref:12">&lt;a href="#fn:12" class="footnote-ref" role="doc-noteref">12&lt;/a>&lt;/sup>，作者讨论了分布式环境下对于函数式编程语言F#的使用。&lt;/p>
+&lt;p>分布式系统的开发本质上非常复杂，部分原因是在客户端和服务器端使用了不同的语言和技术，而且这些技术之间通常没有透明的无缝集成。 因此，开发人员必须将整个系统视为许多互操作的模块，始终牢记这些模块如何协同工作并交换信息。 这也使开发更加复杂，因为我们需要在源代码树中分离服务器端和客户端代码。&lt;/p>
+&lt;p>作者强调了F＃非常适合于分布式云计算。 由于函数样式迫使我们以一种由无状态函数组成的方式分解问题，无状态函数仅在给定初始数据的情况下计算结果，因此我们自然可以在集群中的不同节点上并行运行那些独立的函数。 任务的分配仍然是开发人员的责任，但是功能分解过程的整体性质使其变得更加容易。&lt;/p>
+&lt;h3 id="fp-in-programming-design-optional-functions">FP in Programming Design: Optional Functions
+&lt;/h3>&lt;p>在使用面向对象的方法编写程序的过程中，我们往往会遇到一些配置相关的问题，比如如果我们要启动一个服务器，需要为这个服务器配置各种参数，类似这样&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">Server&lt;/span> &lt;span class="kd">struct&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Addr&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Port&lt;/span> &lt;span class="kt">int&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Protocol&lt;/span> &lt;span class="kt">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">Timeout&lt;/span> &lt;span class="nx">time&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Duration&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">MaxConns&lt;/span> &lt;span class="kt">int&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">TLS&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">tls&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">Config&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>而往往我们不需要配置所有的参数，希望某些配置项使用默认的参数。OOP的语言中我们一般可以使用函数重载的方式解决这一问题。但是在对于先Golang这种不支持函数重载的语言，则需要定义许多构造函数，通过带不同形式参数的方式来应对不同的配置需求，又或者通过一个自定义的配置结构体，将配置项打包为一个数据结构整体传入。这样的方法虽然可以解决问题，但是从程序设计和程序可读性的角度来说，上面的做法既不高效，也不具有很好的可读性。&lt;/p>
+&lt;p>前贝尔实验室成员，UTF-8与Golang的创始人之一Rob Pike曾在2014年的一篇博文《Self-referential functions and the design of options》&lt;sup id="fnref:13">&lt;a href="#fn:13" class="footnote-ref" role="doc-noteref">13&lt;/a>&lt;/sup>中，用函数式编程的的思想巧妙的提出了一种解决程序设计中进行对象参数设置的方法，展现了函数式编程在与面向对象编程中结合的魅力。&lt;/p>
+&lt;p>Rob Pike同样遇到了这样的问题，在他与社区的成员进行讨论后，总结并提出了Optional Function（配置函数）的方法，非常巧妙的解决了自定义配置的同时，也让代码有了自解释性，大大提高了代码的可读性。&lt;/p>
+&lt;p>什么是Optional Functional，首先我们会定义一种新类型：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">option&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">Server&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>我们将一个入参为对象指针，无返回值的函数定义为类型&lt;code>option&lt;/code>，紧接着，我们可以在对象中定义一个用于设置参数的函数Option&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Option sets the options specified. &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Server&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nf">Option&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">opts&lt;/span> &lt;span class="o">...&lt;/span>&lt;span class="nx">option&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> &lt;span class="nx">_&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">opt&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="k">range&lt;/span> &lt;span class="nx">opts&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nf">opt&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>最后，我们可以定义某一个配置项的设置函数，与以往OOP中的set函数不同的是，这个函数接受一个我们想要设置的数值，返回的却是一个Option函数&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// Verbosity sets Foo&amp;#39;s verbosity level to v.&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">Verbosity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">v&lt;/span> &lt;span class="kt">int&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nx">option&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span> &lt;span class="o">*&lt;/span>&lt;span class="nx">Server&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">s&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">verbosity&lt;/span> &lt;span class="p">=&lt;/span> &lt;span class="nx">v&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这样，我们就可以通过类似下面这样的方式来方便的设置我们需要的自定义配置项，在不破坏对象封装的情况下也可以通过函数名让配置方法具有来很好的可读性:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">server&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Option&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nf">Verbosity&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">3&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nf">Overtime&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nf">Addr&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;192.168.10.1&amp;#34;&lt;/span>&lt;span class="p">),&lt;/span> &lt;span class="nf">Port&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">80&lt;/span>&lt;span class="p">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>当然，还有一些&lt;strong>进阶&lt;/strong>的用法，比如将Option的定义修改为&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 返回一个值&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">option&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">Foo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="kd">interface&lt;/span>&lt;span class="p">{}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// 返回option函数&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">type&lt;/span> &lt;span class="nx">option&lt;/span> &lt;span class="kd">func&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">Foo&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="nx">option&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>第一种方式我们可以通过返回的&lt;code>interface{}&lt;/code>获取修改之前的配置值，第二种方法则可以返回一个包含了原始值的Option函数，通过调用该Option函数，我们可以直接将配置项恢复为原始值。结合Golang中的&lt;code>defer&lt;/code>函数，便可以方便的实现对于配置项的临时修改和恢复。&lt;/p>
+&lt;h2 id="pros-and-cons-of-fp">Pros and Cons of FP
+&lt;/h2>&lt;p>正如任何技术方法一样，在新技术刚刚出现时总会受到人们的热情追捧，但是随着时间的推移，慢慢人们也会发现许多问题。函数式程序设计方法也是如此，对程序员来说，函数式编程为我们程序设计带来的新的方法和思维，这些往往给一些软件设计中的难点和痛点提供了新的解决方法。同样函数式编程不是银色子弹，它也有许多自己的局限性，我们应该辩证地去看待它对程序设计的影响。接下来，我会从正面和反面两个角度总结如今人们是如何看待函数式程序设计的，以及FP所具有的优越性和局限性。&lt;/p>
+&lt;h3 id="advantages">Advantages
+&lt;/h3>&lt;p>函数式编程的有点是非常显而易见的，从不同角度来说，函数式程序设计的优越性往往有以下几个方面：&lt;/p>
+&lt;ul>
+&lt;li>函数式程序设计是非常安全的，尤其是在并行和分布式编程中，因为纯函数是天生线程安全的&lt;sup id="fnref:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>纯函数容易理解，不需要关注任何可能被改变的隐藏状态。这使得代码更短，从而保证可以容忍的错误数量更少&lt;sup id="fnref:15">&lt;a href="#fn:15" class="footnote-ref" role="doc-noteref">15&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>函数式编程完成的程序往往更加容易测试，因为它不需要去模拟和考虑任何的Side-effect&lt;sup id="fnref1:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>同时函数式使得人们更容易区分哪些函数是不纯的，因此在QA阶段可以将大部分测试资源都集中在这里，从而提高程序的可靠性&lt;sup id="fnref2:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>函数式的方法更容易组合，程序设计者可以轻松的掌握一个函数的输入输出之间的关系，同时也不需要使用锁来决定函数之间的执行顺序&lt;sup id="fnref3:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>函数式程序设计有着强大的抽象能力，他可以利用引用透明性（Referential transparency）来对概念进行抽象化，从而隐藏其中的复杂性。比如函数式中往往会模糊一个纯数值和函数调用结果之间的界限，程序设计者只需要知道该值是什么，而不用太关注其中的细节&lt;sup id="fnref:16">&lt;a href="#fn:16" class="footnote-ref" role="doc-noteref">16&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>另外，函数式的程序设计方法往往可以加快程序的开发速度。我们可以运用函数式的思维将一个大的问题分解为更小的可组合的操作，然后通过组合的方式串行执行每个操作，从而使问题的解决变得更加容易。&lt;sup id="fnref1:16">&lt;a href="#fn:16" class="footnote-ref" role="doc-noteref">16&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>正如前一节提到的Functional Options在Golang中的应用，函数式的方法可以很好的提升代码的可读性。函数式设计出来的方法往往可以拥有自解释性（self-documented），方法的功能和行为等内容都定义在了输入参数或函数名当中，不需要额外的注释就可以让阅读者很好的理解代码的功能和预测代码运行的结果&lt;sup id="fnref1:11">&lt;a href="#fn:11" class="footnote-ref" role="doc-noteref">11&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>函数式程序设计中对于纯函数的使用，使得方法的计算结果变得可缓存。因为纯函数的输出只取决于函数的输入参数，那么我们便可以预先计算并缓存一些计算结果，这样在之后遇到相同的输入参数时，我们就可以直接使用缓存的结果，从而提高程序的执行效率&lt;sup id="fnref2:11">&lt;a href="#fn:11" class="footnote-ref" role="doc-noteref">11&lt;/a>&lt;/sup>&lt;/li>
+&lt;/ul>
+&lt;h3 id="disadvantages">Disadvantages
+&lt;/h3>&lt;p>函数式程序设计的缺点又是会很明显，但部分缺点会隐藏在一些我们不会去注意到的地方，辩证地看待一种新技术，自然也要充分了解它的局限性，才能更好的使用它：&lt;/p>
+&lt;p>首先是资源占用和运行效率方面：&lt;/p>
+&lt;ul>
+&lt;li>函数式设计的程序往往会比命令式的程序在执行效率上更慢，大多数FP使用特殊的不可变数据结构。如FP通过调用set函数设置一个新值，返回一个设置来新值的新数据结构而不是在原来的数据结构上进行修改&lt;sup id="fnref4:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>同时，使用柯里化将多个参数的函数表示为返回函数的方式会导致额外的函数调用开销&lt;sup id="fnref5:14">&lt;a href="#fn:14" class="footnote-ref" role="doc-noteref">14&lt;/a>&lt;/sup>&lt;/li>
+&lt;li>如果没有编译器的优化，那么递归调用可能会十分的占用资源&lt;sup id="fnref2:16">&lt;a href="#fn:16" class="footnote-ref" role="doc-noteref">16&lt;/a>&lt;/sup>，部分的编译器对于尾递归的调用方式都用称为TCO（Tail Call Optimization)的尾调用优化，通过这种优化方式，可以极大程度的减少递归调用中的堆栈内存占用。但同时也会破坏原来的程序方法的调用链，引入新的复杂性。因此像Golang这样的语言中，尽管社区对于尾调用的优化有着很高的呼声，但设计者对编译器仍没有增加尾调用的优化，因此在使用函数式思维进行程序设计时，需要考虑的递归调用的堆栈占用问题。&lt;/li>
+&lt;li>究其本质而言，函数式的语言倾向于比命令性语言生成大量的短期垃圾。 尽管他们的垃圾收集器倾向于针对此使用情况进行优化，但仍然使预测和控制性能更加困难&lt;sup id="fnref:17">&lt;a href="#fn:17" class="footnote-ref" role="doc-noteref">17&lt;/a>&lt;/sup>。&lt;/li>
+&lt;/ul>
+&lt;p>其次是应用场景方面：&lt;/p>
+&lt;ul>
+&lt;li>在一些特殊函数方法中往往不能使用函数式的思维，如IO方法并不能纯函数化，因为IO依赖于一些外部的状态和side-effect，不符合纯函数的要求&lt;sup id="fnref3:16">&lt;a href="#fn:16" class="footnote-ref" role="doc-noteref">16&lt;/a>&lt;/sup>。&lt;/li>
+&lt;li>在某些应用场景中计算机无法按函数式的方式运行，如一些有状态和命令式的操作，他们本质上就是一个巨大的状态机，FP在这里无法起作用&lt;sup id="fnref4:16">&lt;a href="#fn:16" class="footnote-ref" role="doc-noteref">16&lt;/a>&lt;/sup>。&lt;/li>
+&lt;li>同理，其他一些有状态的对象，在OOP中可以很好的处理应对，但是对于FP来说，就是十分棘手的困难。&lt;/li>
+&lt;/ul>
+&lt;h2 id="总结">总结
+&lt;/h2>&lt;p>在本文中，我简单介绍了函数式语言的发展，并概述了函数式的设计思维在一些已有场景的应用，同时从正反两个角度分别阐述了函数式程序设计的优越性和局限性。&lt;/p>
+&lt;p>综上所述，函数式程序设计经过了很长一段时间的发展，人们已经总结出了许多行而有效的应用方法，但它并不是银色子弹，不能一劳永逸地解决我们程序设计中的所有问题，恰恰相反，函数式程序设计的应用往往会给我们带来新的问题。我们应当从函数式中学到一种我们在面向对象的程序设计中接触不到的程序设计理念，并将其很好的与OOP进行结合。&lt;/p>
+&lt;p>事实也证明FP与OOP是正交的，它们可以很好的结合起来，针对不同问题各取所长。OOP强调对象状态的改变，混合了声明与状态的概念，而FP有着天生适合并发的优势，以及自解释等提高代码质量的优点。&lt;/p>
+&lt;p>细细品味函数式编程，就会觉得FP天生就有一种独特的魅力，我们可以好好利用函数式编程的思维来实现某些符合函数式特性场景的具体需求。所以，在今后的学习工作中，也应当做到具体问题具体分析，运用好函数式程序设计这个巧妙的工具来解决我们遇到的各种问题，提高自身的程序设计能力和代码软件的质量。&lt;/p>
+&lt;h2 id="参考文献">参考文献
+&lt;/h2>&lt;div class="footnotes" role="doc-endnotes">
+&lt;hr>
+&lt;ol>
+&lt;li id="fn:1">
+&lt;p>&lt;a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B&amp;amp;oldid=63346400" target="_blank" rel="noopener"
+>佚名. 函数式编程\[Z/OL\](2020–12–21).&lt;/a>&amp;#160;&lt;a href="#fnref:1" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:2">
+&lt;p>&lt;a class="link" href="https://zh.wikipedia.org/w/index.php?title=Haskell&amp;amp;oldid=63307186" target="_blank" rel="noopener"
+>佚名. Haskell\[Z/OL\](2020–12–19).&lt;/a>&amp;#160;&lt;a href="#fnref:2" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:3">
+&lt;p>&lt;a class="link" href="https://medium.com/@geisonfgfg/functional-go-bc116f4c96a4" target="_blank" rel="noopener"
+>GEISON. Functional Go\[EB/OL\](2020–04–05).&lt;/a>&amp;#160;&lt;a href="#fnref:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref1:3" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:4">
+&lt;p>&lt;a class="link" href="https://deepu.tech/functional-programming-in-go/" target="_blank" rel="noopener"
+>DEEPU. 7 Easy Functional Programming Techniques in Go\[EB/OL\](2019–08– 14).&lt;/a>&amp;#160;&lt;a href="#fnref:4" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:5">
+&lt;p>&lt;a class="link" href="https://zh.wikipedia.org/w/index.php?title=%E9%9D%99%E6%80%81%E5%8D%95%E8%B5%8B%E5%80%BC%E5%BD%A2%E5%BC%8F&amp;amp;oldid=61858310" target="_blank" rel="noopener"
+>佚名. 静态单赋值形式\[Z/OL\](2020–09–21).&lt;/a>&amp;#160;&lt;a href="#fnref:5" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:6">
+&lt;p>&lt;a class="link" href="https://dl.acm.org/doi/10.1145/278283.278285" target="_blank" rel="noopener"
+>APPEL A W. SSA Is Functional Programming[J/OL]. ACM SIGPLAN Notices, 1998, 33(4): 17–20.&lt;/a> DOI:10.1145/278283.278285.&amp;#160;&lt;a href="#fnref:6" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:7">
+&lt;p>&lt;a class="link" href="https://doi.org/10.1093/comjnl/32.2.175" target="_blank" rel="noopener"
+>PEYTON JONES S L. Parallel Implementations of Functional Programming Languages[J/OL]. The Computer Journal, 1989, 32(2): 175–186.&lt;/a> DOI:10.1093/comjnl/32.2.175.&amp;#160;&lt;a href="#fnref:7" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref1:7" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:8">
+&lt;p>&lt;a class="link" href="https://matthew-argreaves.medium.com/the-case-for-functional-programming-and-serverless-architecture-e6c805495f68" target="_blank" rel="noopener"
+>HARGREAVES M. The Case for Functional Programming and Serverless Architecture\[EB/OL\](2018–06–06).&lt;/a>&amp;#160;&lt;a href="#fnref:8" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:9">
+&lt;p>&lt;a class="link" href="https://pattern-match.com/blog/functional-programming-in-serverless-world/" target="_blank" rel="noopener"
+>GAWROŃSKI W. Functional Programming in Serverless World | Pattern Match\[EB/OL\](2018–10–18).&lt;/a>&amp;#160;&lt;a href="#fnref:9" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:10">
+&lt;p>FRITSCH J. Functional programming languages in computing clouds : practical and theoretical explorations[C].&amp;#160;&lt;a href="#fnref:10" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:11">
+&lt;p>&lt;a class="link" href="https://blog.container-solutions.com/using-functional-programming-when-building-cloud-native-applications-with-aws-lambda" target="_blank" rel="noopener"
+>MOCCHETTI R. Using Functional Programming When Building Cloud Native Applications with AWS Lambda\[EB/OL\]([日期不详]).&lt;/a>&amp;#160;&lt;a href="#fnref:11" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref1:11" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref2:11" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:12">
+&lt;p>SOSHNIKOV D. Using Functional Programming for Development of Distributed, Cloud and Web Applications in F#[J]. 2015.&amp;#160;&lt;a href="#fnref:12" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:13">
+&lt;p>&lt;a class="link" href="https://commandcenter.blogspot.com/2014/01/self-referential-functions-and-design.htm" target="_blank" rel="noopener"
+>PIKE R. command center: Self-referential functions and the design of options\[EB/OL\](2014–01–24).&lt;/a>&amp;#160;&lt;a href="#fnref:13" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:14">
+&lt;p>&lt;a class="link" href="https://dzone.com/articles/functional-programming-is-not-what-you-probably-th" target="_blank" rel="noopener"
+>佚名. Functional Programming Is Not What You (Probably) Think - DZone Java\[EB/OL\]([日期不详]).&lt;/a>&amp;#160;&lt;a href="#fnref:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref1:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref2:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref3:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref4:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref5:14" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:15">
+&lt;p>&lt;a class="link" href="https://syndicode.com/blog/pros-and-cons-of-functional-programming/" target="_blank" rel="noopener"
+>佚名. Find Out Pros and Cons of Functional Programming\[EB/OL\](2018–06– 07).&lt;/a>&amp;#160;&lt;a href="#fnref:15" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:16">
+&lt;p>&lt;a class="link" href="https://spin.atomicobject.com/2019/08/29/functional-prog-pros-cons/" target="_blank" rel="noopener"
+>佚名. 5 Drawbacks of Functional Programming – Plus 4 Reasons to Use It\[EB/OL\](2019–08–29).&lt;/a>&amp;#160;&lt;a href="#fnref:16" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref1:16" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref2:16" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref3:16" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&amp;#160;&lt;a href="#fnref4:16" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;li id="fn:17">
+&lt;p>&lt;a class="link" href="https://www.quora.com/What-are-some-limitations-disadvantages-of-functional-programming-Where-does-it-break-down-when-you-want-to-get-things-done/answer/Tikhon-Jelvis" target="_blank" rel="noopener"
+>佚名. Tikhon Jelvis’s answer to What are some limitations/disadvantages of functional programming? Where does it break down when you want to get things done? - Quora\[EB/OL\](2014).&lt;/a>&amp;#160;&lt;a href="#fnref:17" class="footnote-backref" role="doc-backlink">&amp;#x21a9;&amp;#xfe0e;&lt;/a>&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;/div></description></item></channel></rss>

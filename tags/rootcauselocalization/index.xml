@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>RootCauseLocalization on かがやの部屋</title><link>https://blog.kagaya.fun/tags/rootcauselocalization/</link><description>Recent content in RootCauseLocalization on かがやの部屋</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 08 Feb 2022 15:04:55 +0800</lastBuildDate><atom:link href="https://blog.kagaya.fun/tags/rootcauselocalization/index.xml" rel="self" type="application/rss+xml"/><item><title>WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位</title><link>https://blog.kagaya.fun/p/2022/microrank/</link><pubDate>Tue, 08 Feb 2022 15:04:55 +0800</pubDate><guid>https://blog.kagaya.fun/p/2022/microrank/</guid><description>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png" alt="Featured image of post WWW21 | MicroRank: 微服务系统中谱分析方法实现的根因定位" />&lt;blockquote>
+&lt;p>论文标题：MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments&lt;/p>
+&lt;p>论文来源：WWW21&lt;/p>
+&lt;p>论文链接：&lt;a class="link" href="https://dl.acm.org/doi/10.1145/3442381.3449905" target="_blank" rel="noopener"
+>MicroRank: End-to-End Latency Issue Localization with Extended Spectrum Analysis in Microservice Environments | Proceedings of the Web Conference 2021 (acm.org)&lt;/a>&lt;/p>
+&lt;p>源码链接：&lt;/p>&lt;/blockquote>
+&lt;h2 id="tldr">TL;DR
+&lt;/h2>&lt;p>这篇文章提出了一个利用谱分析实现根因定位的方法：MicroRank，通过收集分析异常合正常的trace数据，来定位延迟问题的根因，当MicroRank的异常检测器检测到发生延迟问题时，就会触发根因定位的过程：MicroRank首先会利用一个PageRank的打分器不同trace进行重要性评估，然后谱分析（spectrum analysis）利用打分器得出的权重来计算根因排序。通过在广泛使用的开源微服务系统和生产系统中，对比其他根因定位方法，如CauseInfer和Sieve，MicroRank可以得到更加有效的结果。&lt;/p>
+&lt;h2 id="algorithm">Algorithm
+&lt;/h2>&lt;h3 id="spectrum-based-fault-localization">Spectrum-based fault localization
+&lt;/h3>&lt;p>Spectrum-based fault localization (SBFL) ，谱分析在故障定位中是比较有效且简单的方法。简单来说，在一个程序$P$和其对应的测试集合中，对于程序中的每一个元素$O\in P$，定义一个四元组：&lt;/p>
+$$
+(O_{ef},O_{ep},O_{nf},O_{np})
+$$&lt;p>
+$O_{ef}$: 覆盖O的测试case中失败的数量&lt;/p>
+&lt;p>$O_{ep}$: 覆盖O的测试case中通过的数量&lt;/p>
+&lt;p>$O_{nf}$: 没有覆盖O的测试case中失败的数量&lt;/p>
+&lt;p>$O_{np}$: 没有覆盖O的测试case中通过的数量&lt;/p>
+&lt;p>类似软件测试中的思路，当经过一个服务执行的异常trace越多且执行正常trace的数量越少，那么这个服务越有可能是导致异常的根因。&lt;/p>
+&lt;h3 id="system">System
+&lt;/h3>&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x.png"
+width="1914"
+height="454"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_425b36aa4ae9cc96.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-12_at_23.49.58@2x_hu_b3784abf1a7da530.png 1024w"
+loading="lazy"
+alt="整体流程"
+class="gallery-image"
+data-flex-grow="421"
+data-flex-basis="1011px"
+>&lt;/p>
+&lt;p>MicroRank主要分为四个部分：Anomaly Detector, Data Preparator, PageRank Scorer 和 Weighted Spectrum Ranker&lt;/p>
+&lt;p>系统通过一个时间窗口（文中是30s），如果实时的异常大于一个期望值，就认为出现了异常，并触发根因定位，由Data Preparator来区分时间窗口内的正常/异常trace，并且构建调用图，由一个基于PageRank的打分器为每一个operation（即服务接口，下文同）进行异常分数和正常分数的打分，输入到Spectrum Ranker不断的更新权重进行排序&lt;/p>
+&lt;h3 id="anomaly-detector">Anomaly Detector
+&lt;/h3>&lt;p>异常检测器主要计算每个operation在一段时间（比如一个小时）内的平均处理时间 $\mu_o$ 和标准差 $\delta_o$ ,文中特别说明了只有在出现预测偏差的时候才需要更新上述的两个值。&lt;/p>
+&lt;p>在一个时间窗口内，异常检测需要统计trace涉及的operation以及对应的数量 $count_o$ ，通过下面式子计算期望一条trace的期望响应时间 $L_{excepted}$ ：&lt;/p>
+$$
+L_{excepted} = \sum count_o \times (\mu_o + n \times \delta_o)
+$$&lt;p>
+一条trace的期望响应时间计算为各个operation的n sigma的乘积的和，在文中$n=1.5$，如果实际trace的响应时间大于期望值，则会被认为是异常trace，同时触发根因定位并刷新时间窗口。&lt;/p>
+&lt;p>这里其实存在一些问题：对于OpenTracing格式的span来说，各个span的duration是包含了子span的duration，理论上只需要计算root span的duration即可，不需要累加每个span的duration。&lt;/p>
+&lt;h3 id="pagerank-scorer">PageRank Scorer
+&lt;/h3>&lt;p>文中为了提高谱分析的性能，增加了一个基于PageRank的打分器，分别对异常和正常的trace进行游走计算权重信息。基本思想就是对trace上的每一个operation进行打分来评价trace的重要性，越能够帮助找到根因的trace重要性会越高：&lt;/p>
+&lt;ol>
+&lt;li>如果一个operation被越多的异常trace经过，那么它很有可能是根因&lt;/li>
+&lt;li>如果一个异常trace经过了越少的operation，那么这条trace的重要性越高，因为它包含根因的范围更小（更容易定位根因）&lt;/li>
+&lt;li>如果一种trace出现的数量越少，那么也需要给予更高的重要性&lt;/li>
+&lt;/ol>
+&lt;p>经过PageRank会得出一个得分向量$v$：
+&lt;/p>
+$$
+v^{(q)} = dAv^{(q-1)} + (1-d) \cdot u
+$$&lt;p>
+$d$是参数，$q$是迭代次数，每次进行迭代计算都会更加接近最终的结果，除此之外这个向量还需要矩阵$A$与向量$u$，其中$A$是关于operation和trace的矩阵：&lt;/p>
+$$
+A =
+\left[
+\begin{array}{c|c}
+\overbrace{A_{oo}}^{operations} &amp; \overbrace{A_{ot}}^{traces} \\
+\hline A_{to} &amp; 0
+\end{array}
+\right]
+$$&lt;p>其中$A_{st}$代表了从s出发到t结束的矩阵，矩阵中的值代表转移的概率，即$\frac{1}{相邻节点的数量}$。作者把每一次请求看作图中的一个单独的节点，构造了operation-trace的关系图，如下面图3到图6的变化：&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39.png"
+width="744"
+height="265"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_37451bd6af5db2b2.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.16.39_hu_3a81e98a340832a7.png 1024w"
+loading="lazy"
+alt="请求依赖图"
+class="gallery-image"
+data-flex-grow="280"
+data-flex-basis="673px"
+>&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26.png"
+width="719"
+height="229"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_9ac40467c65343dd.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-02-25_at_10.17.26_hu_3022a36ec9b66da.png 1024w"
+loading="lazy"
+alt="请求与服务依赖图"
+class="gallery-image"
+data-flex-grow="313"
+data-flex-basis="753px"
+>&lt;/p>
+&lt;p>基于图6，我们便能得出一个关于向量$[front, recommend, checkout, product, req1, req2, req4]$的异常关系矩阵：&lt;/p>
+$$
+A =
+\left[
+\begin{array}{cccc|ccc}
+0&amp;0&amp;0&amp;0&amp;1/2&amp;1/3&amp;1/3 \\
+1/3&amp;0&amp;1/3&amp;0&amp;0&amp;1/3&amp;0 \\
+1/3&amp;0&amp;0&amp;0&amp;0&amp;0&amp;1/3 \\
+1/3&amp;1&amp;1&amp;0&amp;1/2&amp;1/3&amp;1/3 \\
+\hline
+1/3&amp;0&amp;0&amp;1/3&amp;0&amp;0&amp;0 \\
+1/3&amp;0&amp;1&amp;1/3&amp;0&amp;0&amp;0 \\
+1/3&amp;1&amp;0&amp;1/3&amp;0&amp;0&amp;0 \\
+\end{array}
+\right]
+$$&lt;p>作者认为系统的接口之间的调用关系图，即$A_{oo}$， 是相对稳定的，而根因往往对operation-trace图，即$A_{ot}$和$A_{to}$影响更大，于是通过增加一个参数${\omega}(0\le\omega\le1)$来降低调用关系图的影响：&lt;/p>
+$$
+A =
+\left[
+\begin{array}{c|c}
+\omega A_{oo} &amp; A_{ot} \\
+\hline A_{to} &amp; 0
+\end{array}
+\right]
+$$&lt;p>文中用向量$u$来计算trace覆盖范围和种类数量的影响：$u = [u_o^T, u_t^T]^T$，其中只需要考虑trace的影响，故operation的向量$u_o$是$\vec{0}$。对$u_t$来说，每一条异常trace的重要性得分$\theta_i$遵循以下计算方法：
+&lt;/p>
+$$
+\theta_i = \varphi\cdot\frac{n_i^{-1}}{\sum n_j^{-1}} + (1-\varphi)\cdot\frac{k_i^{-1}}{\sum k_j^{-1}}
+$$&lt;p>
+$n_i$为异常trace $i$经过operation的数量（覆盖范围），$k_i$则为该异常trace的数量。$0\le\varphi\le1$，文中默认为0.5，用于平衡trace范围和trace数量的参数。对于正常的trace，则经过operation的数量并不能够反应重要性（因为它们的结构都是一样的），因此只需要计算$\frac{k_i^{-1}}{\sum k_j^{-1}}$即可。&lt;/p>
+&lt;p>当计算出矩阵$A$与向量$u$后，则可以计算pagerank分数，初始化$v$:
+&lt;/p>
+$$
+v^{(0)}=[v_o^T, v_t^T]^T=[\frac{1}{N_o},\frac{1}{N_o},\cdots,\frac{1}{N_o},\frac{1}{N_t},\frac{1}{N_t},\cdots,\frac{1}{N_t}]^T
+$$&lt;p>
+$N_o$和$N_t$分别是operation数量和trace种类的数量（上文例子中的req1,2,3则为三种trace），通过（3）式迭代计算（实例代码中迭代次数为25），最后得出正常的评分P和异常trace评分向量&lt;/p>
+&lt;h3 id="weighted-spectrum-ranker">Weighted Spectrum Ranker
+&lt;/h3>&lt;p>最后，按照谱分析的方法，计算开头式(1)中提到的四个值：&lt;/p>
+$$
+\begin{array} \\
+O_{ef} = F * N_{ef}, &amp; O_{nf} = F * (N_f - N_{ef}) \\
+O_{ep} = P * N_{ep}, &amp; O_{np} = P * (N_p - N_{ep})
+\end{array}
+$$&lt;p>之后可以根据下表所示的方法计算对应的值，作者没有解释如何选择，而是通过实验对比各种计算方法的效果&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34.png"
+width="964"
+height="528"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_fb3ec07be16e3471.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-01_at_16.53.34_hu_93d3b32ef00b375d.png 1024w"
+loading="lazy"
+alt="不同的四元组计算方法"
+class="gallery-image"
+data-flex-grow="182"
+data-flex-basis="438px"
+>&lt;/p>
+&lt;h2 id="experiments">Experiments
+&lt;/h2>&lt;p>作者通过实验模拟了在线故障定位的流程：&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x.png"
+width="1568"
+height="358"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_d2333cf15b90bdab.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.00.58@2x_hu_cf809e5c886a6e7.png 1024w"
+loading="lazy"
+alt="在线检测时间轴"
+class="gallery-image"
+data-flex-grow="437"
+data-flex-basis="1051px"
+>&lt;/p>
+&lt;p>不同计算方法的对比：&lt;/p>
+&lt;p>&lt;img src="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x.png"
+width="1460"
+height="1282"
+srcset="https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_1db20e7d5abed50c.png 480w, https://blog.kagaya.fun/p/2022/microrank/ScreenShot_2022-03-14_at_11.08.41@2x_hu_cf017eaf5eb8d643.png 1024w"
+loading="lazy"
+alt="实验结果对比"
+class="gallery-image"
+data-flex-grow="113"
+data-flex-basis="273px"
+>&lt;/p>
+&lt;h2 id="thoughts">Thoughts
+&lt;/h2>&lt;ol>
+&lt;li>MicroRank方法只适用于Latency类型的异常，对于请求失败等结构异常&lt;/li>
+&lt;li>作者认为调用关系是稳定的，然而现实情况是可能业务系统中只有部分系统能够维持稳定的调用关系&lt;/li>
+&lt;li>文中的节点operation其实既可以是服务也可以是服务实例或者接口，作者在这一块的区别并没有详细阐述&lt;/li>
+&lt;li>另外在计算trace latency时也存在一些问题，对于OpenTracing规范的trace数据而言，最顶级的root span已经包含了整条trace的耗时数据，在文中却用了所有span累加的方法计算总耗时。&lt;/li>
+&lt;li>文中把调用trace当作节点与operation统一形成一张依赖图的方式比较有借鉴意义，谱分析的方式虽然简单淳朴，当时通过复现实验表明在大多数场景下还是最有效的。&lt;/li>
+&lt;li>作者虽然讨论了trace数量对结果的影响，但是没有讨论对性能的影响，对于在线方法来说，性能往往也是需要考虑的一点，在我复现的实验中，利用工业界的实际trace，5mins的数量级大概在万级别，此时在pagerank的性能就会非常差，往往需要几十个小时，所以还有不少改进的空间&lt;/li>
+&lt;/ol>
+&lt;p>&lt;img src="https://blog.kagaya.fun/images/notbyai/en/Written-By-Human-Not-By-AI-Badge-white.png"
+loading="lazy"
+alt="notbyai-white"
+>
+&lt;img src="https://blog.kagaya.fun/images/notbyai/jp/Written-By-Human-Not-By-AI-Badge-black.png"
+loading="lazy"
+alt="notbyai-black"
+>&lt;/p></description></item></channel></rss>
