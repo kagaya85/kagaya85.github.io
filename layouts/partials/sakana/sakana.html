@@ -1,0 +1,35 @@
+{{- if .Site.Params.sakana.useSakana -}}
+  <div class="takina"></div>
+  <!-- <div class="chisato"></div> -->
+  <script src="https://cdn.jsdelivr.net/npm/sakana"></script>
+  {{- if .Site.Params.sakana.mute -}}
+  <script>
+    // 取消静音
+    Sakana.setMute(true);
+  </script>
+  {{- else -}}
+  <script>
+    // 取消静音
+    Sakana.setMute(false);
+  </script>
+  {{- end -}}
+  <script>
+    // 启动一只泷奈
+    const takina = Sakana.init({
+        el: '.takina',
+        character:'takina',
+        inertia: 0.01,
+        decay: 0.99,
+        scale: 0.4
+    });
+
+    // 再启动一只千束
+    // const chisato = Sakana.init({
+    //     el:'.chisato',
+    //     character: 'chisato',
+    //     inertia: 0.01,
+    //     decay: 0.99,
+    //     scale: 0.4
+    // });
+  </script>
+{{- end -}}

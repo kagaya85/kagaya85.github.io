@@ -2,9 +2,9 @@ name: Update theme
 
 # Controls when the workflow will run
 on:
-  schedule:
-    # Update theme automatically everyday at 00:00 UTC
-    - cron: "0 0 * * *"
+  # schedule:
+  #   # Update theme automatically everyday at 00:00 UTC
+  #   - cron: "0 0 * * *"
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 

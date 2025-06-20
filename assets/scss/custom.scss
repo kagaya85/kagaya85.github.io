@@ -1,0 +1,15 @@
+html .takina, html .chisato {
+  position: fixed;
+  bottom: 0;
+  z-index: 99;
+  transform-origin: bottom right;
+}
+
+.takina {
+  // 右侧紧贴main box右边界，初始right为0，后续用JS动态调整
+  right: 10px;
+}
+
+.chisato {
+  right: 0px;
+}
